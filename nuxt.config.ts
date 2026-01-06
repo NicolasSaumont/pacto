@@ -1,4 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import { config } from '@fortawesome/fontawesome-svg-core'
+config.autoAddCss = false
+
 export default defineNuxtConfig({
   app: {
     head: {
@@ -21,5 +24,8 @@ export default defineNuxtConfig({
     dirs: ['./types/**'],
   },
 
-  css: ['@/assets/css/main.css'],
+  css: [
+    '@/assets/css/main.css',
+    '@fortawesome/fontawesome-svg-core/styles.css'
+  ],
 })
