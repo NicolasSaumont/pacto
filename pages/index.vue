@@ -2,7 +2,6 @@
 
 <template>
   <div>
-    Hello World!
+    Syntyhèse des produits commandés
   </div>
-  <NuxtLink to="/model">Model</NuxtLink>
 </template>
