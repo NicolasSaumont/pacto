@@ -6,7 +6,7 @@ import {
   faBoxesStacked,
   faFileContract,
   faFilePen,
-  faUser,
+  faUsers,
 } from '@fortawesome/free-solid-svg-icons'
 
 // Icônes brands
@@ -17,7 +17,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     faBoxesStacked,
     faFileContract,
     faFilePen,
-    faUser,
+    faUsers,
   )
 
   nuxtApp.vueApp.component('FontAwesomeIcon', FontAwesomeIcon)

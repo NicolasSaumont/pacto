@@ -1,49 +1,11 @@
 <script setup lang='ts'>
-import { useRoute } from 'vue-router'
+import { useMenu } from '~/composables/useMenu'
 
-const route = useRoute()
+const { 
+  menuItemClass,
+  menuItems,
+} = useMenu()
 
-const { t } = useI18n()
-
-const menuItems = [
-  {
-    label: t('common.synthesis'),
-    path: '/',
-    icon: 'file-contract'
-  },
-  {
-    label: t('common.orders'),
-    path: '/orders',
-    icon: 'file-pen'
-  },
-  {
-    label: t('common.customers'),
-    path: '/customers',
-    icon: 'user'
-  },
-  {
-    label: t('common.products'),
-    path: '/products',
-    icon: 'boxes-stacked'
-  },
-  {
-    label: 'Model',
-    path: '/model',
-    icon: 'user'
-  }
-]
-
-const menuItemClass = (path: string) => {
-  const base = 'flex gap-2 items-center px-3 py-2 rounded-lg transition'
-
-  const isActive = 'bg-blue-800 text-white'
-  const isInactive = 'hover:bg-blue-800 hover:text-white'
-
-  return [
-    base,
-    route.path === path ? isActive : isInactive
-  ]
-}
 </script>
 
 <template>
