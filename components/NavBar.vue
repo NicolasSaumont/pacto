@@ -50,7 +50,7 @@ const menuItemClass = (path: string) => {
   <div class="bg-gray-900 w-1/5 p-5 flex flex-col gap-10 border-r border-gray-600">
     <NuxtLink to="/" class="uppercase font-semibold text-2xl">{{ APP_NAME }}</NuxtLink>
 
-    <div class="flex flex-col gap-4 ml-6">
+    <navbar class="flex flex-col gap-4 ml-6">
       <NuxtLink 
         v-for="item in menuItems" 
         :key="item.label" 
@@ -63,6 +63,6 @@ const menuItemClass = (path: string) => {
         />
         <span>{{ item.label }}</span>
       </NuxtLink>
-    </div>
+    </navbar>
   </div>
 </template>
