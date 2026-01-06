@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind component;
+@tailwind utilities;
+
+/* @font-face  {
+  font-family: 'BloomMonday';
+  src: url('@/assets/fonts/bloom-monday.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+} */
+
+/* body {
+  @apply font-yusei-magic text-black;
+} */
+
+/* h3 {
+  @apply uppercase text-secondary
+} */
+
+/* .main-container {
+  @apply max-w-[1240px] mx-auto;
+} */
+
+.height-screen {
+  height: calc(100vh - 40px)
+    /* 40px correspond au padding du layout : py-5 */
+}
+
+.slot-height {
+  /* 100px correspond à la hauteur du header ; 
+  24px correspond à la hauteur du footer ;
+  40px correspond au padding du layout : py-5 ;
+  20px correspond au padding du footer ;
+  */
+  height: calc(100vh - 100px - 24px - 40px - 20px)
+}
