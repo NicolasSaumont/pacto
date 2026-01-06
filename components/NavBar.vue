@@ -3,24 +3,26 @@ import { useRoute } from 'vue-router'
 
 const route = useRoute()
 
+const { t } = useI18n()
+
 const menuItems = [
   {
-    label: 'Synthèse',
+    label: t('common.synthesis'),
     path: '/',
     icon: ''
   },
   {
-    label: 'Commandes',
+    label: t('common.orders'),
     path: '/orders',
     icon: ''
   },
   {
-    label: 'Clients',
+    label: t('common.customers'),
     path: '/customers',
     icon: ''
   },
   {
-    label: 'Produits',
+    label: t('common.products'),
     path: '/products',
     icon: ''
   },

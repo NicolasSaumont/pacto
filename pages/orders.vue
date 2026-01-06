@@ -1,7 +1,9 @@
-<script setup lang='ts'></script>
+<script setup lang='ts'>
+const { t } = useI18n()
+</script>
 
 <template>
   <div>
-    Prise de commande
+    {{  t('common.order-taking') }}
   </div>
 </template>

@@ -1,7 +1,9 @@
-<script setup lang='ts'></script>
+<script setup lang='ts'>
+const { t } = useI18n()
+</script>
 
 <template>
   <div>
-    Gestion des clients
+    {{  t('customers.management') }}
   </div>
 </template>
