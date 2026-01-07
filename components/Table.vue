@@ -65,23 +65,22 @@ const sortedData = computed(() => {
 
 const getCellValue = (row: T, key: keyof T) => row[key]
 
-const toggleSort = (columnKey: keyof T) => {
+const toggleSort = (column: IColumn<T>) => {
+  if (!column.sortable) return
+
+  const columnKey = column.key
   if (sortColumn.value !== columnKey) {
-    // Nouvelle colonne : tri croissant
     sortColumn.value = columnKey
     sortOrder.value = 'asc'
   } else {
-    // Même colonne : cycle asc → desc → null
-    if (sortOrder.value === 'asc') {
-      sortOrder.value = 'desc'
-    } else if (sortOrder.value === 'desc') {
+    if (sortOrder.value === 'asc') sortOrder.value = 'desc'
+    else if (sortOrder.value === 'desc') {
       sortColumn.value = null
       sortOrder.value = null
-    } else {
-      sortOrder.value = 'asc'
-    }
+    } else sortOrder.value = 'asc'
   }
 }
+
 </script>
 
 <template>
@@ -93,18 +92,19 @@ const toggleSort = (columnKey: keyof T) => {
             <th
               v-for="column in columns"
               :key="String(column.key)"
-              class="text-left py-2 px-3 flex gap-2 items-center cursor-pointer select-none"
-              @click="toggleSort(column.key)"
+              class="text-left py-2 px-3 flex gap-2 items-center select-none"
+              :class="{ 'cursor-pointer': column.sortable }"
+              @click="toggleSort(column)"
             >
               <span>{{ column.header }}</span>
 
               <FontAwesomeIcon
-                v-if="sortColumn === column.key && sortOrder === 'asc'"
+                v-if="column.sortable && sortColumn === column.key && sortOrder === 'asc'"
                 icon="sort-down"
                 class="-mt-2"
               />
               <FontAwesomeIcon
-                v-else-if="sortColumn === column.key && sortOrder === 'desc'"
+                v-else-if="column.sortable && sortColumn === column.key && sortOrder === 'desc'"
                 icon="sort-up"
                 class="-mb-2"
               />

@@ -11,6 +11,7 @@ const columns: IColumn<IProduct>[] = [
   {
     header: t('common.products', 1),
     key: 'name',
+    sortable: true,
   }
 ]
 </script>
