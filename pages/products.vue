@@ -18,6 +18,8 @@ const columns: IColumn<IProduct>[] = [
 <template>
   <div class="w-full max-h-full flex flex-col gap-6">
     <Header />
-    <Table class="flex-1" :columns="columns" :data="MOCKED_PRODUCT" />
+    <Table class="flex-1" :columns="columns" :data="MOCKED_PRODUCT">
+      <template #header-right> blabla </template>
+    </Table>
   </div>
 </template>
