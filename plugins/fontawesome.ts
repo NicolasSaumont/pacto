@@ -4,8 +4,10 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 // Icônes solides
 import { 
   faBoxesStacked,
+  faCircleXmark,
   faFileContract,
   faFilePen,
+  faMagnifyingGlass,
   faUsers,
 } from '@fortawesome/free-solid-svg-icons'
 
@@ -15,8 +17,10 @@ import {  } from '@fortawesome/free-brands-svg-icons'
 export default defineNuxtPlugin((nuxtApp) => {
   library.add(
     faBoxesStacked,
+    faCircleXmark,
     faFileContract,
     faFilePen,
+    faMagnifyingGlass,
     faUsers,
   )
 

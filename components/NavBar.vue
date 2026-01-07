@@ -12,7 +12,7 @@ const {
   <div class="bg-gray-900 w-1/5 p-5 flex flex-col gap-10 border-r border-gray-600 shrink-0">
     <NuxtLink to="/" class="uppercase font-semibold text-2xl">{{ APP_NAME }}</NuxtLink>
 
-    <navbar class="flex flex-col gap-4 ml-6">
+    <nav class="flex flex-col gap-4 ml-6">
       <NuxtLink 
         v-for="item in menuItems" 
         :key="item.label" 
@@ -25,6 +25,6 @@ const {
         />
         <span>{{ item.label }}</span>
       </NuxtLink>
-    </navbar>
+    </nav>
   </div>
 </template>

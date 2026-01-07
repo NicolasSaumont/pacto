@@ -1,8 +1,37 @@
 <script setup lang='ts' generic="T extends { id: string | number }">
-defineProps<{
-  columns: IColumn<T>[]
-  data: T[]
-}>()
+import { useDebounce } from '@vueuse/core'
+
+const props = withDefaults(
+  defineProps<{
+    columns: IColumn<T>[]
+    data: T[]
+    filter?: boolean
+  }>(),
+  {
+    filter: false,
+  }
+)
+
+const { t } = useI18n()
+
+const search = ref('')
+const debouncedSearch = useDebounce(search, INPUT_DEBOUNCE)
+
+const filteredData = computed(() => {
+  if (!props.filter) return props.data
+  if (!debouncedSearch.value.trim()) return props.data
+
+  const query = debouncedSearch.value.toLowerCase()
+
+  return props.data.filter((row) =>
+    props.columns.some((column) => {
+      const value = row[column.key]
+      if (value == null) return false
+
+      return String(value).toLowerCase().includes(query)
+    })
+  )
+})
 
 const getCellValue = (row: T, key: keyof T) => row[key]
 </script>
@@ -22,16 +51,20 @@ const getCellValue = (row: T, key: keyof T) => row[key]
             </th>
           </tr>
 
-          <tr>
+          <tr v-if="filter">
             <th class="pr-4">
-              <slot name="header-right" />
+              <Input
+                v-model="search"
+                icon="magnifying-glass"
+                :placeholder="t('common.search')"
+              />
             </th>
           </tr>
         </thead>
 
         <tbody>
           <tr 
-            v-for="(row, rowIndex) in data" 
+            v-for="(row, rowIndex) in filteredData" 
             :key="row.id"
             class="hover:cursor-pointer hover:bg-gray-800"
           >
