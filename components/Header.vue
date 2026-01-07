@@ -5,7 +5,7 @@ const { currentMenuItem } = useMenu()
 </script>
 
 <template>
-  <div class="text-2xl">
+  <div class="text-2xl mb-6">
     {{  currentMenuItem.description  }}
   </div>
 </template>

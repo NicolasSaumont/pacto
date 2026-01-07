@@ -1,9 +1,9 @@
 export default {
 
-  'common.customers': 'Clients',
+  'common.customers': 'Client | Clients',
   'common.order-taking': 'Prise de commande',
   'common.orders': 'Commandes',
-  'common.products': 'Produits',
+  'common.products': 'Produit | Produits',
   'common.synthesis': 'Synthèse',
 
   'customers.management': 'Gestion des clients',

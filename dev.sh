@@ -10,9 +10,9 @@ echo "🚀 Nettoyage des volumes node_modules et containers éventuels..."
 docker compose down -v || true
 
 # Supprime le dossier node_modules local pour éviter les conflits
-if [ -d "node_modules" ]; then
-    rm -rf node_modules
-fi
+# if [ -d "node_modules" ]; then
+#     rm -rf node_modules
+# fi
 
 echo "📦 Installation des dépendances dans le conteneur..."
 # Installe les dépendances dans le conteneur
