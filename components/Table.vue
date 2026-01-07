@@ -17,6 +17,9 @@ const { t } = useI18n()
 const search = ref('')
 const debouncedSearch = useDebounce(search, INPUT_DEBOUNCE)
 
+const sortColumn = ref<keyof T | null>(null)
+const sortOrder = ref<'asc' | 'desc' | null>(null)
+
 const filteredData = computed(() => {
   if (!props.filter) return props.data
   if (!debouncedSearch.value.trim()) return props.data
@@ -33,7 +36,52 @@ const filteredData = computed(() => {
   )
 })
 
+const sortedData = computed(() => {
+  let data = [...filteredData.value] // filteredData déjà filtré par search
+
+  if (sortColumn.value && sortOrder.value) {
+    data.sort((a: T, b: T) => {
+      const key = sortColumn.value as keyof T // ✅ assure TS que c’est une clé de T
+      const valA = a[key]
+      const valB = b[key]
+
+      if (valA == null) return 1
+      if (valB == null) return -1
+
+      if (typeof valA === 'number' && typeof valB === 'number') {
+        return sortOrder.value === 'asc' ? valA - valB : valB - valA
+      }
+
+      const strA = String(valA).toLowerCase()
+      const strB = String(valB).toLowerCase()
+      return sortOrder.value === 'asc'
+        ? strA.localeCompare(strB)
+        : strB.localeCompare(strA)
+    })
+  }
+
+  return data
+})
+
 const getCellValue = (row: T, key: keyof T) => row[key]
+
+const toggleSort = (columnKey: keyof T) => {
+  if (sortColumn.value !== columnKey) {
+    // Nouvelle colonne : tri croissant
+    sortColumn.value = columnKey
+    sortOrder.value = 'asc'
+  } else {
+    // Même colonne : cycle asc → desc → null
+    if (sortOrder.value === 'asc') {
+      sortOrder.value = 'desc'
+    } else if (sortOrder.value === 'desc') {
+      sortColumn.value = null
+      sortOrder.value = null
+    } else {
+      sortOrder.value = 'asc'
+    }
+  }
+}
 </script>
 
 <template>
@@ -45,9 +93,21 @@ const getCellValue = (row: T, key: keyof T) => row[key]
             <th
               v-for="column in columns"
               :key="String(column.key)"
-              class="text-left py-2 mb-5"
+              class="text-left py-2 px-3 flex gap-2 items-center cursor-pointer select-none"
+              @click="toggleSort(column.key)"
             >
-              {{ column.header }}
+              <span>{{ column.header }}</span>
+
+              <FontAwesomeIcon
+                v-if="sortColumn === column.key && sortOrder === 'asc'"
+                icon="sort-down"
+                class="-mt-2"
+              />
+              <FontAwesomeIcon
+                v-else-if="sortColumn === column.key && sortOrder === 'desc'"
+                icon="sort-up"
+                class="-mb-2"
+              />
             </th>
           </tr>
 
@@ -64,7 +124,7 @@ const getCellValue = (row: T, key: keyof T) => row[key]
 
         <tbody>
           <tr 
-            v-for="(row, rowIndex) in filteredData" 
+            v-for="(row, rowIndex) in sortedData" 
             :key="row.id"
             class="hover:cursor-pointer hover:bg-gray-800"
           >

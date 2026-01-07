@@ -8,6 +8,8 @@ import {
   faFileContract,
   faFilePen,
   faMagnifyingGlass,
+  faSortDown,
+  faSortUp,
   faUsers,
 } from '@fortawesome/free-solid-svg-icons'
 
@@ -21,6 +23,8 @@ export default defineNuxtPlugin((nuxtApp) => {
     faFileContract,
     faFilePen,
     faMagnifyingGlass,
+    faSortDown,
+    faSortUp,
     faUsers,
   )
 
