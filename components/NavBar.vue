@@ -5,7 +5,6 @@ const {
   menuItemClass,
   menuItems,
 } = useMenu()
-
 </script>
 
 <template>

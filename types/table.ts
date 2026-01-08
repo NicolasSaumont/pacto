@@ -1,3 +1,10 @@
+export interface ITableProps<T> {
+  columns: IColumn<T>[]
+  data: T[]
+  filter?: boolean
+  loading?: boolean
+}
+
 export type TColumnSize =
   | number          // px
   | `${number}px`

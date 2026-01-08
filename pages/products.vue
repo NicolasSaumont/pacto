@@ -1,24 +1,9 @@
 <script setup lang='ts'>
-
-interface IProduct {
-  id: number
-  name: string
-}
-
 const { t } = useI18n()
 
-const columns: IColumn<IProduct>[] = [
-  {
-    header: t('common.products', 1),
-    key: 'name',
-    sortable: true,
-  },
-  {
-    header: '',
-    size: '10%',
-    slot: 'actions'
-  }
-]
+const { 
+  columns,
+} = useProducts()
 
 const handleRowClick = (row: IProduct) => {
   navigateTo(`/products/${row.id}`)
@@ -50,6 +35,7 @@ const handleDeleteProductClick = (row: IProduct) => {
         <div class="text-center">
           <Button 
             color="red"
+            flat
             icon="trash" 
             @click="handleDeleteProductClick(row)"
           />
