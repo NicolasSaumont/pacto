@@ -15,7 +15,7 @@ const columns: IColumn<IProduct>[] = [
   },
   {
     header: '',
-    size: '10%',
+    size: '50%',
     slot: 'actions'
   }
 ]
@@ -29,6 +29,12 @@ const columns: IColumn<IProduct>[] = [
       :data="MOCKED_PRODUCT" 
       filter
       class="flex-1" 
-    />
+    >
+      <template #actions="{ row }">
+        <div class="text-center">
+          <Button />
+        </div>
+      </template>
+    </Table>
   </div>
 </template>
