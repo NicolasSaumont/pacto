@@ -19,6 +19,14 @@ const columns: IColumn<IProduct>[] = [
     slot: 'actions'
   }
 ]
+
+const handleRowClick = (row: IProduct) => {
+  navigateTo(`/products/${row.id}`)
+}
+
+const handleDeleteProductClick = (row: IProduct) => {
+  console.log('Delete product :', row)
+}
 </script>
 
 <template>
@@ -29,12 +37,14 @@ const columns: IColumn<IProduct>[] = [
       :data="MOCKED_PRODUCT" 
       filter
       class="flex-1" 
+      @row-click="handleRowClick"
     >
       <template #actions="{ row }">
         <div class="text-center">
           <Button 
             color="red"
             icon="trash" 
+            @click="handleDeleteProductClick(row)"
           />
         </div>
       </template>

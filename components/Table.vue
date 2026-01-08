@@ -11,6 +11,10 @@ const props = withDefaults(
   { filter: false, loading: false }
 )
 
+const emit = defineEmits<{
+  (e: 'row-click', row: T): void
+}>()
+
 const { t } = useI18n()
 
 const SKELETON_ROWS = 8
@@ -100,6 +104,11 @@ const getColumnStyle = (column: IColumn<T>) => {
 
   return { width: column.size }
 }
+
+const handleRowClick = (row: T) => {
+  if (props.loading) return
+  emit('row-click', row)
+}
 </script>
 
 <template>
@@ -157,6 +166,7 @@ const getColumnStyle = (column: IColumn<T>) => {
               :key="isDataColumn(column) ? String(column.key) : `slot-${column.slot}-${colIndex}`"
               :style="getColumnStyle(column)"
               class="py-4 px-3"
+              @click="isDataColumn(column) && handleRowClick(row)"
             >
               <template v-if="loading">
                 <div class="animate-pulse">
@@ -171,7 +181,9 @@ const getColumnStyle = (column: IColumn<T>) => {
               
                 <!-- colonne slot -->
                 <template v-else>
-                  <slot :name="column.slot" :row="row" />
+                  <div @click.stop>
+                    <slot :name="column.slot" :row="row" />
+                  </div>
                 </template>
               </template>
             </td>
