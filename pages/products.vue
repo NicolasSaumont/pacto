@@ -15,7 +15,7 @@ const columns: IColumn<IProduct>[] = [
   },
   {
     header: '',
-    size: '50%',
+    size: '10%',
     slot: 'actions'
   }
 ]
@@ -32,7 +32,10 @@ const columns: IColumn<IProduct>[] = [
     >
       <template #actions="{ row }">
         <div class="text-center">
-          <Button />
+          <Button 
+            color="red"
+            icon="trash" 
+          />
         </div>
       </template>
     </Table>

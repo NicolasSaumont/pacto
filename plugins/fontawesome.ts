@@ -10,6 +10,7 @@ import {
   faMagnifyingGlass,
   faSortDown,
   faSortUp,
+  faTrash,
   faUsers,
 } from '@fortawesome/free-solid-svg-icons'
 
@@ -25,6 +26,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     faMagnifyingGlass,
     faSortDown,
     faSortUp,
+    faTrash,
     faUsers,
   )
 

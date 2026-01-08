@@ -1,4 +1,4 @@
-export type ColumnSize =
+export type TColumnSize =
   | number          // px
   | `${number}px`
   | `${number}rem`
@@ -9,14 +9,14 @@ export interface IDataColumn<T> {
   header: string
   key: keyof T
   searchable?: boolean
-  size?: ColumnSize
+  size?: TColumnSize
   sortable?: boolean
 }
 
 export interface ISlotColumn {
   header: string
   slot: string // ex: "actions"
-  size?: ColumnSize
+  size?: TColumnSize
 }
 
 export type IColumn<T> = IDataColumn<T> | ISlotColumn
