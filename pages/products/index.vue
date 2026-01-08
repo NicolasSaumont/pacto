@@ -24,6 +24,7 @@ const handleDeleteProductClick = (row: IProduct) => {
         />
       </template>
     </Header>
+    
     <Table 
       :columns="columns" 
       :data="MOCKED_PRODUCT" 

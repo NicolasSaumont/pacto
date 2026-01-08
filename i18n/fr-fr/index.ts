@@ -13,4 +13,7 @@ export default {
 
   'products.add-product': '+ Nouveau produit',
   'products.management': 'Gestion des produits',
+
+  'product.add-product': 'Créer un nouveau produit',
+  'product.name': 'Nom du produit',
 }

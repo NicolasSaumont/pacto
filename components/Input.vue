@@ -1,13 +1,25 @@
 <script setup lang='ts'>
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   icon?: string
   modelValue?: string
+  label?: string
   placeholder?: string
-}>()
+  theme?: TInputTheme
+}>(), {
+  theme: 'dark',
+})
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string): void
 }>()
+
+const { 
+  clearRightClass,
+  iconColorClass,
+  inputClasses,
+  labelClass,
+  rightPaddingClass,
+} = useInput(props)
 
 const handleResetClick = () => {
   emit('update:modelValue', '')
@@ -15,26 +27,45 @@ const handleResetClick = () => {
 </script>
 
 <template>
-  <div class="relative">
-    <input
-      type="text"
-      :value="modelValue"
-      :placeholder="`${placeholder}...`"
-      class="bg-gray-800 border border-gray-600 rounded-lg pl-3 py-1 text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-      :class="[icon ? 'pr-16' : 'pr-10']"
-      @input="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
-    />
-    <FontAwesomeIcon
-      v-if="modelValue"
-      icon="circle-xmark"
-      class="absolute top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer"
-      :class="[icon ? 'right-10' : 'right-3']"
-      @click="handleResetClick"
-    />
-    <FontAwesomeIcon
-      v-if="icon"
-      :icon="icon"
-      class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
-    />
+  <div class="w-full max-w-72">
+    <!-- Label -->
+    <label
+      v-if="label"
+      class="block mb-1 text-sm font-medium"
+      :class="labelClass"
+    >
+      {{ label }}
+    </label>
+
+    <!-- Input wrapper -->
+    <div class="relative">
+      <input
+        type="text"
+        :value="modelValue"
+        :placeholder="placeholder ? `${placeholder}...` : undefined"
+        class="w-full"
+        :class="[
+          inputClasses,
+          rightPaddingClass,
+        ]"
+        @input="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
+      />
+
+      <FontAwesomeIcon
+        v-if="modelValue"
+        icon="circle-xmark"
+        class="absolute top-1/2 -translate-y-1/2 cursor-pointer"
+        :class="[iconColorClass, clearRightClass]"
+        @click="handleResetClick"
+      />
+
+      <FontAwesomeIcon
+        v-if="icon"
+        :icon="icon"
+        class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"
+        :class="iconColorClass"
+      />
+    </div>
   </div>
 </template>
+

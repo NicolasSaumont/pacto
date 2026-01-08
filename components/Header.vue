@@ -5,9 +5,11 @@ const { currentMenuItem } = useMenu()
 </script>
 
 <template>
-  <div class="flex gap-2 justify-between">
-    <div class="text-2xl mb-6">
-      {{  currentMenuItem.description  }}
+  <div class="flex gap-2 justify-between mb-6">
+    <div class="text-2xl">
+      <slot name="title">
+        {{ currentMenuItem?.description }}
+      </slot>
     </div>
     <slot name="header-right" />
   </div>
