@@ -27,7 +27,7 @@ const handleResetClick = () => {
     <FontAwesomeIcon
       v-if="modelValue"
       icon="circle-xmark"
-      class="absolute right-10 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer"
+      class="absolute top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer"
       :class="[icon ? 'right-10' : 'right-3']"
       @click="handleResetClick"
     />

@@ -1,4 +1,4 @@
-<script setup lang='ts' generic="T extends { id: string | number }">
+<script setup lang="ts" generic="T extends { id: string | number }">
 import { useDebounce } from '@vueuse/core'
 
 const props = withDefaults(
@@ -8,10 +8,7 @@ const props = withDefaults(
     filter?: boolean
     loading?: boolean
   }>(),
-  {
-    filter: false,
-    loading: false,
-  }
+  { filter: false, loading: false }
 )
 
 const { t } = useI18n()
@@ -24,31 +21,34 @@ const debouncedSearch = useDebounce(search, INPUT_DEBOUNCE)
 const sortColumn = ref<keyof T | null>(null)
 const sortOrder = ref<'asc' | 'desc' | null>(null)
 
+const dataColumns = computed(() =>
+  props.columns.filter(isDataColumn)
+)
+
 const filteredData = computed(() => {
+  if (props.loading) return props.data
   if (!props.filter) return props.data
   if (!debouncedSearch.value.trim()) return props.data
 
   const query = debouncedSearch.value.toLowerCase()
 
   return props.data.filter((row) =>
-    props.columns.some((column) => {
+    dataColumns.value.some((column) => {
+      if (column.searchable === false) return false
       const value = row[column.key]
       if (value == null) return false
-
       return String(value).toLowerCase().includes(query)
     })
   )
 })
 
 const sortedData = computed(() => {
-  let data = [...filteredData.value] // filteredData déjà filtré par search
-
+  const data = [...filteredData.value]
   if (sortColumn.value && sortOrder.value) {
-    data.sort((a: T, b: T) => {
+    data.sort((a, b) => {
       const key = sortColumn.value as keyof T
       const valA = a[key]
       const valB = b[key]
-
       if (valA == null) return 1
       if (valB == null) return -1
 
@@ -63,20 +63,17 @@ const sortedData = computed(() => {
         : strB.localeCompare(strA)
     })
   }
-
   return data
 })
 
 const displayRows = computed(() => {
-  if (props.loading) {
-    return Array.from({ length: SKELETON_ROWS }, (_, i) => ({ id: `skeleton-${i}` }))
-  }
-  return sortedData.value
+  if (!props.loading) return sortedData.value
+  return Array.from({ length: SKELETON_ROWS }, (_, i) => ({ id: `skeleton-${i}` } as unknown as T))
 })
 
-const getCellValue = (row: T, key: keyof T) => row[key]
-
 const toggleSort = (column: IColumn<T>) => {
+  if (props.loading) return
+  if (!isDataColumn(column)) return
   if (!column.sortable) return
 
   const columnKey = column.key
@@ -91,72 +88,91 @@ const toggleSort = (column: IColumn<T>) => {
     } else sortOrder.value = 'asc'
   }
 }
+
+const getCellValue = (row: T, key: keyof T) => row[key]
+
+const getColumnStyle = (column: IColumn<T>) => {
+  if (!column.size) return {}
+
+  if (typeof column.size === 'number') {
+    return { width: `${column.size}px` }
+  }
+
+  return { width: column.size }
+}
 </script>
 
 <template>
   <div class="bg-gray-900 p-6 rounded-2xl border border-gray-600 w-full h-full flex flex-col min-h-0">
+
+    <div v-if="filter" class="flex justify-end mb-3 pr-4">
+      <Input
+        v-model="search"
+        icon="magnifying-glass"
+        :placeholder="t('common.search')"
+        :disabled="loading"
+      />
+    </div>
+
     <div class="overflow-y-auto min-h-0 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
-      <table class="w-full border-collapse">
-        <thead class="sticky top-0 bg-gray-900 z-10 flex justify-between">
+      <table class="w-full table-fixed border-collapse">
+        <thead class="sticky top-0 bg-gray-900 z-10">
           <tr>
             <th
-              v-for="column in columns"
-              :key="String(column.key)"
-              class="text-left py-2 px-3 flex gap-2 items-center select-none"
-              :class="{ 'cursor-pointer': column.sortable }"
+              v-for="(column, colIndex) in columns"
+              :key="isDataColumn(column) ? String(column.key) : `slot-${column.slot}-${colIndex}`"
+              class="text-left py-2 px-3 select-none"
+              :style="getColumnStyle(column)"
+              :class="{ 'cursor-pointer': isDataColumn(column) && column.sortable && !loading }"
               @click="toggleSort(column)"
             >
-              <span>{{ column.header }}</span>
-
-              <FontAwesomeIcon
-                v-if="column.sortable && sortColumn === column.key && sortOrder === 'asc'"
-                icon="sort-down"
-                class="-mt-2"
-              />
-              <FontAwesomeIcon
-                v-else-if="column.sortable && sortColumn === column.key && sortOrder === 'desc'"
-                icon="sort-up"
-                class="-mb-2"
-              />
-            </th>
-          </tr>
-
-          <tr v-if="filter">
-            <th class="pr-4">
-              <Input
-                v-model="search"
-                icon="magnifying-glass"
-                :placeholder="t('common.search')"
-              />
+              <div class="flex gap-2 items-center">
+                <span class="truncate">{{ column.header }}</span>
+              
+                <template v-if="isDataColumn(column) && column.sortable && !loading">
+                  <FontAwesomeIcon
+                    v-if="sortColumn === column.key && sortOrder === 'asc'"
+                    icon="sort-down"
+                    class="-mt-2 shrink-0"
+                  />
+                  <FontAwesomeIcon
+                    v-else-if="sortColumn === column.key && sortOrder === 'desc'"
+                    icon="sort-up"
+                    class="-mb-2 shrink-0"
+                  />
+                </template>
+              </div>
             </th>
           </tr>
         </thead>
 
         <tbody>
-          <tr 
-            v-for="(row, rowIndex) in sortedData" 
+          <tr
+            v-for="row in displayRows"
             :key="row.id"
-            class="hover:cursor-pointer hover:bg-gray-800"
+            :class="loading ? '' : 'hover:cursor-pointer hover:bg-gray-800'"
           >
             <td
-              v-for="column in columns"
-              :key="String(column.key)"
+              v-for="(column, colIndex) in columns"
+              :key="isDataColumn(column) ? String(column.key) : `slot-${column.slot}-${colIndex}`"
+              :style="getColumnStyle(column)"
               class="py-4 px-3"
-              :class="{
-                'border-t border-gray-800': rowIndex !== 0,
-                'border-b border-gray-800': rowIndex !== data.length - 1,
-              }"
             >
               <template v-if="loading">
                 <div class="animate-pulse">
-                  <div
-                    class="h-4 rounded bg-gray-800"
-                  />
+                  <div class="h-4 rounded bg-gray-800 w-3/4" />
                 </div>
               </template>
-              
+            
               <template v-else>
-                {{ getCellValue(row as T, column.key) }}
+                <span v-if="isDataColumn(column)" class="block truncate">
+                  {{ getCellValue(row, column.key) }}
+                </span>
+              
+                <!-- colonne slot -->
+                <template v-else>
+                  <slot :name="column.slot" :row="row" />
+                </template>
               </template>
             </td>
           </tr>
@@ -165,4 +181,3 @@ const toggleSort = (column: IColumn<T>) => {
     </div>
   </div>
 </template>
-
