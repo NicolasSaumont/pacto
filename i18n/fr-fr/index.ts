@@ -11,5 +11,6 @@ export default {
 
   'orders.synthesis': 'Synthèse des produits commandés',
 
+  'products.add-product': '+ Nouveau produit',
   'products.management': 'Gestion des produits',
 }

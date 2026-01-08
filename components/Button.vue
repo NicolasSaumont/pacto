@@ -18,9 +18,15 @@ const emit = defineEmits<{
 }>()
 
 const basicClasses = computed(() => [
-  'font-medium p-3 rounded-lg max-w-44 transition-colors',
+  'font-medium rounded-lg max-w-44 transition-colors',
   'disabled:opacity-50 disabled:cursor-not-allowed',
 ])
+
+const paddingClasses = computed(() =>
+  props.label
+    ? 'py-3 px-4'
+    : 'p-3'
+)
 
 const colorStyles: Record<TButtonColor, {
   normal: string[]
@@ -38,6 +44,7 @@ const colorStyles: Record<TButtonColor, {
 
 const buttonStyle = computed(() => [
   ...basicClasses.value,
+  paddingClasses.value,
   ...(props.flat
     ? colorStyles[props.color].flat
     : colorStyles[props.color].normal),
