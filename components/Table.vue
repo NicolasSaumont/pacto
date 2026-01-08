@@ -6,13 +6,17 @@ const props = withDefaults(
     columns: IColumn<T>[]
     data: T[]
     filter?: boolean
+    loading?: boolean
   }>(),
   {
     filter: false,
+    loading: false,
   }
 )
 
 const { t } = useI18n()
+
+const SKELETON_ROWS = 8
 
 const search = ref('')
 const debouncedSearch = useDebounce(search, INPUT_DEBOUNCE)
@@ -41,7 +45,7 @@ const sortedData = computed(() => {
 
   if (sortColumn.value && sortOrder.value) {
     data.sort((a: T, b: T) => {
-      const key = sortColumn.value as keyof T // ✅ assure TS que c’est une clé de T
+      const key = sortColumn.value as keyof T
       const valA = a[key]
       const valB = b[key]
 
@@ -63,6 +67,13 @@ const sortedData = computed(() => {
   return data
 })
 
+const displayRows = computed(() => {
+  if (props.loading) {
+    return Array.from({ length: SKELETON_ROWS }, (_, i) => ({ id: `skeleton-${i}` }))
+  }
+  return sortedData.value
+})
+
 const getCellValue = (row: T, key: keyof T) => row[key]
 
 const toggleSort = (column: IColumn<T>) => {
@@ -80,7 +91,6 @@ const toggleSort = (column: IColumn<T>) => {
     } else sortOrder.value = 'asc'
   }
 }
-
 </script>
 
 <template>
@@ -137,7 +147,17 @@ const toggleSort = (column: IColumn<T>) => {
                 'border-b border-gray-800': rowIndex !== data.length - 1,
               }"
             >
-              {{ getCellValue(row, column.key) }}
+              <template v-if="loading">
+                <div class="animate-pulse">
+                  <div
+                    class="h-4 rounded bg-gray-800"
+                  />
+                </div>
+              </template>
+              
+              <template v-else>
+                {{ getCellValue(row as T, column.key) }}
+              </template>
             </td>
           </tr>
         </tbody>
