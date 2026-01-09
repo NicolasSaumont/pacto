@@ -5,11 +5,13 @@ const props = withDefaults(defineProps<{
   flat?: boolean
   icon?: string
   label?: string
+  outline?: boolean
   type?: 'button' | 'submit' | 'reset'
 }>(), {
   color: 'primary',
   disabled: false,
   flat: false,
+  outline: false,
   type: 'button',
 })
 
@@ -30,7 +32,7 @@ const {
     @click="emit('click', $event)"
   >
     <slot>
-      <div class="flex gap-2 items-center">
+      <div class="flex gap-2 items-center justify-center">
         <span v-if="label">{{ label }}</span>
         <FontAwesomeIcon v-if="icon" :icon />
       </div>

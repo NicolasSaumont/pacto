@@ -20,7 +20,7 @@ const handleDeleteProductClick = (row: IProduct) => {
       <template #header-right>
         <Button 
           :label="t('products.add-product')" 
-          @click="navigateTo('/products/create')"
+          @click="navigateTo(PRODUCTS_CREATE)"
         />
       </template>
     </Header>

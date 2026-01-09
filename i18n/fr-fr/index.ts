@@ -1,9 +1,11 @@
 export default {
 
+  'common.cancel': 'Annuler',
   'common.customers': 'Client | Clients',
   'common.order-taking': 'Prise de commande',
   'common.orders': 'Commandes',
   'common.products': 'Produit | Produits',
+  'common.save': 'Enregistrer',
   'common.search': 'Rechercher',
   'common.synthesis': 'Synthèse',
 
