@@ -12,6 +12,6 @@ const { t } = useI18n()
 
     <ProductsForm />
 
-    <ProductsFooter />
+    <ProductsFooter :mode="ModeEnum.CREATION"/>
   </div>
 </template>

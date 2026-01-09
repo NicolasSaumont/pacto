@@ -3,6 +3,7 @@ export interface IInputProps {
   icon?: string
   modelValue?: string
   label?: string
+  loading?: boolean
   placeholder?: string
   theme?: TInputTheme
 }

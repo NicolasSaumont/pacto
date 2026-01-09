@@ -1,14 +1,20 @@
 <script setup lang='ts'>
+const props = defineProps<{
+  mode: ModeEnum
+}>()
+
 const { t } = useI18n()
 
 const {
+  editProduct,
   postNewProduct,
   resetForm,
 } = useProductsStore()
 
 const { 
   isConfirmButtonDisabled,
-  isProductProcessing,
+  isProductSaving,
+  product,
 } = storeToRefs(useProductsStore())
 
 const handleResetClick = () => {
@@ -16,11 +22,14 @@ const handleResetClick = () => {
 }
 
 const handleSubmitClick = async () => {
-  isProductProcessing.value = true
-  await postNewProduct()
+  isProductSaving.value = true
+
+  if (props.mode === ModeEnum.CREATION) await postNewProduct()
+  else if (props.mode === ModeEnum.EDITION) await editProduct(product.value.id)
+
   await navigateTo(PRODUCTS)
   resetForm()
-  isProductProcessing.value = false
+  isProductSaving.value = false
 }
 </script>
 
@@ -34,7 +43,7 @@ const handleSubmitClick = async () => {
     <Button 
       :disabled="isConfirmButtonDisabled"
       :label="t('common.save')" 
-      :loading="isProductProcessing"
+      :loading="isProductSaving"
       @click="handleSubmitClick"
     />
   </div>

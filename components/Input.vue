@@ -4,6 +4,7 @@ const props = withDefaults(defineProps<{
   icon?: string
   modelValue?: string
   label?: string
+  loading?: boolean
   placeholder?: string
   theme?: TInputTheme
 }>(), {
@@ -47,18 +48,31 @@ const handleResetClick = () => {
         :class="[
           inputClasses,
           rightPaddingClass,
-          disabled && 'cursor-not-allowed opacity-80',
+          (disabled || loading) && 'cursor-not-allowed opacity-80',
         ]"
         @input="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
       />
 
       <FontAwesomeIcon
-        v-if="modelValue && !disabled"
+        v-if="modelValue && !disabled && !loading"
         icon="circle-xmark"
         class="absolute top-1/2 -translate-y-1/2 cursor-pointer"
         :class="[iconColorClass, clearRightClass]"
         @click="handleResetClick"
       />
+
+      <!-- LOADING -->
+      <span
+        v-if="loading"
+        class="absolute top-1/2 -translate-y-1/2"
+        :class="clearRightClass"
+        aria-label="loading"
+      >
+        <span
+          class="block h-5 w-5 rounded-full border-2 border-transparent border-t-current animate-spin"
+          :class="iconColorClass"
+        />
+      </span>
 
       <FontAwesomeIcon
         v-if="icon"
@@ -66,7 +80,7 @@ const handleResetClick = () => {
         class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"
         :class="[
           iconColorClass,
-          disabled && 'opacity-50',
+          (disabled || loading) && 'opacity-50',
         ]"
       />
     </div>

@@ -6,10 +6,12 @@ const {
 } = useProductsStore()
 
 const {
-  isProductProcessing,
+  isProductSaving,
+  isProductGettingFetch,
   product
-  // productName,
 } = storeToRefs(useProductsStore())
+
+const isProductNameInputDisabled = computed(() => isProductSaving.value || isProductGettingFetch.value)
 
 onUnmounted(resetForm)
 </script>
@@ -17,8 +19,9 @@ onUnmounted(resetForm)
 <template>
   <Input
     v-model="product.name"
-    :disabled="isProductProcessing"
+    :disabled="isProductNameInputDisabled"
     :label="t('product.name')"
+    :loading="isProductGettingFetch"
     theme="light"
   />
 </template>

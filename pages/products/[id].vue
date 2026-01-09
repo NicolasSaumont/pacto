@@ -7,15 +7,15 @@ const {
 } = useProductsStore()
 
 const {
-  isProductProcessing,
+  isProductGettingFetch,
 } = storeToRefs(useProductsStore())
 
 onMounted(async () => {
-  isProductProcessing.value = true
+  isProductGettingFetch.value = true
   const productId = getRouteParam(route.params.id)
   if (!productId) return
   await setProduct(productId)
-  isProductProcessing.value = false
+  isProductGettingFetch.value = false
 })
 </script>
 
@@ -27,4 +27,6 @@ onMounted(async () => {
   </Header>
 
   <ProductsForm />
+
+  <ProductsFooter :mode="ModeEnum.EDITION"/>
 </template>

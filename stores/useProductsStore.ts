@@ -1,12 +1,17 @@
 import { defineStore } from 'pinia'
 
 export const useProductsStore = defineStore('products', () => {
-  const isProductProcessing = ref(false)
+  const isProductSaving = ref(false)
+  const isProductGettingFetch = ref(false)
   const product = ref<IProduct>({ ...DEFAULT_PRODUCT })
-  // const productName = ref<string>()
 
   const isConfirmButtonDisabled = computed(() => !product.value.name)
   
+  const editProduct = async (productId: number) => {
+    console.log('Product edition is processing : ', productId)
+    await new Promise(resolve => setTimeout(resolve, 1000))
+  }
+
   const postNewProduct = async () => {
     console.log('New product creation is processing : ', product.value.name)
     await new Promise(resolve => setTimeout(resolve, 1000))
@@ -20,15 +25,16 @@ export const useProductsStore = defineStore('products', () => {
     // await getProduct(productId)
     console.log('Product is getting fetch : ', productId)
     await new Promise(resolve => setTimeout(resolve, 1000))
-    product.value = MOCKED_PRODUCT
+    product.value = { ...MOCKED_PRODUCT }
   }
 
   return {
+    editProduct,
     isConfirmButtonDisabled,
-    isProductProcessing,
+    isProductSaving,
+    isProductGettingFetch,
     postNewProduct,
     product,
-    // productName,
     resetForm,
     setProduct,
   }
