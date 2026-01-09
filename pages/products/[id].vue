@@ -20,13 +20,15 @@ onMounted(async () => {
 </script>
 
 <template>
-  <Header>
-    <template #title>
-      {{ t('product.edit-product') }}
-    </template>
-  </Header>
+  <div class="w-full max-h-full flex flex-col gap-6">
+    <Header>
+      <template #title>
+        {{ t('product.edit-product') }}
+      </template>
+    </Header>
 
-  <ProductsForm />
+    <ProductsForm />
 
-  <ProductsFooter :mode="ModeEnum.EDITION"/>
+    <ProductsFooter :mode="ModeEnum.EDITION"/>
+  </div>
 </template>
