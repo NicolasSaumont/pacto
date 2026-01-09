@@ -1,9 +1,7 @@
-<script setup lang='ts'>
-const { t } = useI18n()
-</script>
+<script setup lang='ts'></script>
 
 <template>
-  <div>
-    {{  t('common.order-taking') }}
+  <div class="w-full max-h-full flex flex-col gap-6">
+    <Header />
   </div>
 </template>
