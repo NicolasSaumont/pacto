@@ -5,6 +5,7 @@ const props = withDefaults(defineProps<{
   flat?: boolean
   icon?: string
   label?: string
+  loading?: boolean
   outline?: boolean
   type?: 'button' | 'submit' | 'reset'
 }>(), {
@@ -27,15 +28,25 @@ const {
 <template>
   <button
     :type="type"
-    :disabled="disabled"
+    :disabled="disabled || loading"
     :class="buttonStyle"
     @click="emit('click', $event)"
   >
-    <slot>
-      <div class="flex gap-2 items-center justify-center">
-        <span v-if="label">{{ label }}</span>
-        <FontAwesomeIcon v-if="icon" :icon />
-      </div>
-    </slot>
+    <div class="flex gap-2 items-center justify-center">
+      <!-- LOADING -->
+      <span
+        v-if="loading"
+        class="h-5 w-5 rounded-full border-2 border-transparent border-t-current animate-spin"
+        aria-label="loading"
+      />
+
+      <template v-else>
+        <slot>
+          <span v-if="label">{{ label }}</span>
+          <FontAwesomeIcon v-if="icon" :icon="icon" />
+        </slot>
+      </template>
+    </div>
   </button>
 </template>
+

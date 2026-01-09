@@ -17,5 +17,6 @@ export default {
   'products.management': 'Gestion des produits',
 
   'product.add-product': 'Créer un nouveau produit',
+  'product.edit-product': 'Modifier un produit',
   'product.name': 'Nom du produit',
 }

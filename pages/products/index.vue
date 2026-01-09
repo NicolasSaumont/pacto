@@ -27,7 +27,7 @@ const handleDeleteProductClick = (row: IProduct) => {
     
     <Table 
       :columns="columns" 
-      :data="MOCKED_PRODUCT" 
+      :data="MOCKED_PRODUCTS" 
       filter
       class="flex-1" 
       @row-click="handleRowClick"

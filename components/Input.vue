@@ -1,5 +1,6 @@
 <script setup lang='ts'>
 const props = withDefaults(defineProps<{
+  disabled?: boolean
   icon?: string
   modelValue?: string
   label?: string
@@ -17,7 +18,6 @@ const {
   clearRightClass,
   iconColorClass,
   inputClasses,
-  labelClass,
   rightPaddingClass,
 } = useInput(props)
 
@@ -31,8 +31,7 @@ const handleResetClick = () => {
     <!-- Label -->
     <label
       v-if="label"
-      class="block mb-1 text-sm font-medium"
-      :class="labelClass"
+      class="block mb-1 text-sm font-medium text-gray-400"
     >
       {{ label }}
     </label>
@@ -42,17 +41,19 @@ const handleResetClick = () => {
       <input
         type="text"
         :value="modelValue"
+        :disabled="disabled"
         :placeholder="placeholder ? `${placeholder}...` : undefined"
         class="w-full"
         :class="[
           inputClasses,
           rightPaddingClass,
+          disabled && 'cursor-not-allowed opacity-80',
         ]"
         @input="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
       />
 
       <FontAwesomeIcon
-        v-if="modelValue"
+        v-if="modelValue && !disabled"
         icon="circle-xmark"
         class="absolute top-1/2 -translate-y-1/2 cursor-pointer"
         :class="[iconColorClass, clearRightClass]"
@@ -63,7 +64,10 @@ const handleResetClick = () => {
         v-if="icon"
         :icon="icon"
         class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"
-        :class="iconColorClass"
+        :class="[
+          iconColorClass,
+          disabled && 'opacity-50',
+        ]"
       />
     </div>
   </div>

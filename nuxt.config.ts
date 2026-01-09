@@ -16,12 +16,19 @@ export default defineNuxtConfig({
   ssr: false,
 
   modules: [
+    '@pinia/nuxt',
     '@nuxtjs/i18n',
     '@nuxtjs/tailwindcss',
   ],
 
   imports: {
-    dirs: ['./types/**'],
+    dirs: [
+      './composables/**',
+      './repository/**',
+      './stores/**',
+      './types/**', 
+      './utils/**', 
+    ],
   },
 
   css: [

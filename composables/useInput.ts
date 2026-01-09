@@ -41,17 +41,10 @@ export function useInput(props: IInputProps) {
     hasTrailingIcon.value ? 'right-10' : 'right-3'
   )
 
-  const labelClass = computed(() =>
-    props.theme === 'light'
-      ? 'text-gray-400'
-      : 'text-gray-700'
-  )
-
   return { 
     clearRightClass,
     iconColorClass,
     inputClasses,
-    labelClass,
     rightPaddingClass,
   }
 }

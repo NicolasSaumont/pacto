@@ -5,6 +5,7 @@ export interface IButtonProps {
   outline?: boolean
   icon?: string
   label?: string
+  loading?: boolean
   type?: 'button' | 'submit' | 'reset'
 }
 

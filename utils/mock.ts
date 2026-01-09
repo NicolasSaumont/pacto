@@ -1,4 +1,4 @@
-export const MOCKED_PRODUCT = [
+export const MOCKED_PRODUCTS = [
   { id: 1, name: 'Jambon blanc supérieur' },
   { id: 2, name: 'Jambon blanc découenné dégraissé' },
   { id: 3, name: 'Jambon cru traditionnel' },
@@ -63,3 +63,5 @@ export const MOCKED_PRODUCT = [
   { id: 49, name: 'Jésus de Lyon' },
   { id: 50, name: 'Fuseau lorrain' },
 ]
+
+export const MOCKED_PRODUCT = { id: 1, name: 'Jambon blanc supérieur' }

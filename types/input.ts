@@ -1,4 +1,5 @@
 export interface IInputProps {
+  disabled?: boolean
   icon?: string
   modelValue?: string
   label?: string
