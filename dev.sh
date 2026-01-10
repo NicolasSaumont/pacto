@@ -1,18 +1,17 @@
 #!/usr/bin/env bash
-set -e  # Arrête le script si une commande échoue
+set -e
 
-# --- Chemin du projet ---
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$SCRIPT_DIR"
 
-echo "🚀 Nettoyage des volumes node_modules et containers éventuels..."
-# Supprime les containers et volumes liés au projet
-docker compose down -v || true
+echo "🧹 Nettoyage des volumes node_modules et containers éventuels..."
+docker compose down -v --remove-orphans || true
 
-echo "📦 Installation des dépendances dans le conteneur..."
-# Installe les dépendances dans le conteneur
-docker compose run --rm app npm install
+echo "📦 Installation des dépendances BACK..."
+docker compose run --rm back npm install
 
-echo "⚡ Démarrage du conteneur en mode dev..."
-# Lancer le conteneur en mode développement
+echo "📦 Installation des dépendances FRONT..."
+docker compose run --rm front npm install
+
+echo "🚀 Lancement de l'environnement DEV..."
 docker compose up
