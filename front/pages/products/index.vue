@@ -7,15 +7,20 @@ const {
 
 const productsStore = useProductsStore()
 
-const { setProducts } = productsStore
+const { 
+  deleteProduct,
+  setProducts,
+} = productsStore
+
 const { products } = storeToRefs(productsStore)
 
 const handleRowClick = (row: IProduct) => {
   navigateTo(`/products/${row.id}`)
 }
 
-const handleDeleteProductClick = (row: IProduct) => {
-  console.log('Delete product :', row)
+const handleDeleteProductClick = async (row: IProduct) => {
+  await deleteProduct(row.id.toString())
+  setProducts()
 }
 
 onMounted(setProducts)

@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-BACK_CONTAINER="pacto-back-1"  # Nom du container back
+BACK_CONTAINER="pacto-back-1"
 DB_CONTAINER="pacto-db-1"
 
 echo "⏳ Attente que Postgres soit prêt..."
@@ -12,7 +12,8 @@ done
 echo "✅ Postgres prêt"
 
 echo "🧹 Réinitialisation des tables et relance du seed..."
-# Réinitialisation des tables (ex : Sequelize, Prisma ou autre)
+
+# Reset des tables
 docker exec "$BACK_CONTAINER" node src/reset.js
 echo "✅ Tables réinitialisées avec succès !"
 

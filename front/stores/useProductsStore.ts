@@ -8,9 +8,13 @@ export const useProductsStore = defineStore('products', () => {
 
   const isConfirmButtonDisabled = computed(() => !product.value.name)
   
-  const editProduct = async (productId: number) => {
+  const editProduct = async (productId: string) => {
     console.log('Product edition is processing : ', productId)
     await new Promise(resolve => setTimeout(resolve, 1000))
+  }
+
+  const deleteProduct = async (productId: string) => {
+    await productRepository.deleteProduct(productId)
   }
 
   const postNewProduct = async () => {
@@ -22,20 +26,18 @@ export const useProductsStore = defineStore('products', () => {
     product.value = { ...DEFAULT_PRODUCT }
   }
 
+  const setProduct = async (productId: string) => {
+    product.value = await productRepository.getProduct(productId)
+    console.log(product.value)
+  }
+
   const setProducts = async () => {
     products.value = await productRepository.getProducts() 
     console.log(products.value)
   }
 
-  const setProduct = async (productId: string) => {
-    product.value = await productRepository.getProduct(productId)
-    console.log(product.value)
-    // console.log('Product is getting fetch : ', productId)
-    // await new Promise(resolve => setTimeout(resolve, 1000))
-    // product.value = { ...MOCKED_PRODUCT }
-  }
-
   return {
+    deleteProduct,
     editProduct,
     isConfirmButtonDisabled,
     isProductSaving,

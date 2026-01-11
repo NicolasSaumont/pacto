@@ -1,9 +1,11 @@
 const { fetcher } = apiFactory()
 
 export const productRepository = {
-  async getProducts(): Promise<IProduct[]> {
-    const { public: { apiBase } } = useRuntimeConfig()
-    return await $fetch<IProduct[]>(`${apiBase}/products`)
+
+  async deleteProduct(id: string): Promise<void> {
+    return fetcher<void>(`/products/${id}`, {
+      method: 'DELETE',
+    })
   },
 
   async getProduct(id: string): Promise<IProduct> {
@@ -11,16 +13,15 @@ export const productRepository = {
     return await $fetch<IProduct>(`${apiBase}/products/${id}`)
   },
 
+  async getProducts(): Promise<IProduct[]> {
+    const { public: { apiBase } } = useRuntimeConfig()
+    return await $fetch<IProduct[]>(`${apiBase}/products`)
+  },
+
   // create(payload: Pick<IProduct, 'name'>): Promise<IProduct> {
   //   return fetcher<IProduct>('/products', {
   //     method: 'POST',
   //     body: payload,
-  //   })
-  // },
-
-  // delete(id: number): Promise<void> {
-  //   return fetcher<void>(`/products/${id}`, {
-  //     method: 'DELETE',
   //   })
   // },
 }
