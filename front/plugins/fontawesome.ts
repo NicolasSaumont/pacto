@@ -12,6 +12,7 @@ import {
   faSortUp,
   faTrash,
   faUsers,
+  faXmark,
 } from '@fortawesome/free-solid-svg-icons'
 
 // Icônes brands
@@ -28,6 +29,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     faSortUp,
     faTrash,
     faUsers,
+    faXmark,
   )
 
   nuxtApp.vueApp.component('FontAwesomeIcon', FontAwesomeIcon)

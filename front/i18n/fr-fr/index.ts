@@ -1,6 +1,7 @@
 export default {
 
   'common.cancel': 'Annuler',
+  'common.confirm': 'Confirmer',
   'common.customers': 'Client | Clients',
   'common.order-taking': 'Prise de commande',
   'common.orders': 'Commandes',
@@ -16,7 +17,9 @@ export default {
   'products.add-product': '+ Nouveau produit',
   'products.management': 'Gestion des produits',
 
-  'product.add-product': 'Créer un nouveau produit',
-  'product.edit-product': 'Modifier un produit',
+  'product.add': 'Créer un nouveau produit',
+  'product.edit': 'Modifier un produit',
+  'product.delete': 'Supprimer un produit',
+  'product.delete.confirmation': 'Voulez-vous vraiment supprimer ce produit ?',
   'product.name': 'Nom du produit',
 }

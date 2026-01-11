@@ -17,13 +17,25 @@ const {
   products
 } = storeToRefs(productsStore)
 
+const isDeleteProductConfirmationModalVisible = ref(false)
+const productToDelete = ref<IProduct | null>(null)
+
 const handleRowClick = (row: IProduct) => {
   navigateTo(`/products/${row.id}`)
 }
 
-const handleDeleteProductClick = async (row: IProduct) => {
-  await deleteProduct(row.id.toString())
-  setProducts()
+const handleOpenDeleteProductConfirmationModalClick = (row: IProduct) => {
+  productToDelete.value = row
+  isDeleteProductConfirmationModalVisible.value = true
+}
+
+const handleDeleteProductClick = async () => {
+  if (!productToDelete.value) return
+
+  await deleteProduct(productToDelete.value.id.toString())
+  await setProducts()
+
+  productToDelete.value = null
 }
 
 onMounted(setProducts)
@@ -45,7 +57,6 @@ onMounted(setProducts)
       :data="products" 
       filter
       :loading="isProductGettingFetch"
-      class="flex-1" 
       @row-click="handleRowClick"
     >
       <template #actions="{ row }">
@@ -54,10 +65,18 @@ onMounted(setProducts)
             color="red"
             flat
             icon="trash" 
-            @click="handleDeleteProductClick(row)"
+            @click.stop="handleOpenDeleteProductConfirmationModalClick(row)"
           />
         </div>
       </template>
     </Table>
+
+    <Modal 
+      v-model="isDeleteProductConfirmationModalVisible"
+      :description="t('product.delete.confirmation')"
+      is-confirmation-modal
+      :title="t('product.delete')"
+      @confirm="handleDeleteProductClick"
+    />
   </div>
 </template>
