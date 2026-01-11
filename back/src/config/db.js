@@ -1,12 +1,15 @@
-require('dotenv').config()
+require('dotenv').config({ path: '../../.env' })
 const { Sequelize } = require('sequelize')
 
 // Création de l'instance Sequelize pour PostgreSQL
 // process.env.PG_URL = url complète de la DB, ex: postgres://user:pass@db:5432/mydb
-const sequelize = new Sequelize(process.env.PG_URL, {
-  dialect: 'postgres', // Type de DB
-  logging: false,      // Désactive les logs SQL
-})
+const sequelize = new Sequelize( 
+  `postgres://${process.env.PG_USER}:${process.env.PG_PASSWORD}@${process.env.PG_HOST}:${process.env.PG_PORT}/${process.env.PG_DB}`,
+  {
+    dialect: 'postgres', // Type de DB
+    logging: false,      // Désactive les logs SQL
+  }
+)
 
 // Couleurs pour les logs
 const colors = {

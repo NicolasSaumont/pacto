@@ -1,6 +1,6 @@
 require('dotenv').config()
 const { sequelize } = require('./config/db')
-const Product = require('./models/Product')  // ✅ Utilise le modèle existant
+const Product = require('./models/Product')
 
 const products = [
   { name: 'Jambon cru' },

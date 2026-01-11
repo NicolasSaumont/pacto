@@ -17,6 +17,8 @@ const Product = sequelize.define('Product', {
 }, {
   tableName: 'products', // nom de la table dans PostgreSQL
   timestamps: true,      // ajoute createdAt / updatedAt automatiquement
+  paranoid: true,        // active deletedAt
+  deletedAt: 'deletedAt' // nom de la colonne pour soft delete
 })
 
 module.exports = Product

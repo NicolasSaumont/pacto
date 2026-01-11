@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Product = require('../models/Product')
 
-// GET /products => renvoie tous les produits (id + name seulement)
+// GET /products => renvoie tous les produits
 router.get('/', async (req, res) => {
   try {
     const products = await Product.findAll({
@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
   }
 })
 
-// GET /products/:id => renvoie un produit selon l'id passé en paramètre (id + name seulement)
+// GET /products/:id => renvoie un produit selon l'id passé en paramètre
 router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params
