@@ -4,6 +4,7 @@ export const useProductsStore = defineStore('products', () => {
   const isProductSaving = ref(false)
   const isProductGettingFetch = ref(false)
   const product = ref<IProduct>({ ...DEFAULT_PRODUCT })
+  const products = ref<IProduct[]>([])
 
   const isConfirmButtonDisabled = computed(() => !product.value.name)
   
@@ -21,11 +22,17 @@ export const useProductsStore = defineStore('products', () => {
     product.value = { ...DEFAULT_PRODUCT }
   }
 
+  const setProducts = async () => {
+    products.value = await productRepository.getProducts() 
+    console.log(products.value)
+  }
+
   const setProduct = async (productId: string) => {
-    // await getProduct(productId)
-    console.log('Product is getting fetch : ', productId)
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    product.value = { ...MOCKED_PRODUCT }
+    product.value = await productRepository.getProduct(productId)
+    console.log(product.value)
+    // console.log('Product is getting fetch : ', productId)
+    // await new Promise(resolve => setTimeout(resolve, 1000))
+    // product.value = { ...MOCKED_PRODUCT }
   }
 
   return {
@@ -35,7 +42,9 @@ export const useProductsStore = defineStore('products', () => {
     isProductGettingFetch,
     postNewProduct,
     product,
+    products,
     resetForm,
     setProduct,
+    setProducts,
   }
 })

@@ -5,6 +5,11 @@ const {
   columns,
 } = useProducts()
 
+const productsStore = useProductsStore()
+
+const { setProducts } = productsStore
+const { products } = storeToRefs(productsStore)
+
 const handleRowClick = (row: IProduct) => {
   navigateTo(`/products/${row.id}`)
 }
@@ -12,6 +17,8 @@ const handleRowClick = (row: IProduct) => {
 const handleDeleteProductClick = (row: IProduct) => {
   console.log('Delete product :', row)
 }
+
+onMounted(setProducts)
 </script>
 
 <template>
@@ -27,7 +34,7 @@ const handleDeleteProductClick = (row: IProduct) => {
     
     <Table 
       :columns="columns" 
-      :data="MOCKED_PRODUCTS" 
+      :data="products" 
       filter
       class="flex-1" 
       @row-click="handleRowClick"

@@ -1,3 +1,4 @@
+require('dotenv').config()
 const { Sequelize } = require('sequelize')
 
 // Création de l'instance Sequelize pour PostgreSQL

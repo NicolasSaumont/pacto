@@ -5,17 +5,19 @@ const props = defineProps<{
 
 const { t } = useI18n()
 
+const productsStore = useProductsStore()
+
 const {
   editProduct,
   postNewProduct,
   resetForm,
-} = useProductsStore()
+} = productsStore
 
 const { 
   isConfirmButtonDisabled,
   isProductSaving,
   product,
-} = storeToRefs(useProductsStore())
+} = storeToRefs(productsStore)
 
 const handleResetClick = () => {
   navigateTo(PRODUCTS)

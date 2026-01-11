@@ -2,13 +2,10 @@
 const { t } = useI18n()
 const route = useRoute()
 
-const {
-  setProduct,
-} = useProductsStore()
+const productsStore = useProductsStore()
 
-const {
-  isProductGettingFetch,
-} = storeToRefs(useProductsStore())
+const { setProduct } = productsStore
+const { isProductGettingFetch } = storeToRefs(productsStore)
 
 onMounted(async () => {
   isProductGettingFetch.value = true

@@ -15,6 +15,12 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   ssr: false,
 
+  runtimeConfig: {
+    public: {
+      apiBase: process.env.NUXT_PUBLIC_API_BASE,
+    },
+  },
+
   modules: [
     '@pinia/nuxt',
     '@nuxtjs/i18n',

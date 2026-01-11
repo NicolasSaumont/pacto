@@ -31,6 +31,10 @@ app.get('/', (req, res) => {
   res.send('Backend opérationnel')
 })
 
+// Route pour les produits
+const productsRouter = require('./routes/products')
+app.use('/products', productsRouter)
+
 // Définition du port sur lequel le serveur écoute
 // On peut le configurer via .env, sinon il prend 3001 par défaut
 const PORT = process.env.PORT || 3001
