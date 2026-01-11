@@ -54,4 +54,33 @@ router.delete('/:id', async (req, res) => {
   }
 })
 
+// PATCH /products/:id
+const updateProduct = async (req, res) => {
+  const { id } = req.params
+  const { name } = req.body
+
+  try {
+    const product = await Product.findByPk(id)
+
+    if (!product) {
+      return res.status(404).json({ message: 'Produit introuvable' })
+    }
+
+    // Tentative de mise à jour
+    await product.update({ name })
+
+    res.json(product)
+
+  } catch (error) {
+    // Si le nom existe déjà
+    if (error.name === 'SequelizeUniqueConstraintError') {
+      return res.status(400).json({ message: 'Un produit avec ce nom existe déjà' })
+    }
+
+    // Autres erreurs
+    console.error(error)
+    res.status(500).json({ message: 'Erreur serveur' })
+  }
+}
+
 module.exports = router

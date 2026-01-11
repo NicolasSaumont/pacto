@@ -14,6 +14,8 @@ onMounted(async () => {
   await setProduct(productId)
   isProductGettingFetch.value = false
 })
+
+// TODO: gérer l'accès via url à un produit non existant/supprimé
 </script>
 
 <template>
