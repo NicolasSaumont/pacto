@@ -28,12 +28,12 @@ export const useProductsStore = defineStore('products', () => {
 
   const setProduct = async (productId: string) => {
     product.value = await productRepository.getProduct(productId)
-    console.log(product.value)
   }
 
   const setProducts = async () => {
+    isProductGettingFetch.value = true
     products.value = await productRepository.getProducts() 
-    console.log(products.value)
+    isProductGettingFetch.value = false
   }
 
   return {

@@ -12,7 +12,10 @@ const {
   setProducts,
 } = productsStore
 
-const { products } = storeToRefs(productsStore)
+const { 
+  isProductGettingFetch,
+  products
+} = storeToRefs(productsStore)
 
 const handleRowClick = (row: IProduct) => {
   navigateTo(`/products/${row.id}`)
@@ -41,6 +44,7 @@ onMounted(setProducts)
       :columns="columns" 
       :data="products" 
       filter
+      :loading="isProductGettingFetch"
       class="flex-1" 
       @row-click="handleRowClick"
     >
