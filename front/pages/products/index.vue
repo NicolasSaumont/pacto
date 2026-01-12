@@ -5,6 +5,10 @@ const {
   columns,
 } = useProducts()
 
+const {
+  notify
+} = useNotify()
+
 const productsStore = useProductsStore()
 
 const { 
@@ -70,6 +74,15 @@ onMounted(setProducts)
         </div>
       </template>
     </Table>
+
+    <Button 
+      label="useNotify" 
+      @click="notify({
+        state: 'success',
+        title: 'Sauvegardé',
+        content: 'Tout est OK ✅',
+      })"
+    />
 
     <Modal 
       v-model="isDeleteProductConfirmationModalVisible"

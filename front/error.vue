@@ -40,7 +40,7 @@ const goBack = () => {
             {{ t('error.message.404') }}
           </span>
           <span v-else>
-            {{ t('error.title.default') }}
+            {{ t('error.message.default') }}
           </span>
         </p>
 

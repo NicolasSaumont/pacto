@@ -15,7 +15,7 @@ onMounted(async () => {
   isProductGettingFetch.value = false
 })
 
-// TODO: gérer l'accès via url à un produit non existant/supprimé
+// TODO: gérer l'accès via url à un produit non existant/supprimé -> notification produit non trouvé + try catch
 </script>
 
 <template>
