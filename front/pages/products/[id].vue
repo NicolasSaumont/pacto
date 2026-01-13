@@ -1,21 +1,37 @@
 <script setup lang='ts'>
 const { t } = useI18n()
 const route = useRoute()
+const { withNotify } = useNotifyAction()
 
 const productsStore = useProductsStore()
 
 const { setProduct } = productsStore
 const { isProductGettingFetch } = storeToRefs(productsStore)
 
-onMounted(async () => {
+const fetchProductOnMount = async () => {
   isProductGettingFetch.value = true
-  const productId = getRouteParam(route.params.id)
-  if (!productId) return
-  await setProduct(productId)
-  isProductGettingFetch.value = false
-})
+  try {
+    const productId = getRouteParam(route.params.id)
+    if (!productId) {
+      await navigateTo('/products')
+      return
+    }
 
-// TODO: gérer l'accès via url à un produit non existant/supprimé -> notification produit non trouvé + try catch
+    await withNotify(
+      () => setProduct(productId),
+      {
+        errorContent: t('product.api.get.error-message'),
+        rethrow: true,
+      }
+    )
+  } catch (error) {
+    await navigateTo('/products')
+  } finally {
+    isProductGettingFetch.value = false
+  }
+}
+
+onMounted(fetchProductOnMount)
 </script>
 
 <template>

@@ -20,6 +20,21 @@ const {
 const isDeleteProductConfirmationModalVisible = ref(false)
 const productToDelete = ref<IProduct | null>(null)
 
+const fetchProductsOnMount = async () => {
+  isProductGettingFetch.value = true
+
+  await withNotify(
+    async () => {
+      await setProducts()
+    },
+    {
+      errorContent: t('products.api.get.error-message'),
+    }
+  )
+
+  isProductGettingFetch.value = false
+}
+
 const handleRowClick = (row: IProduct) => {
   navigateTo(`/products/${row.id}`)
 }
@@ -47,10 +62,9 @@ const handleDeleteProductClick = async () => {
   
   productToDelete.value = null
   isDeleteProductConfirmationModalVisible.value = false
-  
 }
 
-onMounted(setProducts)
+onMounted(fetchProductsOnMount)
 </script>
 
 <template>

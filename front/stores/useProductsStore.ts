@@ -35,9 +35,7 @@ export const useProductsStore = defineStore('products', () => {
   }
 
   const setProducts = async () => {
-    isProductGettingFetch.value = true
     products.value = await productRepository.getProducts() 
-    isProductGettingFetch.value = false
   }
 
   return {

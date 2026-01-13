@@ -24,14 +24,16 @@ export default {
 
   'orders.synthesis': 'Synthèse des produits commandés',
 
-  'products.add-product': '+ Nouveau produit',
-  'products.management': 'Gestion des produits',
-
   'product.api.delete.error-message': 'Le produit n\'a pas pu être supprimé',
   'product.api.delete.success-message': 'Le produit a bien été supprimé',
+  'product.api.get.error-message': 'Le produit n\'a pas pu être chargé',
   'product.add': 'Créer un nouveau produit',
   'product.edit': 'Modifier un produit',
   'product.delete': 'Supprimer un produit',
   'product.delete.confirmation': 'Voulez-vous vraiment supprimer ce produit ?',
   'product.name': 'Nom du produit',
+
+  'products.add-product': '+ Nouveau produit',
+  'products.api.get.error-message': 'Les produits n\'ont pas pu être chargés',
+  'products.management': 'Gestion des produits',
 }
