@@ -78,9 +78,10 @@ onMounted(setProducts)
     <Button 
       label="useNotify" 
       @click="notify({
-        state: 'success',
+        state: 'info',
         title: 'Sauvegardé',
         content: 'Tout est OK ✅',
+        style: 'white'
       })"
     />
 

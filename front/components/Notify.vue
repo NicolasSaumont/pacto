@@ -45,19 +45,19 @@ const tailwindClassesByState = (state: TNotifyState, style: INotification['style
 
   const map: Record<TNotifyState, string> = {
     success: isWhite
-      ? 'bg-white text-gray-900 border-green-600'
+      ? 'bg-white text-green-900 border-green-600'
       : 'bg-green-800 text-green-50 border-green-500',
 
     error: isWhite
-      ? 'bg-white text-gray-900 border-red-600'
+      ? 'bg-white text-red-800 border-red-600'
       : 'bg-red-800 text-red-50 border-red-500',
 
     warning: isWhite
-      ? 'bg-white text-gray-900 border-yellow-600'
+      ? 'bg-white text-yellow-700 border-yellow-600'
       : 'bg-yellow-700 text-yellow-50 border-yellow-500',
 
     info: isWhite
-      ? 'bg-white text-gray-900 border-blue-600'
+      ? 'bg-white text-blue-800 border-blue-600'
       : 'bg-blue-800 text-blue-50 border-blue-500',
   }
 
