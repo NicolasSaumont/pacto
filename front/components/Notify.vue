@@ -11,9 +11,7 @@ const props = withDefaults(
   }
 )
 
-const {
-  notifications
-} = useNotify()
+const { notifications } = useNotify()
 
 const hoverNotify = (idTimeout: number | undefined) => {
   if (idTimeout) {

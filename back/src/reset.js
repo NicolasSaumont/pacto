@@ -1,15 +1,13 @@
-const { sequelize } = require('./config/db');
+const { sequelize } = require('./config/db')
 
-(async () => {
+;(async () => {
   try {
     console.log('🧹 Réinitialisation des tables...')
-    await sequelize.sync({ force: true }); // Vide toutes les tables
-    console.log('✅ Tables réinitialisées avec succès !');
-
-    console.log('📦 Relance du seed...')
-    require('./seed'); // Exécute le seed.js
+    await sequelize.query('TRUNCATE TABLE "products" RESTART IDENTITY CASCADE;')
+    console.log('✅ Tables réinitialisées avec succès !')
+    process.exit(0)
   } catch (err) {
-    console.error('❌ Erreur :', err);
-    process.exit(1);
+    console.error('❌ Erreur reset :', err)
+    process.exit(1)
   }
-})();
+})()

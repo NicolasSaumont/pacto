@@ -1,13 +1,9 @@
 <script setup lang='ts'>
 const { t } = useI18n()
 
-const { 
-  columns,
-} = useProducts()
-
-const {
-  notify
-} = useNotify()
+const { columns } = useProducts()
+const { notify } = useNotify()
+const { withNotify } = useNotifyAction()
 
 const productsStore = useProductsStore()
 
@@ -36,10 +32,22 @@ const handleOpenDeleteProductConfirmationModalClick = (row: IProduct) => {
 const handleDeleteProductClick = async () => {
   if (!productToDelete.value) return
 
-  await deleteProduct(productToDelete.value.id.toString())
-  await setProducts()
+  const productId = productToDelete.value.id.toString()
 
+  await withNotify(
+    async () => {
+      await deleteProduct(productId)
+      await setProducts()
+    },
+    {
+      successContent: t('product.api.delete.success-message'),
+      errorContent: t('product.api.delete.error-message'),
+    }
+  )
+  
   productToDelete.value = null
+  isDeleteProductConfirmationModalVisible.value = false
+  
 }
 
 onMounted(setProducts)

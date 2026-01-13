@@ -1,5 +1,4 @@
 require('dotenv').config()
-const { sequelize } = require('./config/db')
 const Product = require('./models/Product')
 
 const products = [
@@ -13,26 +12,23 @@ const products = [
 
 const seedDB = async () => {
   try {
-    // Synchronise la table sans la supprimer
-    await sequelize.sync({ force: false })
-    console.log('📦 Table products synchronisée')
+    console.log('📦 Seed products...')
 
     for (const prod of products) {
-      const [product, created] = await Product.findOrCreate({
-        where: { name: prod.name }, // évite les doublons
+      const [_, created] = await Product.findOrCreate({
+        where: { name: prod.name },
         defaults: prod,
       })
-      if (created) {
-        console.log(`✅ Produit créé : ${prod.name}`)
-      } else {
-        console.log(`ℹ️ Produit déjà existant : ${prod.name}`)
-      }
+      console.log(created ? `✅ Créé : ${prod.name}` : `ℹ️ Existe : ${prod.name}`)
     }
 
     console.log('🎉 Seed terminé !')
     process.exit(0)
   } catch (err) {
     console.error('❌ Erreur lors du seed :', err)
+    if (err?.errors) {
+      console.error('Détails:', err.errors.map(e => ({ path: e.path, value: e.value, message: e.message })))
+    }
     process.exit(1)
   }
 }

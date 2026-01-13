@@ -14,7 +14,11 @@ export const useProductsStore = defineStore('products', () => {
   }
 
   const deleteProduct = async (productId: string) => {
-    await productRepository.deleteProduct(productId)
+    try {
+      await productRepository.deleteProduct(productId)
+    } catch (error) {
+      throw error
+    }
   }
 
   const postNewProduct = async () => {
