@@ -73,43 +73,39 @@ onUnmounted(() => {
 
 <template>
   <div class="fixed top-4 right-4 z-[9999] w-[360px] max-w-[calc(100vw-2rem)] pointer-events-none">
-    <transition-group name="slide-fade">
+    <transition-group name="slide-fade" tag="div" class="flex flex-col gap-3">
       <div
         v-for="notification in notifications"
         :key="notification.id"
         :itemid="notification.id + ''"
-        class="flex items-start gap-2 p-6 rounded-lg m-4 shadow-xl"
-        :class="['border-l-4', tailwindClassesByState(notification.state, notification.style)]"
+        class="pointer-events-auto flex items-start gap-2 p-6 rounded-lg shadow-xl border-l-4"
+        :class="tailwindClassesByState(notification.state, notification.style)"
         @mouseover="hoverNotify(notification.idTimeout)"
         @mouseleave="deleteNotify(notification.id)"
+        @click.stop
+        @pointerdown.stop
       >
         <div class="flex flex-row items-start gap-4 w-[20.25rem]">
           <FontAwesomeIcon
             v-if="notification.icon"
             :icon="notification.icon"
-            class="c-notify-icon text-xl"
+            class="text-xl"
           />
-          <div class="c-notify-content text-sm flex flex-col items-start gap-1">
-            <span class="c-notify-title-content font-semibold">
-              {{ notification.title }}
-            </span>
-            <span
-              v-if="notification.content"
-              class="c-notify-text-content"
-            >
-              {{
-                notification.content
-              }}
-            </span>
+          <div class="text-sm flex flex-col items-start gap-1">
+            <span class="font-semibold">{{ notification.title }}</span>
+            <span v-if="notification.content">{{ notification.content }}</span>
           </div>
         </div>
+
         <FontAwesomeIcon
           icon="xmark"
-          class="c-notify-close cursor-pointer"
-          @click="deleteNotify(notification.id, 1)"
+          class="cursor-pointer"
+          @click.stop="deleteNotify(notification.id, 1)"
+          @pointerdown.stop
         />
       </div>
     </transition-group>
   </div>
 </template>
+
 

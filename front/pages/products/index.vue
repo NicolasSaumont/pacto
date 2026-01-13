@@ -81,7 +81,6 @@ onMounted(setProducts)
         state: 'info',
         title: 'Sauvegardé',
         content: 'Tout est OK ✅',
-        style: 'white'
       })"
     />
 
