@@ -18,6 +18,13 @@ export const productRepository = {
     return await $fetch<IProduct[]>(`${apiBase}/products`)
   },
 
+  async updateProduct(newProduct: IProduct): Promise<void> {
+    return fetcher<void>(`/products/${newProduct.id}`, {
+      method: 'PATCH',
+      body: { name: newProduct.name }
+    })
+  },
+
   // create(payload: Pick<IProduct, 'name'>): Promise<IProduct> {
   //   return fetcher<IProduct>('/products', {
   //     method: 'POST',

@@ -5,11 +5,11 @@ const { notify } = useNotify()
 
 const {
   columns,
-  fetchProductsOnMount,
   handleDeleteProductClick,
   handleOpenDeleteProductConfirmationModalClick,
   handleRowClick,
   isDeleteProductConfirmationModalVisible,
+  loadProducts,
 } = useProducts()
 
 const productsStore = useProductsStore()
@@ -19,7 +19,7 @@ const {
   products
 } = storeToRefs(productsStore)
 
-onMounted(fetchProductsOnMount)
+onMounted(loadProducts)
 </script>
 
 <template>

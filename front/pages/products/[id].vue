@@ -1,9 +1,9 @@
 <script setup lang='ts'>
 const { t } = useI18n()
 
-const { fetchProductOnMount } = useProducts()
+const { loadProduct } = useProducts()
 
-onMounted(fetchProductOnMount)
+onMounted(loadProduct)
 </script>
 
 <template>

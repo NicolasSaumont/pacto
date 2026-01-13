@@ -8,9 +8,8 @@ export const useProductsStore = defineStore('products', () => {
 
   const isConfirmButtonDisabled = computed(() => !product.value.name)
   
-  const editProduct = async (productId: string) => {
-    console.log('Product edition is processing : ', productId)
-    await new Promise(resolve => setTimeout(resolve, 1000))
+  const editProduct = async (product: IProduct) => {
+    await productRepository.updateProduct(product)
   }
 
   const deleteProduct = async (productId: string) => {

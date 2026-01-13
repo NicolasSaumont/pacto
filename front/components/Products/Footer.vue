@@ -27,7 +27,7 @@ const handleSubmitClick = async () => {
   isProductSaving.value = true
 
   if (props.mode === ModeEnum.CREATION) await postNewProduct()
-  else if (props.mode === ModeEnum.EDITION) await editProduct(product.value.id)
+  else if (props.mode === ModeEnum.EDITION) await editProduct(product.value)
 
   await navigateTo(PRODUCTS)
   resetForm()

@@ -59,6 +59,10 @@ const updateProduct = async (req, res) => {
   const { id } = req.params
   const { name } = req.body
 
+  if (!name?.trim()) {
+    return res.status(400).json({ message: 'Nom requis' })
+  }
+
   try {
     const product = await Product.findByPk(id)
 
@@ -74,7 +78,7 @@ const updateProduct = async (req, res) => {
   } catch (error) {
     // Si le nom existe déjà
     if (error.name === 'SequelizeUniqueConstraintError') {
-      return res.status(400).json({ message: 'Un produit avec ce nom existe déjà' })
+      return res.status(409).json({ message: 'Un produit avec ce nom existe déjà' })
     }
 
     // Autres erreurs
