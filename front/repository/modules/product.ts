@@ -9,13 +9,15 @@ export const productRepository = {
   },
 
   async getProduct(id: string): Promise<IProduct> {
-    const { public: { apiBase } } = useRuntimeConfig()
-    return await $fetch<IProduct>(`${apiBase}/products/${id}`)
+    return fetcher<IProduct>(`/products/${id}`, {
+      method: 'GET',
+    })
   },
 
   async getProducts(): Promise<IProduct[]> {
-    const { public: { apiBase } } = useRuntimeConfig()
-    return await $fetch<IProduct[]>(`${apiBase}/products`)
+    return fetcher<IProduct[]>('/products', {
+      method: 'GET',
+    })
   },
 
   async updateProduct(newProduct: IProduct): Promise<void> {

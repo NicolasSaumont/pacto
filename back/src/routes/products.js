@@ -2,6 +2,26 @@ const express = require('express')
 const router = express.Router()
 const Product = require('../models/Product')
 
+// DELETE /products/:id => supprime un produit selon l'id passé en paramètre
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params
+
+  try {
+    const product = await Product.findByPk(id)
+
+    if (!product) {
+      return res.status(404).json({ message: 'Produit non trouvé' })
+    }
+
+    await product.destroy() // avec paranoid: true → soft delete
+    return res.status(200).json({ message: 'Produit supprimé (soft delete)' })
+
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ message: 'Erreur serveur' })
+  }
+})
+
 // GET /products => renvoie tous les produits
 router.get('/', async (req, res) => {
   try {
@@ -34,28 +54,8 @@ router.get('/:id', async (req, res) => {
   }
 })
 
-// DELETE /products/:id => supprime un produit selon l'id passé en paramètre
-router.delete('/:id', async (req, res) => {
-  const { id } = req.params
-
-  try {
-    const product = await Product.findByPk(id)
-
-    if (!product) {
-      return res.status(404).json({ message: 'Produit non trouvé' })
-    }
-
-    await product.destroy() // avec paranoid: true → soft delete
-    return res.status(200).json({ message: 'Produit supprimé (soft delete)' })
-
-  } catch (err) {
-    console.error(err)
-    res.status(500).json({ message: 'Erreur serveur' })
-  }
-})
-
 // PATCH /products/:id
-const updateProduct = async (req, res) => {
+router.patch('/:id', async (req, res) => {
   const { id } = req.params
   const { name } = req.body
 
@@ -85,6 +85,6 @@ const updateProduct = async (req, res) => {
     console.error(error)
     res.status(500).json({ message: 'Erreur serveur' })
   }
-}
+})
 
 module.exports = router
