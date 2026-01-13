@@ -1,35 +1,7 @@
 <script setup lang='ts'>
 const { t } = useI18n()
-const route = useRoute()
-const { withNotify } = useNotifyAction()
 
-const productsStore = useProductsStore()
-
-const { setProduct } = productsStore
-const { isProductGettingFetch } = storeToRefs(productsStore)
-
-const fetchProductOnMount = async () => {
-  isProductGettingFetch.value = true
-  try {
-    const productId = getRouteParam(route.params.id)
-    if (!productId) {
-      await navigateTo('/products')
-      return
-    }
-
-    await withNotify(
-      () => setProduct(productId),
-      {
-        errorContent: t('product.api.get.error-message'),
-        rethrow: true,
-      }
-    )
-  } catch (error) {
-    await navigateTo('/products')
-  } finally {
-    isProductGettingFetch.value = false
-  }
-}
+const { fetchProductOnMount } = useProducts()
 
 onMounted(fetchProductOnMount)
 </script>
