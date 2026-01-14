@@ -9,7 +9,11 @@ export const useProductsStore = defineStore('products', () => {
   const isConfirmButtonDisabled = computed(() => !product.value.name)
   
   const editProduct = async (product: IProduct) => {
-    await productRepository.updateProduct(product)
+    try {
+      await productRepository.updateProduct(product)
+    } catch (error) {
+      throw error
+    }
   }
 
   const deleteProduct = async (productId: string) => {

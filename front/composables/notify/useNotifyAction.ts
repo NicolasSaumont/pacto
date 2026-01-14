@@ -1,3 +1,5 @@
+import type { FetchError } from 'ofetch'
+
 export function useNotifyAction() {
   const { t } = useI18n()
   const { notify } = useNotify()
@@ -23,10 +25,16 @@ export function useNotifyAction() {
 
       return result
     } catch (error) {
+      const fetchError = error as FetchError<any>
+
+      const apiMessage =
+        fetchError?.data?.message ??
+        fetchError?.data?.error
+
       notify({
         state: 'error',
         title: t('common.api.error-title'),
-        content: options?.errorContent,
+        content: apiMessage || options?.errorContent,
       })
 
       if (options?.rethrow) throw error

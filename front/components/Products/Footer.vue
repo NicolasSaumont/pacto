@@ -5,12 +5,14 @@ const props = defineProps<{
 
 const { t } = useI18n()
 
+const {
+  sendProductToEdit
+} = useProducts()
+
 const productsStore = useProductsStore()
 
 const {
-  editProduct,
   postNewProduct,
-  resetForm,
 } = productsStore
 
 const { 
@@ -25,13 +27,18 @@ const handleResetClick = () => {
 
 const handleSubmitClick = async () => {
   isProductSaving.value = true
+  try {
+    if (props.mode === ModeEnum.CREATION) await postNewProduct()
+    else if (props.mode === ModeEnum.EDITION) await sendProductToEdit(product.value)
 
-  if (props.mode === ModeEnum.CREATION) await postNewProduct()
-  else if (props.mode === ModeEnum.EDITION) await editProduct(product.value)
-
-  await navigateTo(PRODUCTS)
-  resetForm()
-  isProductSaving.value = false
+    await navigateTo(PRODUCTS)
+  } catch {
+    // IMPORTANT: on consomme l'erreur pour éviter le warning Vue
+    // la notif est déjà affichée dans withNotify
+    return
+  } finally {
+    isProductSaving.value = false
+  }
 }
 </script>
 

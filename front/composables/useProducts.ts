@@ -9,6 +9,7 @@ export function useProducts() {
 
   const { 
     deleteProduct,
+    editProduct,
     setProduct,
     setProducts,
   } = productsStore
@@ -62,7 +63,6 @@ export function useProducts() {
     navigateTo(`/products/${row.id}`)
   }
 
-
   const loadProduct = async () => {
     isProductGettingFetch.value = true
     try {
@@ -79,7 +79,7 @@ export function useProducts() {
           rethrow: true,
         }
       )
-    } catch (error) {
+    } catch {
       await navigateTo('/products')
     } finally {
       isProductGettingFetch.value = false
@@ -100,6 +100,19 @@ export function useProducts() {
 
     isProductGettingFetch.value = false
   }
+
+  const sendProductToEdit = async (product: IProduct) => {
+    await withNotify(
+      async () => {
+        await editProduct(product)
+      },
+      {
+        successContent: t('product.api.edit.success-message'),
+        errorContent: t('product.api.edit.error-message'),
+        rethrow: true,
+      }
+    )
+  }
   
   return { 
     columns,
@@ -109,5 +122,6 @@ export function useProducts() {
     isDeleteProductConfirmationModalVisible,
     loadProduct,
     loadProducts,
+    sendProductToEdit,
   }
 }
