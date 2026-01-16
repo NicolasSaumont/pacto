@@ -17,6 +17,10 @@ echo "🧹 Réinitialisation des tables et relance du seed..."
 docker exec "$BACK_CONTAINER" node src/reset.js
 echo "✅ Tables réinitialisées avec succès !"
 
+# Migration
+docker exec "$BACK_CONTAINER" npm run migrate
+echo "🐦 Migration..."
+
 # Relance du seed
 docker exec "$BACK_CONTAINER" node src/seed.js
 echo "📦 Seed relancé avec succès !"

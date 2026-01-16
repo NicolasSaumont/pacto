@@ -2,22 +2,56 @@
 const { t } = useI18n()
 
 const { notify } = useNotify()
+const { withNotify } = useNotifyAction()
 
 const {
   columns,
-  handleDeleteProductClick,
-  handleOpenDeleteProductConfirmationModalClick,
-  handleRowClick,
   isDeleteProductConfirmationModalVisible,
   loadProducts,
 } = useProducts()
 
 const productsStore = useProductsStore()
 
+const {
+  deleteProduct,
+  setProducts,
+} = productsStore
+
 const { 
   isProductGettingFetch,
   products
 } = storeToRefs(productsStore)
+
+const productToDelete = ref<IProduct | null>(null)
+
+const handleDeleteProductClick = async () => {
+  if (!productToDelete.value) return
+
+  const productId = productToDelete.value.id.toString()
+
+  await withNotify(
+    async () => {
+      await deleteProduct(productId)
+      await setProducts()
+    },
+    {
+      successContent: t('product.api.delete.success-message'),
+      errorContent: t('product.api.delete.error-message'),
+    }
+  )
+  
+  productToDelete.value = null
+  isDeleteProductConfirmationModalVisible.value = false
+}
+
+const handleOpenDeleteProductConfirmationModalClick = (row: IProduct) => {
+  productToDelete.value = row
+  isDeleteProductConfirmationModalVisible.value = true
+}
+
+const handleRowClick = (row: IProduct) => {
+  navigateTo(`/products/${row.id}`)
+}
 
 onMounted(loadProducts)
 </script>

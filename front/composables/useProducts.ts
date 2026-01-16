@@ -32,36 +32,6 @@ export function useProducts() {
   ]
 
   const isDeleteProductConfirmationModalVisible = ref(false)
-  const productToDelete = ref<IProduct | null>(null)
-
-  const handleDeleteProductClick = async () => {
-    if (!productToDelete.value) return
-
-    const productId = productToDelete.value.id.toString()
-
-    await withNotify(
-      async () => {
-        await deleteProduct(productId)
-        await setProducts()
-      },
-      {
-        successContent: t('product.api.delete.success-message'),
-        errorContent: t('product.api.delete.error-message'),
-      }
-    )
-    
-    productToDelete.value = null
-    isDeleteProductConfirmationModalVisible.value = false
-  }
-
-  const handleOpenDeleteProductConfirmationModalClick = (row: IProduct) => {
-    productToDelete.value = row
-    isDeleteProductConfirmationModalVisible.value = true
-  }
-
-  const handleRowClick = (row: IProduct) => {
-    navigateTo(`/products/${row.id}`)
-  }
 
   const loadProduct = async () => {
     isProductGettingFetch.value = true
@@ -116,9 +86,6 @@ export function useProducts() {
   
   return { 
     columns,
-    handleDeleteProductClick,
-    handleOpenDeleteProductConfirmationModalClick,
-    handleRowClick,
     isDeleteProductConfirmationModalVisible,
     loadProduct,
     loadProducts,

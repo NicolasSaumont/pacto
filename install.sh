@@ -15,3 +15,8 @@ docker compose run --rm front npm install
 
 echo "🚀 Lancement de l'environnement DEV..."
 docker compose up
+
+docker compose up -d
+
+echo "🧩 Application des migrations..."
+docker exec "pacto-back-1" npm run migrate
