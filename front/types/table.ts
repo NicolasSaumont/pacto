@@ -12,12 +12,18 @@ export type TColumnSize =
   | `${number}%`
   | 'auto'
 
+export enum sortOrderEnum {
+  ASC = 'ascending',
+  DESC = 'descending'
+}
+
 export interface IDataColumn<T> {
   header: string
   key: keyof T
   searchable?: boolean
   size?: TColumnSize
   sortable?: boolean
+  sortByDefault?: sortOrderEnum | null
 }
 
 export interface ISlotColumn {

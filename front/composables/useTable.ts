@@ -7,7 +7,8 @@ export function useTable<T extends { id: string | number }>(props: ITableProps<T
   const debouncedSearch = useDebounce(search, INPUT_DEBOUNCE)
 
   const sortColumn = ref<keyof T | null>(null)
-  const sortOrder = ref<'asc' | 'desc' | null>(null)
+  const sortOrder = ref<sortOrderEnum | null>(null)
+  const defaultSortApplied = ref(false)
 
   const dataColumns = computed(() =>
     props.columns.filter(isDataColumn)
@@ -43,12 +44,12 @@ export function useTable<T extends { id: string | number }>(props: ITableProps<T
         if (valB == null) return -1
 
         if (typeof valA === 'number' && typeof valB === 'number') {
-          return sortOrder.value === 'asc' ? valA - valB : valB - valA
+          return sortOrder.value === sortOrderEnum.ASC ? valA - valB : valB - valA
         }
 
         const strA = String(valA).toLowerCase()
         const strB = String(valB).toLowerCase()
-        return sortOrder.value === 'asc'
+        return sortOrder.value === sortOrderEnum.ASC
           ? strA.localeCompare(strB)
           : strB.localeCompare(strA)
       })
@@ -65,6 +66,15 @@ export function useTable<T extends { id: string | number }>(props: ITableProps<T
     )
   })
 
+  const getCellValue = (row: T, key: keyof T) => row[key]
+
+  const getColumnStyle = (column: IColumn<T>) => {
+    if (!('size' in column) || !column.size) return {}
+
+    if (typeof column.size === 'number') return { width: `${column.size}px` }
+    return { width: column.size }
+  }
+
   const toggleSort = (column: IColumn<T>) => {
     if (props.loading) return
     if (!isDataColumn(column)) return
@@ -74,24 +84,51 @@ export function useTable<T extends { id: string | number }>(props: ITableProps<T
 
     if (sortColumn.value !== columnKey) {
       sortColumn.value = columnKey
-      sortOrder.value = 'asc'
+      sortOrder.value = sortOrderEnum.ASC
     } else {
-      if (sortOrder.value === 'asc') sortOrder.value = 'desc'
-      else if (sortOrder.value === 'desc') {
+      if (sortOrder.value === sortOrderEnum.ASC) sortOrder.value = sortOrderEnum.DESC
+      else if (sortOrder.value === sortOrderEnum.DESC) {
         sortColumn.value = null
         sortOrder.value = null
-      } else sortOrder.value = 'asc'
+      } else sortOrder.value = sortOrderEnum.ASC
     }
   }
 
-  const getCellValue = (row: T, key: keyof T) => row[key]
+  // Applique le tri par défaut une seule fois, dès que les colonnes sont prêtes, sans jamais écraser un tri déjà défini
+  watch(
+    // On observe les colonnes et l'état de loading :
+    // - les colonnes peuvent arriver async
+    // - on ne veut pas trier tant que la table est en loading
+    () => [props.columns, props.loading] as const,
 
-  const getColumnStyle = (column: IColumn<T>) => {
-    if (!('size' in column) || !column.size) return {}
+    () => {
+      // ❌ Tant que la table charge, on ne touche pas au tri
+      if (props.loading) return
 
-    if (typeof column.size === 'number') return { width: `${column.size}px` }
-    return { width: column.size }
-  }
+      // ❌ Le tri par défaut a déjà été appliqué une fois
+      //    (évite de réinitialiser le tri après un clic utilisateur)
+      if (defaultSortApplied.value) return
+
+      // ❌ Un tri est déjà en place (ex: initialisé ailleurs)
+      //    → on respecte l'existant
+      if (sortColumn.value || sortOrder.value) return
+
+      // 🔍 Recherche de la première colonne déclarée avec sortByDefault
+      const defaultCol = dataColumns.value.find(
+        (column) => column.sortable && column.sortByDefault != null
+      )
+      if (!defaultCol) return
+
+      // ✅ Initialisation du tri par défaut
+      sortColumn.value = defaultCol.key
+      sortOrder.value = defaultCol.sortByDefault ?? null
+
+      // 🔒 Marque le tri par défaut comme appliqué
+      defaultSortApplied.value = true
+    }, 
+    
+    { immediate: true, deep: true }
+  )
 
   return {
     displayRows,

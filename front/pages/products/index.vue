@@ -86,15 +86,6 @@ onMounted(loadProducts)
       </template>
     </Table>
 
-    <Button 
-      label="useNotify" 
-      @click="notify({
-        state: 'info',
-        title: 'Sauvegardé',
-        content: 'Tout est OK ✅',
-      })"
-    />
-
     <Modal 
       v-model="isDeleteProductConfirmationModalVisible"
       :description="t('product.delete.confirmation')"

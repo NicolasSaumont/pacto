@@ -8,7 +8,6 @@ export function useProducts() {
   const productsStore = useProductsStore()
 
   const { 
-    deleteProduct,
     editProduct,
     setProduct,
     setProducts,
@@ -23,6 +22,7 @@ export function useProducts() {
       header: t('common.products', 1),
       key: 'name',
       sortable: true,
+      sortByDefault: sortOrderEnum.ASC
     },
     {
       header: '',
