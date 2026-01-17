@@ -25,10 +25,11 @@ export default {
   'orders.synthesis': 'Synthèse des produits commandés',
 
   'product.api.code.deleted': 'Produit supprimé (soft delete)',
-  'product.api.code.not-found': 'Produit non trouvé',
-  'product.api.code.server-error': 'Erreur serveur',
+  'product.api.code.duplicate-name': 'Un produit avec ce nom existe déjà',
   'product.api.code.get-error-message': 'Erreur lors de la récupération du produit',
   'product.api.code.missing-required-field': 'Champ requis manquant',
+  'product.api.code.not-found': 'Produit non trouvé',
+  'product.api.code.server-error': 'Erreur serveur',
   'product.api.delete.error-message': 'Le produit n\'a pas pu être supprimé',
   'product.api.delete.success-message': 'Le produit a bien été supprimé',
   'product.api.edit.error-message': 'Le produit n\'a pas pu être modifié',
