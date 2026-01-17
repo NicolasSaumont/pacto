@@ -6,42 +6,42 @@ const props = defineProps<{
 const { t } = useI18n()
 
 const {
-  sendProductToCreate,
-  sendProductToEdit,
-} = useProducts()
+  sendCustomerToCreate,
+  sendCustomerToEdit,
+} = useCustomers()
 
-const productsStore = useProductsStore()
+const customersStore = useCustomersStore()
 
 const {
   resetForm,
-} = productsStore
+} = customersStore
 
 const {
-  isProductSaving,
-  isProductGettingFetch,
-  product
-} = storeToRefs(productsStore)
+  isCustomerSaving,
+  isCustomerGettingFetch,
+  customer
+} = storeToRefs(customersStore)
 
-const isProductNameInputDisabled = computed(() => isProductSaving.value || isProductGettingFetch.value)
+const isCustomerNameInputDisabled = computed(() => isCustomerSaving.value || isCustomerGettingFetch.value)
 
 
 const handleResetClick = () => {
-  navigateTo(PRODUCTS)
+  navigateTo(CUSTOMERS)
 }
 
 const handleSubmitClick = async () => {
-  isProductSaving.value = true
+  isCustomerSaving.value = true
   try {
-    if (props.mode === ModeEnum.CREATION) await sendProductToCreate(product.value)
-    else if (props.mode === ModeEnum.EDITION) await sendProductToEdit(product.value)
+    if (props.mode === ModeEnum.CREATION) await sendCustomerToCreate(customer.value)
+    else if (props.mode === ModeEnum.EDITION) await sendCustomerToEdit(customer.value)
 
-    await navigateTo(PRODUCTS)
+    await navigateTo(CUSTOMERS)
   } catch {
     // IMPORTANT: on consomme l'erreur pour éviter le warning Vue
     // la notif est déjà affichée dans withNotify
     return
   } finally {
-    isProductSaving.value = false
+    isCustomerSaving.value = false
   }
 }
 
@@ -54,12 +54,12 @@ onUnmounted(resetForm)
     @reset.prevent="handleResetClick"
   >
     <Input
-      v-model="product.name"
-      :disabled="isProductNameInputDisabled"
-      :label="t('product.name')"
-      :loading="isProductGettingFetch"
+      v-model="customer.name"
+      :disabled="isCustomerNameInputDisabled"
+      :label="t('customer.name')"
+      :loading="isCustomerGettingFetch"
       theme="light"
     />
-    <ProductsFooter />
+    <CustomersFooter />
   </form>
 </template>

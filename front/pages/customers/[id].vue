@@ -1,9 +1,9 @@
 <script setup lang='ts'>
 const { t } = useI18n()
 
-const { loadCustomers } = useCustomers()
+const { loadCustomer } = useCustomers()
 
-onMounted(loadCustomers)
+onMounted(loadCustomer)
 </script>
 
 <template>

@@ -1,20 +1,20 @@
 import { defineStore } from 'pinia'
 
 export const useCustomersStore = defineStore('customers', () => {
-  // const isProductSaving = ref(false)
+  const isCustomerSaving = ref(false)
   const isCustomerGettingFetch = ref(false)
-  // const product = ref<IProduct>({ ...DEFAULT_PRODUCT })
+  const customer = ref<ICustomer>({ ...DEFAULT_CUSTOMER })
   const customers = ref<ICustomer[]>([])
 
-  // const isConfirmButtonDisabled = computed(() => !product.value.name)
+  const isConfirmButtonDisabled = computed(() => !customer.value.name)
   
-  // const editProduct = async (product: IProduct) => {
-  //   try {
-  //     await productRepository.patchProduct(product)
-  //   } catch (error) {
-  //     throw error
-  //   }
-  // }
+  const editCustomer = async (customer: ICustomer) => {
+    try {
+      await customerRepository.patchCustomer(customer)
+    } catch (error) {
+      throw error
+    }
+  }
 
   // const deleteProduct = async (productId: string) => {
   //   try {
@@ -24,37 +24,37 @@ export const useCustomersStore = defineStore('customers', () => {
   //   }
   // }
 
-  // const postNewProduct = async (product: IProduct) => {
-  //   try {
-  //     await productRepository.postProduct(product)
-  //   } catch (error) {
-  //     throw error
-  //   }
-  // }
+  const postNewCustomer = async (customer: ICustomer) => {
+    try {
+      await customerRepository.postCustomer(customer)
+    } catch (error) {
+      throw error
+    }
+  }
 
-  // const resetForm = () => {
-  //   product.value = { ...DEFAULT_PRODUCT }
-  // }
+  const resetForm = () => {
+    customer.value = { ...DEFAULT_CUSTOMER }
+  }
 
-  // const setProduct = async (productId: string) => {
-  //   product.value = await productRepository.getProduct(productId)
-  // }
+  const setCustomer = async (customerId: string) => {
+    customer.value = await customerRepository.getCustomer(customerId)
+  }
 
   const setCustomers = async () => {
     customers.value = await customerRepository.getCustomers() 
   }
 
   return {
+    customer,
     customers,
     isCustomerGettingFetch,
     // deleteProduct,
-    // editProduct,
-    // isConfirmButtonDisabled,
-    // isProductSaving,
-    // postNewProduct,
-    // product,
-    // resetForm,
-    // setProduct,
+    editCustomer,
+    isConfirmButtonDisabled,
+    isCustomerSaving,
+    postNewCustomer,
+    resetForm,
+    setCustomer,
     setCustomers,
   }
 })

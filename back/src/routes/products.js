@@ -10,7 +10,7 @@ router.delete('/:id', async (req, res) => {
     const product = await Product.findByPk(id)
 
     if (!product) {
-      return res.status(404).json({ code: 'product.api.code.not-found' })
+      return res.status(404).json({ code: 'api.code.not-found.product' })
     }
 
     await product.destroy() // avec paranoid: true → soft delete
@@ -18,7 +18,7 @@ router.delete('/:id', async (req, res) => {
 
   } catch (err) {
     console.error(err)
-    res.status(500).json({ code: 'product.api.code.server-error' })
+    res.status(500).json({ code: 'api.code.server-error' })
   }
 })
 
@@ -44,13 +44,13 @@ router.get('/:id', async (req, res) => {
     })
 
     if (!product) {
-      return res.status(404).json({ code: 'product.api.code.not-found' })
+      return res.status(404).json({ code: 'api.code.not-found.product' })
     }
 
     res.json(product)
   } catch (err) {
     console.error(err)
-    res.status(500).json({ code: 'product.api.code.get-error-message' })
+    res.status(500).json({ code: 'api.code.get-error-message.product' })
   }
 })
 
@@ -60,14 +60,14 @@ router.patch('/:id', async (req, res) => {
   const { name } = req.body
 
   if (!name?.trim()) {
-    return res.status(400).json({ code: 'product.api.code.missing-required-field' })
+    return res.status(400).json({ code: 'api.code.missing-required-field' })
   }
 
   try {
     const product = await Product.findByPk(id)
 
     if (!product) {
-      return res.status(404).json({ code: 'product.api.code.not-found' })
+      return res.status(404).json({ code: 'api.code.not-found.product' })
     }
 
     // Tentative de mise à jour
@@ -78,12 +78,12 @@ router.patch('/:id', async (req, res) => {
   } catch (error) {
     // Si le nom existe déjà
     if (error.name === 'SequelizeUniqueConstraintError') {
-      return res.status(409).json({ code: 'product.api.code.duplicate-name' })
+      return res.status(409).json({ code: 'api.code.duplicate-name' })
     }
 
     // Autres erreurs
     console.error(error)
-    res.status(500).json({ code: 'product.api.code.server-error' })
+    res.status(500).json({ code: 'api.code.server-error' })
   }
 })
 
@@ -92,7 +92,7 @@ router.post('/', async (req, res) => {
   const { name } = req.body
 
   if (!name?.trim()) {
-    return res.status(400).json({ code: 'product.api.code.missing-required-field' })
+    return res.status(400).json({ code: 'api.code.missing-required-field' })
   }
 
   try {
@@ -103,11 +103,11 @@ router.post('/', async (req, res) => {
   } catch (error) {
     // Nom déjà existant
     if (error.name === 'SequelizeUniqueConstraintError') {
-      return res.status(409).json({ code: 'product.api.code.duplicate-name' })
+      return res.status(409).json({ code: 'api.code.duplicate-name' })
     }
 
     console.error(error)
-    return res.status(500).json({ code: 'product.api.code.server-error' })
+    return res.status(500).json({ code: 'api.code.server-error' })
   }
 })
 

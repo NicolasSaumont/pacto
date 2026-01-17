@@ -8,11 +8,11 @@ export const customerRepository = {
   //   })
   // },
 
-  // async getProduct(id: string): Promise<IProduct> {
-  //   return fetcher<IProduct>(`/products/${id}`, {
-  //     method: 'GET',
-  //   })
-  // },
+  async getCustomer(id: string): Promise<ICustomer> {
+    return fetcher<ICustomer>(`/customers/${id}`, {
+      method: 'GET',
+    })
+  },
 
   async getCustomers(): Promise<ICustomer[]> {
     return fetcher<ICustomer[]>('/customers', {
@@ -20,17 +20,17 @@ export const customerRepository = {
     })
   },
 
-  // async patchProduct(newProduct: IProduct): Promise<void> {
-  //   return fetcher<void>(`/products/${newProduct.id}`, {
-  //     method: 'PATCH',
-  //     body: { name: newProduct.name }
-  //   })
-  // },
+  async patchCustomer(newCustomer: ICustomer): Promise<void> {
+    return fetcher<void>(`/products/${newCustomer.id}`, {
+      method: 'PATCH',
+      body: { name: newCustomer.name }
+    })
+  },
 
-  // async postProduct(newProduct: IProduct): Promise<IProduct> {
-  //   return fetcher<IProduct>('/products', {
-  //     method: 'POST',
-  //     body: { name: newProduct.name }
-  //   })
-  // },
+  async postCustomer(newCustomer: ICustomer): Promise<ICustomer> {
+    return fetcher<ICustomer>('/customers', {
+      method: 'POST',
+      body: { name: newCustomer.name }
+    })
+  },
 }

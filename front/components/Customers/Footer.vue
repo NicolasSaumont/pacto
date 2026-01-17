@@ -1,12 +1,12 @@
 <script setup lang='ts'>
 const { t } = useI18n()
 
-const productsStore = useProductsStore()
+const customersStore = useCustomersStore()
 
 const { 
   isConfirmButtonDisabled,
-  isProductSaving,
-} = storeToRefs(productsStore)
+  isCustomerSaving,
+} = storeToRefs(customersStore)
 </script>
 
 <template>
@@ -20,7 +20,7 @@ const {
       type="submit"
       :disabled="isConfirmButtonDisabled"
       :label="t('common.save')" 
-      :loading="isProductSaving"
+      :loading="isCustomerSaving"
     />
   </div>
 </template>

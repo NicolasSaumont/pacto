@@ -8,9 +8,9 @@ export function useCustomers() {
 const customersStore = useCustomersStore()
 
   const { 
-    // editProduct,
-    // postNewProduct,
-    // setProduct,
+    editCustomer,
+    postNewCustomer,
+    setCustomer,
     setCustomers,
   } = customersStore
 
@@ -34,28 +34,28 @@ const customersStore = useCustomersStore()
 
   // const isDeleteProductConfirmationModalVisible = ref(false)
 
-  // const loadProduct = async () => {
-  //   isProductGettingFetch.value = true
-  //   try {
-  //     const productId = getRouteParam(route.params.id)
-  //     if (!productId) {
-  //       await navigateTo('/products')
-  //       return
-  //     }
+  const loadCustomer = async () => {
+    isCustomerGettingFetch.value = true
+    try {
+      const customerId = getRouteParam(route.params.id)
+      if (!customerId) {
+        await navigateTo('/customers')
+        return
+      }
 
-  //     await withNotify(
-  //       () => setProduct(productId),
-  //       {
-  //         errorContent: t('product.api.get.error-message'),
-  //         rethrow: true,
-  //       }
-  //     )
-  //   } catch {
-  //     await navigateTo('/products')
-  //   } finally {
-  //     isProductGettingFetch.value = false
-  //   }
-  // }
+      await withNotify(
+        () => setCustomer(customerId),
+        {
+          errorContent: t('customer.api.get.error-message'),
+          rethrow: true,
+        }
+      )
+    } catch {
+      await navigateTo('/customers')
+    } finally {
+      isCustomerGettingFetch.value = false
+    }
+  }
 
   const loadCustomers = async () => {
     isCustomerGettingFetch.value = true
@@ -72,38 +72,38 @@ const customersStore = useCustomersStore()
     isCustomerGettingFetch.value = false
   }
 
-  // const sendProductToCreate = async (product: IProduct) => {
-  //   await withNotify(
-  //     async () => {
-  //       await postNewProduct(product)
-  //     },
-  //     {
-  //       successContent: t('product.api.post.success-message'),
-  //       errorContent: t('product.api.post.error-message'),
-  //       rethrow: true,
-  //     }
-  //   )
-  // }
+  const sendCustomerToCreate = async (customer: ICustomer) => {
+    await withNotify(
+      async () => {
+        await postNewCustomer(customer)
+      },
+      {
+        successContent: t('customer.api.post.success-message'),
+        errorContent: t('customer.api.post.error-message'),
+        rethrow: true,
+      }
+    )
+  }
 
-  // const sendProductToEdit = async (product: IProduct) => {
-  //   await withNotify(
-  //     async () => {
-  //       await editProduct(product)
-  //     },
-  //     {
-  //       successContent: t('product.api.edit.success-message'),
-  //       errorContent: t('product.api.edit.error-message'),
-  //       rethrow: true,
-  //     }
-  //   )
-  // }
+  const sendCustomerToEdit = async (customer: ICustomer) => {
+    await withNotify(
+      async () => {
+        await editCustomer(customer)
+      },
+      {
+        successContent: t('customer.api.edit.success-message'),
+        errorContent: t('customer.api.edit.error-message'),
+        rethrow: true,
+      }
+    )
+  }
   
   return { 
     columns,
     // isDeleteProductConfirmationModalVisible,
+    loadCustomer,
     loadCustomers,
-    // loadProducts,
-    // sendProductToCreate,
-    // sendProductToEdit,
+    sendCustomerToCreate,
+    sendCustomerToEdit,
   }
 }

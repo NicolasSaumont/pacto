@@ -10,7 +10,7 @@ const Customer = require('../models/Customer')
 //     const product = await Product.findByPk(id)
 
 //     if (!product) {
-//       return res.status(404).json({ code: 'product.api.code.not-found' })
+//       return res.status(404).json({ code: 'api.code.not-found.product' })
 //     }
 
 //     await product.destroy() // avec paranoid: true → soft delete
@@ -18,7 +18,7 @@ const Customer = require('../models/Customer')
 
 //   } catch (err) {
 //     console.error(err)
-//     res.status(500).json({ code: 'product.api.code.server-error' })
+//     res.status(500).json({ code: 'api.code.server-error' })
 //   }
 // })
 
@@ -35,24 +35,24 @@ router.get('/', async (req, res) => {
   }
 })
 
-// // GET /products/:id => renvoie un produit selon l'id passé en paramètre
-// router.get('/:id', async (req, res) => {
-//   try {
-//     const { id } = req.params
-//     const product = await Product.findByPk(id, {
-//       attributes: ['id', 'name'] 
-//     })
+// GET /customers/:id => renvoie un client selon l'id passé en paramètre
+router.get('/:id', async (req, res) => {
+  try {
+    const { id } = req.params
+    const customer = await Customer.findByPk(id, {
+      attributes: ['id', 'name'] 
+    })
 
-//     if (!product) {
-//       return res.status(404).json({ code: 'product.api.code.not-found' })
-//     }
+    if (!customer) {
+      return res.status(404).json({ code: 'api.code.not-found' })
+    }
 
-//     res.json(product)
-//   } catch (err) {
-//     console.error(err)
-//     res.status(500).json({ code: 'product.api.code.get-error-message' })
-//   }
-// })
+    res.json(customer)
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ code: 'api.code.get-error-message.customer' })
+  }
+})
 
 // // PATCH /products/:id => modifie un produit existant selon l'id passé en paramètre
 // router.patch('/:id', async (req, res) => {
@@ -60,14 +60,14 @@ router.get('/', async (req, res) => {
 //   const { name } = req.body
 
 //   if (!name?.trim()) {
-//     return res.status(400).json({ code: 'product.api.code.missing-required-field' })
+//     return res.status(400).json({ code: 'api.code.missing-required-field' })
 //   }
 
 //   try {
 //     const product = await Product.findByPk(id)
 
 //     if (!product) {
-//       return res.status(404).json({ code: 'product.api.code.not-found' })
+//       return res.status(404).json({ code: 'api.code.not-found.product' })
 //     }
 
 //     // Tentative de mise à jour
@@ -78,12 +78,12 @@ router.get('/', async (req, res) => {
 //   } catch (error) {
 //     // Si le nom existe déjà
 //     if (error.name === 'SequelizeUniqueConstraintError') {
-//       return res.status(409).json({ code: 'product.api.code.duplicate-name' })
+//       return res.status(409).json({ code: 'api.code.duplicate-name' })
 //     }
 
 //     // Autres erreurs
 //     console.error(error)
-//     res.status(500).json({ code: 'product.api.code.server-error' })
+//     res.status(500).json({ code: 'api.code.server-error' })
 //   }
 // })
 
@@ -92,7 +92,7 @@ router.get('/', async (req, res) => {
 //   const { name } = req.body
 
 //   if (!name?.trim()) {
-//     return res.status(400).json({ code: 'product.api.code.missing-required-field' })
+//     return res.status(400).json({ code: 'api.code.missing-required-field' })
 //   }
 
 //   try {
@@ -103,11 +103,11 @@ router.get('/', async (req, res) => {
 //   } catch (error) {
 //     // Nom déjà existant
 //     if (error.name === 'SequelizeUniqueConstraintError') {
-//       return res.status(409).json({ code: 'product.api.code.duplicate-name' })
+//       return res.status(409).json({ code: 'api.code.duplicate-name' })
 //     }
 
 //     console.error(error)
-//     return res.status(500).json({ code: 'product.api.code.server-error' })
+//     return res.status(500).json({ code: 'api.code.server-error' })
 //   }
 // })
 

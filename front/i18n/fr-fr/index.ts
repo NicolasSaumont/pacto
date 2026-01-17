@@ -1,4 +1,12 @@
 export default {
+  'api.code.duplicate-name': 'Un produit avec ce nom existe déjà',
+  'api.code.get-error-message.customer': 'Erreur lors de la récupération du client',
+  'api.code.get-error-message.product': 'Erreur lors de la récupération du produit',
+  'api.code.missing-required-field': 'Champ requis manquant',
+  'api.code.not-found.customer': 'Client non trouvé',
+  'api.code.not-found.product': 'Produit non trouvé',
+  'api.code.server-error': 'Erreur serveur',
+
   'common.api.error-title': 'Échec',
   'common.api.success-title': 'Succès',
   'common.cancel': 'Annuler',
@@ -13,7 +21,13 @@ export default {
   'common.search': 'Rechercher',
   'common.synthesis': 'Synthèse',
 
+  'customer.api.edit.error-message': 'Le client n\'a pas pu être modifié',
+  'customer.api.edit.success-message': 'Le client a bien été modifié',
+  'customer.api.get.error-message': 'Le client n\'a pas pu être chargé',
+  'customer.api.post.error-message': 'Le client n\'a pas pu être créé',
+  'customer.api.post.success-message': 'Le client a bien été créé',
   'customer.edit': 'Modifier un client',
+  'customer.name': 'Nom du client',
 
   'customers.add-customer': '+ Nouveau client',
   'customers.api.code.get-error-message': 'Erreur lors de la récupération des clients',
@@ -29,11 +43,6 @@ export default {
 
   'product.add': 'Créer un nouveau produit',
   'product.api.code.deleted': 'Produit supprimé (soft delete)',
-  'product.api.code.duplicate-name': 'Un produit avec ce nom existe déjà',
-  'product.api.code.get-error-message': 'Erreur lors de la récupération du produit',
-  'product.api.code.missing-required-field': 'Champ requis manquant',
-  'product.api.code.not-found': 'Produit non trouvé',
-  'product.api.code.server-error': 'Erreur serveur',
   'product.api.delete.error-message': 'Le produit n\'a pas pu être supprimé',
   'product.api.delete.success-message': 'Le produit a bien été supprimé',
   'product.api.edit.error-message': 'Le produit n\'a pas pu être modifié',
