@@ -4,20 +4,7 @@ export const useCustomersStore = defineStore('customers', () => {
   // const isProductSaving = ref(false)
   const isCustomerGettingFetch = ref(false)
   // const product = ref<IProduct>({ ...DEFAULT_PRODUCT })
-  const customers = ref<ICustomer[]>([
-    {
-      id: 1,
-      name: 'Boucherie Martin',
-    },
-    {
-      id: 2,
-      name: 'Boucherie Dupont',
-    },
-    {
-      id: 3,
-      name: 'Boucherie Bernard',
-    },
-  ])
+  const customers = ref<ICustomer[]>([])
 
   // const isConfirmButtonDisabled = computed(() => !product.value.name)
   
@@ -54,8 +41,7 @@ export const useCustomersStore = defineStore('customers', () => {
   // }
 
   const setCustomers = async () => {
-    console.log('setCustomers')
-    // customers.value = await customerRepository.getCustomers() 
+    customers.value = await customerRepository.getCustomers() 
   }
 
   return {

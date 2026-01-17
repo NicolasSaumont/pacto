@@ -14,6 +14,7 @@ export default {
   'common.synthesis': 'Synthèse',
 
   'customers.add-customer': '+ Nouveau client',
+  'customers.api.code.get-error-message': 'Erreur lors de la récupération des clients',
   'customers.management': 'Gestion des clients',
 
   'error.code': 'Code d\'erreur : {errorCode}',

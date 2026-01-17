@@ -1,5 +1,6 @@
 require('dotenv').config()
 const Product = require('./models/Product')
+const Customer = require('./models/Customer')
 
 const products = [
   { name: 'Jambon cru' },
@@ -10,16 +11,32 @@ const products = [
   { name: 'Rillettes de porc' },
 ]
 
+const customers = [
+  { name: 'Boucherie Martin' },
+  { name: 'Boucherie Bernard' },
+  { name: 'Boucherie Dupont' },
+]
+
 const seedDB = async () => {
   try {
     console.log('📦 Seed products...')
 
-    for (const prod of products) {
+    for (const product of products) {
       const [_, created] = await Product.findOrCreate({
-        where: { name: prod.name },
-        defaults: prod,
+        where: { name: product.name },
+        defaults: product,
       })
-      console.log(created ? `✅ Créé : ${prod.name}` : `ℹ️ Existe : ${prod.name}`)
+      console.log(created ? `✅ Créé : ${product.name}` : `ℹ️ Existe : ${product.name}`)
+    }
+
+    console.log('📦 Seed customers...')
+
+    for (const customer of customers) {
+      const [_, created] = await Customer.findOrCreate({
+        where: { name: customer.name },
+        defaults: customer,
+      })
+      console.log(created ? `✅ Créé : ${customer.name}` : `ℹ️ Existe : ${customer.name}`)
     }
 
     console.log('🎉 Seed terminé !')
