@@ -18,6 +18,8 @@ const emit = defineEmits<{
 
 const { t } = useI18n()
 
+const confirmButtonRef = ref<HTMLButtonElement | null>(null)
+
 const onConfirm = () => {
   emit('confirm')
   isVisible.value = false
@@ -26,6 +28,38 @@ const onConfirm = () => {
 const onCancel = () => {
   isVisible.value = false
 }
+
+const onKeyDown = (e: KeyboardEvent) => {
+  if (!isVisible.value) return
+
+  switch (e.key) {
+    case 'Enter':
+      if (props.isConfirmationModal) {
+        e.preventDefault()
+        onConfirm()
+      }
+      break
+
+    case 'Escape':
+      e.preventDefault()
+      onCancel()
+      break
+  }
+}
+
+watch(isVisible, async (visible) => {
+  if (visible) {
+    await nextTick()
+    confirmButtonRef.value?.focus()
+    document.addEventListener('keydown', onKeyDown)
+  } else {
+    document.removeEventListener('keydown', onKeyDown)
+  }
+})
+
+onUnmounted(() => {
+  document.removeEventListener('keydown', onKeyDown)
+})
 </script>
 
 <template>
@@ -68,6 +102,7 @@ const onCancel = () => {
             @click="onCancel"
           />
           <Button
+            ref="confirmButtonRef"
             :label="t('common.confirm')"
             @click="onConfirm"
           />

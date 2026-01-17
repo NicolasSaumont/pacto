@@ -23,10 +23,17 @@ const emit = defineEmits<{
 const {
   buttonStyle
 } = useButton(props)
+
+const buttonRef = ref<HTMLButtonElement | null>(null)
+
+defineExpose({
+  focus: () => buttonRef.value?.focus()
+})
 </script>
 
 <template>
   <button
+    ref="buttonRef"
     :type="type"
     :disabled="disabled || loading"
     :class="buttonStyle"
