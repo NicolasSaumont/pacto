@@ -4,6 +4,10 @@ export const APP_NAME = 'pacto'
 export const INPUT_DEBOUNCE = 300
 export const NOTIFICATION_DEFAULT_DURATION = 5000
 
+export enum ModeEnum {
+  CREATION = 'creation',
+  EDITION = 'edition',
+}
 /* URL */
 
 export const CUSTOMERS = '/customers'
