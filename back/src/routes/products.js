@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Product = require('../models/Product')
 
-// DELETE /products/:id => supprime un produit selon l'id passé en paramètre
+// DELETE /products/:id => supprime un produit existant selon l'id passé en paramètre
 router.delete('/:id', async (req, res) => {
   const { id } = req.params
 
@@ -54,7 +54,7 @@ router.get('/:id', async (req, res) => {
   }
 })
 
-// PATCH /products/:id
+// PATCH /products/:id => modifie un produit existant selon l'id passé en paramètre
 router.patch('/:id', async (req, res) => {
   const { id } = req.params
   const { name } = req.body
@@ -84,6 +84,30 @@ router.patch('/:id', async (req, res) => {
     // Autres erreurs
     console.error(error)
     res.status(500).json({ code: 'product.api.code.server-error' })
+  }
+})
+
+// POST /products => crée un nouveau produit
+router.post('/', async (req, res) => {
+  const { name } = req.body
+
+  if (!name?.trim()) {
+    return res.status(400).json({ code: 'product.api.code.missing-required-field' })
+  }
+
+  try {
+    const product = await Product.create({ name })
+
+    return res.status(201).json(product)
+
+  } catch (error) {
+    // Nom déjà existant
+    if (error.name === 'SequelizeUniqueConstraintError') {
+      return res.status(409).json({ code: 'product.api.code.duplicate-name' })
+    }
+
+    console.error(error)
+    return res.status(500).json({ code: 'product.api.code.server-error' })
   }
 })
 

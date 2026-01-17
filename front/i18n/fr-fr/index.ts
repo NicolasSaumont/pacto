@@ -34,6 +34,8 @@ export default {
   'product.api.delete.success-message': 'Le produit a bien été supprimé',
   'product.api.edit.error-message': 'Le produit n\'a pas pu être modifié',
   'product.api.edit.success-message': 'Le produit a bien été modifié',
+  'product.api.post.error-message': 'Le produit n\'a pas pu être créé',
+  'product.api.post.success-message': 'Le produit a bien été créé',
   'product.api.get.error-message': 'Le produit n\'a pas pu être chargé',
   'product.add': 'Créer un nouveau produit',
   'product.edit': 'Modifier un produit',

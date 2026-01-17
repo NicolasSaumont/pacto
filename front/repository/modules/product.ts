@@ -20,17 +20,17 @@ export const productRepository = {
     })
   },
 
-  async updateProduct(newProduct: IProduct): Promise<void> {
+  async patchProduct(newProduct: IProduct): Promise<void> {
     return fetcher<void>(`/products/${newProduct.id}`, {
       method: 'PATCH',
       body: { name: newProduct.name }
     })
   },
 
-  // create(payload: Pick<IProduct, 'name'>): Promise<IProduct> {
-  //   return fetcher<IProduct>('/products', {
-  //     method: 'POST',
-  //     body: payload,
-  //   })
-  // },
+  async postProduct(newProduct: IProduct): Promise<IProduct> {
+    return fetcher<IProduct>('/products', {
+      method: 'POST',
+      body: { name: newProduct.name }
+    })
+  },
 }

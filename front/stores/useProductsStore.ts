@@ -10,7 +10,7 @@ export const useProductsStore = defineStore('products', () => {
   
   const editProduct = async (product: IProduct) => {
     try {
-      await productRepository.updateProduct(product)
+      await productRepository.patchProduct(product)
     } catch (error) {
       throw error
     }
@@ -24,9 +24,12 @@ export const useProductsStore = defineStore('products', () => {
     }
   }
 
-  const postNewProduct = async () => {
-    console.log('New product creation is processing : ', product.value.name)
-    await new Promise(resolve => setTimeout(resolve, 1000))
+  const postNewProduct = async (product: IProduct) => {
+    try {
+      await productRepository.postProduct(product)
+    } catch (error) {
+      throw error
+    }
   }
 
   const resetForm = () => {

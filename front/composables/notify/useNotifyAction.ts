@@ -27,14 +27,12 @@ export function useNotifyAction() {
     } catch (error) {
       const fetchError = error as FetchError<any>
 
-      const apiMessage =
-        fetchError?.data?.message ??
-        fetchError?.data?.error
+      const apiCode = fetchError?.data?.code
 
       notify({
         state: 'error',
         title: t('common.api.error-title'),
-        content: apiMessage || options?.errorContent,
+        content: t(apiCode) || options?.errorContent,
       })
 
       if (options?.rethrow) throw error

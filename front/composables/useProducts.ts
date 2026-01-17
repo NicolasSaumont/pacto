@@ -9,6 +9,7 @@ export function useProducts() {
 
   const { 
     editProduct,
+    postNewProduct,
     setProduct,
     setProducts,
   } = productsStore
@@ -71,6 +72,19 @@ export function useProducts() {
     isProductGettingFetch.value = false
   }
 
+  const sendProductToCreate = async (product: IProduct) => {
+    await withNotify(
+      async () => {
+        await postNewProduct(product)
+      },
+      {
+        successContent: t('product.api.post.success-message'),
+        errorContent: t('product.api.post.error-message'),
+        rethrow: true,
+      }
+    )
+  }
+
   const sendProductToEdit = async (product: IProduct) => {
     await withNotify(
       async () => {
@@ -89,6 +103,7 @@ export function useProducts() {
     isDeleteProductConfirmationModalVisible,
     loadProduct,
     loadProducts,
+    sendProductToCreate,
     sendProductToEdit,
   }
 }

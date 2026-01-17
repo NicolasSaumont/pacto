@@ -6,13 +6,13 @@ const props = defineProps<{
 const { t } = useI18n()
 
 const {
+  sendProductToCreate,
   sendProductToEdit,
 } = useProducts()
 
 const productsStore = useProductsStore()
 
 const {
-  postNewProduct,
   resetForm,
 } = productsStore
 
@@ -32,7 +32,7 @@ const handleResetClick = () => {
 const handleSubmitClick = async () => {
   isProductSaving.value = true
   try {
-    if (props.mode === ModeEnum.CREATION) await postNewProduct()
+    if (props.mode === ModeEnum.CREATION) await sendProductToCreate(product.value)
     else if (props.mode === ModeEnum.EDITION) await sendProductToEdit(product.value)
 
     await navigateTo(PRODUCTS)
