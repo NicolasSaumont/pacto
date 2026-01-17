@@ -24,6 +24,7 @@
   "devDependencies": {
     "@nuxtjs/i18n": "^9.3.3",
     "@nuxtjs/tailwindcss": "^6.11.4",
+    "@types/node": "^25.0.6",
     "tailwind-scrollbar": "^3.0.0"
   }
 }

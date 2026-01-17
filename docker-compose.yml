@@ -4,9 +4,11 @@ services:
     working_dir: /app
     volumes:
       - ./front:/app
+    env_file:
+      - .env
+    command: npx nuxt dev --host 0.0.0.0 --port $NUXT_PORT
     ports:
-      - "3000:3000"
-    command: npx nuxt dev --host 0.0.0.0
+      - "3000:$NUXT_PORT"
 
   back:
     image: node:22
@@ -16,7 +18,7 @@ services:
     ports:
       - "3001:3001"
     env_file:
-      - ./back/.env
+      - .env
     depends_on:
       - db
     command: npx nodemon src/server.js
@@ -24,9 +26,9 @@ services:
   db:
     image: postgres:16
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: mydb
+      POSTGRES_USER: pacto_user       # identifiant utilisé dans PG_URL
+      POSTGRES_PASSWORD: pacto_pass   # mot de passe utilisé dans PG_URL
+      POSTGRES_DB: pacto              # nom de la DB utilisé dans PG_URL
     ports:
       - "5432:5432"
     volumes:

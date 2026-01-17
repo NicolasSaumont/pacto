@@ -18,7 +18,7 @@ export function useButton(props: IButtonProps) {
     primary: {
       normal: ['bg-blue-500 text-white', 'enabled:hover:bg-blue-700'],
       flat: ['enabled:hover:bg-blue-900/75'],
-      outline: ['border border-blue-500', 'enabled:hover:bg-blue-900/50']
+      outline: ['border border-blue-500', 'enabled:hover:bg-blue-900/20']
     },
     red: {
       normal: ['bg-red-500 text-white', 'enabled:hover:bg-red-700'],

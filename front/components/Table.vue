@@ -64,12 +64,12 @@ const handleRowClick = (row: T) => {
               
                 <template v-if="isDataColumn(column) && column.sortable && !loading">
                   <FontAwesomeIcon
-                    v-if="sortColumn === column.key && sortOrder === 'asc'"
+                    v-if="sortColumn === column.key && sortOrder === sortOrderEnum.ASC"
                     icon="sort-down"
                     class="-mt-2 shrink-0"
                   />
                   <FontAwesomeIcon
-                    v-else-if="sortColumn === column.key && sortOrder === 'desc'"
+                    v-else-if="sortColumn === column.key && sortOrder === sortOrderEnum.DESC"
                     icon="sort-up"
                     class="-mb-2 shrink-0"
                   />

@@ -1,17 +1,58 @@
 <script setup lang='ts'>
 const { t } = useI18n()
 
-const { 
+const { withNotify } = useNotifyAction()
+
+const {
   columns,
+  isDeleteProductConfirmationModalVisible,
+  loadProducts,
 } = useProducts()
+
+const productsStore = useProductsStore()
+
+const {
+  deleteProduct,
+  setProducts,
+} = productsStore
+
+const { 
+  isProductGettingFetch,
+  products
+} = storeToRefs(productsStore)
+
+const productToDelete = ref<IProduct | null>(null)
+
+const handleDeleteProductClick = async () => {
+  if (!productToDelete.value) return
+
+  const productId = productToDelete.value.id.toString()
+
+  await withNotify(
+    async () => {
+      await deleteProduct(productId)
+      await setProducts()
+    },
+    {
+      successContent: t('product.api.delete.success-message'),
+      errorContent: t('product.api.delete.error-message'),
+    }
+  )
+  
+  productToDelete.value = null
+  isDeleteProductConfirmationModalVisible.value = false
+}
+
+const handleOpenDeleteProductConfirmationModalClick = (row: IProduct) => {
+  productToDelete.value = row
+  isDeleteProductConfirmationModalVisible.value = true
+}
 
 const handleRowClick = (row: IProduct) => {
   navigateTo(`/products/${row.id}`)
 }
 
-const handleDeleteProductClick = (row: IProduct) => {
-  console.log('Delete product :', row)
-}
+onMounted(loadProducts)
 </script>
 
 <template>
@@ -27,9 +68,9 @@ const handleDeleteProductClick = (row: IProduct) => {
     
     <Table 
       :columns="columns" 
-      :data="MOCKED_PRODUCTS" 
+      :data="products" 
       filter
-      class="flex-1" 
+      :loading="isProductGettingFetch"
       @row-click="handleRowClick"
     >
       <template #actions="{ row }">
@@ -38,10 +79,18 @@ const handleDeleteProductClick = (row: IProduct) => {
             color="red"
             flat
             icon="trash" 
-            @click="handleDeleteProductClick(row)"
+            @click.stop="handleOpenDeleteProductConfirmationModalClick(row)"
           />
         </div>
       </template>
     </Table>
+
+    <Modal 
+      v-model="isDeleteProductConfirmationModalVisible"
+      :description="t('product.delete.confirmation')"
+      is-confirmation-modal
+      :title="t('product.delete')"
+      @confirm="handleDeleteProductClick"
+    />
   </div>
 </template>

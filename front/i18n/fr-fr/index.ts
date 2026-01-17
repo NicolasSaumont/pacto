@@ -1,7 +1,11 @@
 export default {
-
+  'common.api.error-title': 'Échec',
+  'common.api.success-title': 'Succès',
   'common.cancel': 'Annuler',
+  'common.confirm': 'Confirmer',
   'common.customers': 'Client | Clients',
+  'common.go-back': 'Revenir en arrière',
+  'common.go-back-to-home': 'Revenir en à l\'accueil',
   'common.order-taking': 'Prise de commande',
   'common.orders': 'Commandes',
   'common.products': 'Produit | Produits',
@@ -11,12 +15,35 @@ export default {
 
   'customers.management': 'Gestion des clients',
 
+  'error.code': 'Code d\'erreur : {errorCode}',
+  'error.message.404': 'Cette page n’existe pas…',
+  'error.message.default': 'Quelque chose s\'est mal passé…',
+  'error.title.404': '404 — Page introuvable',
+  'error.title.500': 'Erreur inattendue',
+
   'orders.synthesis': 'Synthèse des produits commandés',
 
-  'products.add-product': '+ Nouveau produit',
-  'products.management': 'Gestion des produits',
-
-  'product.add-product': 'Créer un nouveau produit',
-  'product.edit-product': 'Modifier un produit',
+  'product.add': 'Créer un nouveau produit',
+  'product.api.code.deleted': 'Produit supprimé (soft delete)',
+  'product.api.code.duplicate-name': 'Un produit avec ce nom existe déjà',
+  'product.api.code.get-error-message': 'Erreur lors de la récupération du produit',
+  'product.api.code.missing-required-field': 'Champ requis manquant',
+  'product.api.code.not-found': 'Produit non trouvé',
+  'product.api.code.server-error': 'Erreur serveur',
+  'product.api.delete.error-message': 'Le produit n\'a pas pu être supprimé',
+  'product.api.delete.success-message': 'Le produit a bien été supprimé',
+  'product.api.edit.error-message': 'Le produit n\'a pas pu être modifié',
+  'product.api.edit.success-message': 'Le produit a bien été modifié',
+  'product.api.get.error-message': 'Le produit n\'a pas pu être chargé',
+  'product.api.post.error-message': 'Le produit n\'a pas pu être créé',
+  'product.api.post.success-message': 'Le produit a bien été créé',
+  'product.delete': 'Supprimer un produit',
+  'product.delete.confirmation': 'Voulez-vous vraiment supprimer ce produit ?',
+  'product.edit': 'Modifier un produit',
   'product.name': 'Nom du produit',
+
+  'products.add-product': '+ Nouveau produit',
+  'products.api.code.get-error-message': 'Erreur lors de la récupération des produits',
+  'products.api.get.error-message': 'Les produits n\'ont pas pu être chargés',
+  'products.management': 'Gestion des produits',
 }
