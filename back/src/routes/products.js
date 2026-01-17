@@ -10,15 +10,15 @@ router.delete('/:id', async (req, res) => {
     const product = await Product.findByPk(id)
 
     if (!product) {
-      return res.status(404).json({ message: 'Produit non trouvé' })
+      return res.status(404).json({ code: 'product.api.code.not-found' })
     }
 
     await product.destroy() // avec paranoid: true → soft delete
-    return res.status(200).json({ message: 'Produit supprimé (soft delete)' })
+    return res.status(200).json({ code: 'product.api.code.deleted' })
 
   } catch (err) {
     console.error(err)
-    res.status(500).json({ message: 'Erreur serveur' })
+    res.status(500).json({ code: 'product.api.code.server-error' })
   }
 })
 
@@ -31,7 +31,7 @@ router.get('/', async (req, res) => {
     res.json(products)
   } catch (err) {
     console.error(err)
-    res.status(500).json({ message: 'Erreur lors de la récupération des produits' })
+    res.status(500).json({ code: 'products.api.code.get-error-message' })
   }
 })
 
@@ -44,13 +44,13 @@ router.get('/:id', async (req, res) => {
     })
 
     if (!product) {
-      return res.status(404).json({ message: 'Produit non trouvé' })
+      return res.status(404).json({ code: 'product.api.code.not-found' })
     }
 
     res.json(product)
   } catch (err) {
     console.error(err)
-    res.status(500).json({ message: 'Erreur lors de la récupération du produit' })
+    res.status(500).json({ code: 'product.api.code.get-error-message' })
   }
 })
 
@@ -60,14 +60,14 @@ router.patch('/:id', async (req, res) => {
   const { name } = req.body
 
   if (!name?.trim()) {
-    return res.status(400).json({ message: 'Nom requis' })
+    return res.status(400).json({ code: 'product.api.code.missing-required-field' })
   }
 
   try {
     const product = await Product.findByPk(id)
 
     if (!product) {
-      return res.status(404).json({ message: 'Produit introuvable' })
+      return res.status(404).json({ code: 'product.api.code.not-found' })
     }
 
     // Tentative de mise à jour
@@ -78,12 +78,12 @@ router.patch('/:id', async (req, res) => {
   } catch (error) {
     // Si le nom existe déjà
     if (error.name === 'SequelizeUniqueConstraintError') {
-      return res.status(409).json({ message: 'Un produit avec ce nom existe déjà' })
+      return res.status(409).json({ code: 'product.api.code.duplicate-name' })
     }
 
     // Autres erreurs
     console.error(error)
-    res.status(500).json({ message: 'Erreur serveur' })
+    res.status(500).json({ code: 'product.api.code.server-error' })
   }
 })
 
