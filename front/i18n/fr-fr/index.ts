@@ -1,5 +1,4 @@
 export default {
-
   'common.api.error-title': 'Échec',
   'common.api.success-title': 'Succès',
   'common.cancel': 'Annuler',
@@ -16,7 +15,7 @@ export default {
 
   'customers.management': 'Gestion des clients',
 
-  'error.code' : 'Code d\'erreur : {errorCode}',
+  'error.code': 'Code d\'erreur : {errorCode}',
   'error.message.404': 'Cette page n’existe pas…',
   'error.message.default': 'Quelque chose s\'est mal passé…',
   'error.title.404': '404 — Page introuvable',
@@ -24,6 +23,7 @@ export default {
 
   'orders.synthesis': 'Synthèse des produits commandés',
 
+  'product.add': 'Créer un nouveau produit',
   'product.api.code.deleted': 'Produit supprimé (soft delete)',
   'product.api.code.duplicate-name': 'Un produit avec ce nom existe déjà',
   'product.api.code.get-error-message': 'Erreur lors de la récupération du produit',
@@ -34,13 +34,12 @@ export default {
   'product.api.delete.success-message': 'Le produit a bien été supprimé',
   'product.api.edit.error-message': 'Le produit n\'a pas pu être modifié',
   'product.api.edit.success-message': 'Le produit a bien été modifié',
+  'product.api.get.error-message': 'Le produit n\'a pas pu être chargé',
   'product.api.post.error-message': 'Le produit n\'a pas pu être créé',
   'product.api.post.success-message': 'Le produit a bien été créé',
-  'product.api.get.error-message': 'Le produit n\'a pas pu être chargé',
-  'product.add': 'Créer un nouveau produit',
-  'product.edit': 'Modifier un produit',
   'product.delete': 'Supprimer un produit',
   'product.delete.confirmation': 'Voulez-vous vraiment supprimer ce produit ?',
+  'product.edit': 'Modifier un produit',
   'product.name': 'Nom du produit',
 
   'products.add-product': '+ Nouveau produit',
