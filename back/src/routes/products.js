@@ -78,7 +78,7 @@ router.patch('/:id', async (req, res) => {
   } catch (error) {
     // Si le nom existe déjà
     if (error.name === 'SequelizeUniqueConstraintError') {
-      return res.status(409).json({ code: 'api.code.duplicate-name' })
+      return res.status(409).json({ code: 'api.code.duplicate-name.product' })
     }
 
     // Autres erreurs
@@ -103,7 +103,7 @@ router.post('/', async (req, res) => {
   } catch (error) {
     // Nom déjà existant
     if (error.name === 'SequelizeUniqueConstraintError') {
-      return res.status(409).json({ code: 'api.code.duplicate-name' })
+      return res.status(409).json({ code: 'api.code.duplicate-name.product' })
     }
 
     console.error(error)

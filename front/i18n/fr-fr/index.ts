@@ -1,5 +1,6 @@
 export default {
-  'api.code.duplicate-name': 'Un produit avec ce nom existe déjà',
+  'api.code.duplicate-name.customer': 'Un client avec ce nom existe déjà',
+  'api.code.duplicate-name.product': 'Un produit avec ce nom existe déjà',
   'api.code.get-error-message.customer': 'Erreur lors de la récupération du client',
   'api.code.get-error-message.product': 'Erreur lors de la récupération du produit',
   'api.code.missing-required-field': 'Champ requis manquant',
@@ -21,6 +22,7 @@ export default {
   'common.search': 'Rechercher',
   'common.synthesis': 'Synthèse',
 
+  'customer.add': 'Créer un nouveau client',
   'customer.api.edit.error-message': 'Le client n\'a pas pu être modifié',
   'customer.api.edit.success-message': 'Le client a bien été modifié',
   'customer.api.get.error-message': 'Le client n\'a pas pu être chargé',

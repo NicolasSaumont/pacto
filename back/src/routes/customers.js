@@ -78,7 +78,7 @@ router.get('/:id', async (req, res) => {
 //   } catch (error) {
 //     // Si le nom existe déjà
 //     if (error.name === 'SequelizeUniqueConstraintError') {
-//       return res.status(409).json({ code: 'api.code.duplicate-name' })
+//       return res.status(409).json({ code: 'api.code.duplicate-name.customer' })
 //     }
 
 //     // Autres erreurs
@@ -87,28 +87,28 @@ router.get('/:id', async (req, res) => {
 //   }
 // })
 
-// // POST /products => crée un nouveau produit
-// router.post('/', async (req, res) => {
-//   const { name } = req.body
+// POST /customers => crée un nouveau client
+router.post('/', async (req, res) => {
+  const { name } = req.body
 
-//   if (!name?.trim()) {
-//     return res.status(400).json({ code: 'api.code.missing-required-field' })
-//   }
+  if (!name?.trim()) {
+    return res.status(400).json({ code: 'api.code.missing-required-field' })
+  }
 
-//   try {
-//     const product = await Product.create({ name })
+  try {
+    const customer = await Customer.create({ name })
 
-//     return res.status(201).json(product)
+    return res.status(201).json(customer)
 
-//   } catch (error) {
-//     // Nom déjà existant
-//     if (error.name === 'SequelizeUniqueConstraintError') {
-//       return res.status(409).json({ code: 'api.code.duplicate-name' })
-//     }
+  } catch (error) {
+    // Nom déjà existant
+    if (error.name === 'SequelizeUniqueConstraintError') {
+      return res.status(409).json({ code: 'api.code.duplicate-name.customer' })
+    }
 
-//     console.error(error)
-//     return res.status(500).json({ code: 'api.code.server-error' })
-//   }
-// })
+    console.error(error)
+    return res.status(500).json({ code: 'api.code.server-error' })
+  }
+})
 
 module.exports = router
