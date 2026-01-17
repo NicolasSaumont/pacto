@@ -14,8 +14,6 @@ onMounted(loadProduct)
       </template>
     </Header>
 
-    <ProductsForm />
-
-    <ProductsFooter :mode="ModeEnum.EDITION"/>
+    <ProductsForm :mode="ModeEnum.EDITION" />
   </div>
 </template>
