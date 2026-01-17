@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize')
 const { sequelize } = require('../config/db')
 const { normalizeName } = require('../utils/normalize')
 
-const Product = sequelize.define('Product', {
+const Customer = sequelize.define('Customer', {
   // --- Clé primaire auto-incrémentée ---
   id: {
     type: DataTypes.INTEGER,
@@ -21,20 +21,20 @@ const Product = sequelize.define('Product', {
   },
   
 }, {
-  tableName: 'products', // nom de la table dans PostgreSQL
-  timestamps: true,      // ajoute createdAt / updatedAt automatiquement
-  paranoid: true,        // active deletedAt
+  tableName: 'customers', // nom de la table dans PostgreSQL
+  timestamps: true,       // ajoute createdAt / updatedAt automatiquement
+  paranoid: true,         // active deletedAt
   deletedAt: 'deletedAt', // nom de la colonne pour soft delete
 
   hooks: {
     // couvre create + update
-    beforeValidate: (product) => {
+    beforeValidate: (customer) => {
       // si name est présent, on (re)calcule name_normalized
-      if (product.name) {
-        product.name_normalized = normalizeName(product.name)
+      if (customer.name) {
+        customer.name_normalized = normalizeName(customer.name)
       }
     },
   },
 })
 
-module.exports = Product
+module.exports = Customer

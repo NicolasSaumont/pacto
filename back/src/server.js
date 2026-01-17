@@ -35,6 +35,10 @@ app.get('/', (req, res) => {
 const productsRouter = require('./routes/products')
 app.use('/products', productsRouter)
 
+// Route pour les clients
+const customersRouter = require('./routes/customers')
+app.use('/customers', customersRouter)
+
 // Définition du port sur lequel le serveur écoute
 // On peut le configurer via .env, sinon il prend 3001 par défaut
 const PORT = process.env.PORT || 3001
