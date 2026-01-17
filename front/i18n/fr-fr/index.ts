@@ -13,6 +13,7 @@ export default {
   'common.search': 'Rechercher',
   'common.synthesis': 'Synthèse',
 
+  'customers.add-customer': '+ Nouveau client',
   'customers.management': 'Gestion des clients',
 
   'error.code': 'Code d\'erreur : {errorCode}',

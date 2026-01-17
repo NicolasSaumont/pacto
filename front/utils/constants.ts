@@ -6,6 +6,8 @@ export const NOTIFICATION_DEFAULT_DURATION = 5000
 
 /* URL */
 
+export const CUSTOMERS = '/customers'
+export const CUSTOMERS_CREATE = '/customers/create'
 export const MAIN = '/'
 export const PRODUCTS = '/products'
 export const PRODUCTS_CREATE = '/products/create'
