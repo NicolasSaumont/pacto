@@ -6,7 +6,7 @@ const { withNotify } = useNotifyAction()
 const {
   columns,
   // isDeleteProductConfirmationModalVisible,
-  // loadProducts,
+  loadCustomers,
 } = useCustomers()
 
 const customersStore = useCustomersStore()
@@ -52,7 +52,7 @@ const handleRowClick = (row: ICustomer) => {
   navigateTo(`/customers/${row.id}`)
 }
 
-// onMounted(loadProducts)
+onMounted(loadCustomers)
 </script>
 
 <template>

@@ -53,9 +53,10 @@ export const useCustomersStore = defineStore('customers', () => {
   //   product.value = await productRepository.getProduct(productId)
   // }
 
-  // const setProducts = async () => {
-  //   products.value = await productRepository.getProducts() 
-  // }
+  const setCustomers = async () => {
+    console.log('setCustomers')
+    // customers.value = await customerRepository.getCustomers() 
+  }
 
   return {
     customers,
@@ -68,6 +69,6 @@ export const useCustomersStore = defineStore('customers', () => {
     // product,
     // resetForm,
     // setProduct,
-    // setProducts,
+    setCustomers,
   }
 })

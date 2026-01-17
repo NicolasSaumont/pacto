@@ -5,18 +5,18 @@ export function useCustomers() {
   const { t } = useI18n()
   const { withNotify } = useNotifyAction()
 
-  const productsStore = useProductsStore()
+const customersStore = useCustomersStore()
 
   const { 
-    editProduct,
-    postNewProduct,
-    setProduct,
-    setProducts,
-  } = productsStore
+    // editProduct,
+    // postNewProduct,
+    // setProduct,
+    setCustomers,
+  } = customersStore
 
   const { 
-    isProductGettingFetch,
-  } = storeToRefs(productsStore)
+    isCustomerGettingFetch,
+  } = storeToRefs(customersStore)
 
   const columns: IColumn<ICustomer>[] = [
     {
@@ -32,78 +32,78 @@ export function useCustomers() {
     }
   ]
 
-  const isDeleteProductConfirmationModalVisible = ref(false)
+  // const isDeleteProductConfirmationModalVisible = ref(false)
 
-  const loadProduct = async () => {
-    isProductGettingFetch.value = true
-    try {
-      const productId = getRouteParam(route.params.id)
-      if (!productId) {
-        await navigateTo('/products')
-        return
-      }
+  // const loadProduct = async () => {
+  //   isProductGettingFetch.value = true
+  //   try {
+  //     const productId = getRouteParam(route.params.id)
+  //     if (!productId) {
+  //       await navigateTo('/products')
+  //       return
+  //     }
 
-      await withNotify(
-        () => setProduct(productId),
-        {
-          errorContent: t('product.api.get.error-message'),
-          rethrow: true,
-        }
-      )
-    } catch {
-      await navigateTo('/products')
-    } finally {
-      isProductGettingFetch.value = false
-    }
-  }
+  //     await withNotify(
+  //       () => setProduct(productId),
+  //       {
+  //         errorContent: t('product.api.get.error-message'),
+  //         rethrow: true,
+  //       }
+  //     )
+  //   } catch {
+  //     await navigateTo('/products')
+  //   } finally {
+  //     isProductGettingFetch.value = false
+  //   }
+  // }
 
-  const loadProducts = async () => {
-    isProductGettingFetch.value = true
+  const loadCustomers = async () => {
+    isCustomerGettingFetch.value = true
 
     await withNotify(
       async () => {
-        await setProducts()
+        await setCustomers()
       },
       {
         errorContent: t('products.api.get.error-message'),
       }
     )
 
-    isProductGettingFetch.value = false
+    isCustomerGettingFetch.value = false
   }
 
-  const sendProductToCreate = async (product: IProduct) => {
-    await withNotify(
-      async () => {
-        await postNewProduct(product)
-      },
-      {
-        successContent: t('product.api.post.success-message'),
-        errorContent: t('product.api.post.error-message'),
-        rethrow: true,
-      }
-    )
-  }
+  // const sendProductToCreate = async (product: IProduct) => {
+  //   await withNotify(
+  //     async () => {
+  //       await postNewProduct(product)
+  //     },
+  //     {
+  //       successContent: t('product.api.post.success-message'),
+  //       errorContent: t('product.api.post.error-message'),
+  //       rethrow: true,
+  //     }
+  //   )
+  // }
 
-  const sendProductToEdit = async (product: IProduct) => {
-    await withNotify(
-      async () => {
-        await editProduct(product)
-      },
-      {
-        successContent: t('product.api.edit.success-message'),
-        errorContent: t('product.api.edit.error-message'),
-        rethrow: true,
-      }
-    )
-  }
+  // const sendProductToEdit = async (product: IProduct) => {
+  //   await withNotify(
+  //     async () => {
+  //       await editProduct(product)
+  //     },
+  //     {
+  //       successContent: t('product.api.edit.success-message'),
+  //       errorContent: t('product.api.edit.error-message'),
+  //       rethrow: true,
+  //     }
+  //   )
+  // }
   
   return { 
     columns,
-    isDeleteProductConfirmationModalVisible,
-    loadProduct,
-    loadProducts,
-    sendProductToCreate,
-    sendProductToEdit,
+    // isDeleteProductConfirmationModalVisible,
+    loadCustomers,
+    // loadProducts,
+    // sendProductToCreate,
+    // sendProductToEdit,
   }
 }
