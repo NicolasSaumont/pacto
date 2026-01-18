@@ -1,4 +1,6 @@
 export default {
+  'api.code.deleted.customer': 'Client supprimé (soft delete)',
+  'api.code.deleted.product': 'Produit supprimé (soft delete)',
   'api.code.duplicate-name.customer': 'Un client avec ce nom existe déjà',
   'api.code.duplicate-name.product': 'Un produit avec ce nom existe déjà',
   'api.code.get-error-message.customer': 'Erreur lors de la récupération du client',
@@ -44,7 +46,6 @@ export default {
   'orders.synthesis': 'Synthèse des produits commandés',
 
   'product.add': 'Créer un nouveau produit',
-  'product.api.code.deleted': 'Produit supprimé (soft delete)',
   'product.api.delete.error-message': 'Le produit n\'a pas pu être supprimé',
   'product.api.delete.success-message': 'Le produit a bien été supprimé',
   'product.api.edit.error-message': 'Le produit n\'a pas pu être modifié',

@@ -16,13 +16,13 @@ export const useCustomersStore = defineStore('customers', () => {
     }
   }
 
-  // const deleteProduct = async (productId: string) => {
-  //   try {
-  //     await productRepository.deleteProduct(productId)
-  //   } catch (error) {
-  //     throw error
-  //   }
-  // }
+  const deleteCustomer = async (customerId: string) => {
+    try {
+      await customerRepository.deleteCustomer(customerId)
+    } catch (error) {
+      throw error
+    }
+  }
 
   const postNewCustomer = async (customer: ICustomer) => {
     try {
@@ -47,10 +47,10 @@ export const useCustomersStore = defineStore('customers', () => {
   return {
     customer,
     customers,
-    isCustomerGettingFetch,
-    // deleteProduct,
+    deleteCustomer,
     editCustomer,
     isConfirmButtonDisabled,
+    isCustomerGettingFetch,
     isCustomerSaving,
     postNewCustomer,
     resetForm,

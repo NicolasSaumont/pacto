@@ -5,48 +5,48 @@ const { withNotify } = useNotifyAction()
 
 const {
   columns,
-  // isDeleteProductConfirmationModalVisible,
+  isDeleteCustomerConfirmationModalVisible,
   loadCustomers,
 } = useCustomers()
 
 const customersStore = useCustomersStore()
 
-// const {
-//   deleteProduct,
-//   setProducts,
-// } = productsStore
+const {
+  deleteCustomer,
+  setCustomers,
+} = customersStore
 
 const { 
   customers,
   isCustomerGettingFetch,
 } = storeToRefs(customersStore)
 
-// const productToDelete = ref<IProduct | null>(null)
+const customerToDelete = ref<ICustomer | null>(null)
 
-// const handleDeleteProductClick = async () => {
-//   if (!productToDelete.value) return
+const handleDeleteCustomerClick = async () => {
+  if (!customerToDelete.value) return
 
-//   const productId = productToDelete.value.id.toString()
+  const customerId = customerToDelete.value.id.toString()
 
-//   await withNotify(
-//     async () => {
-//       await deleteProduct(productId)
-//       await setProducts()
-//     },
-//     {
-//       successContent: t('product.api.delete.success-message'),
-//       errorContent: t('product.api.delete.error-message'),
-//     }
-//   )
+  await withNotify(
+    async () => {
+      await deleteCustomer(customerId)
+      await setCustomers()
+    },
+    {
+      successContent: t('product.api.delete.success-message'),
+      errorContent: t('product.api.delete.error-message'),
+    }
+  )
   
-//   productToDelete.value = null
-//   isDeleteProductConfirmationModalVisible.value = false
-// }
+  customerToDelete.value = null
+  isDeleteCustomerConfirmationModalVisible.value = false
+}
 
-// const handleOpenDeleteProductConfirmationModalClick = (row: IProduct) => {
-//   productToDelete.value = row
-//   isDeleteProductConfirmationModalVisible.value = true
-// }
+const handleOpenDeleteCustomerConfirmationModalClick = (row: ICustomer) => {
+  customerToDelete.value = row
+  isDeleteCustomerConfirmationModalVisible.value = true
+}
 
 const handleRowClick = (row: ICustomer) => {
   navigateTo(`/customers/${row.id}`)
@@ -75,22 +75,22 @@ onMounted(loadCustomers)
     >
       <template #actions="{ row }">
         <div class="text-center">
-          <!-- <Button 
+          <Button 
             color="red"
             flat
             icon="trash" 
-            @click.stop="handleOpenDeleteProductConfirmationModalClick(row)"
-          /> -->
+            @click.stop="handleOpenDeleteCustomerConfirmationModalClick(row)"
+          />
         </div>
       </template>
     </Table>
 
-    <!-- <Modal 
-      v-model="isDeleteProductConfirmationModalVisible"
+    <Modal 
+      v-model="isDeleteCustomerConfirmationModalVisible"
       :description="t('product.delete.confirmation')"
       is-confirmation-modal
       :title="t('product.delete')"
-      @confirm="handleDeleteProductClick"
-    /> -->
+      @confirm="handleDeleteCustomerClick"
+    />
   </div>
 </template>

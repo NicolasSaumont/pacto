@@ -14,7 +14,7 @@ router.delete('/:id', async (req, res) => {
     }
 
     await product.destroy() // avec paranoid: true → soft delete
-    return res.status(200).json({ code: 'product.api.code.deleted' })
+    return res.status(200).json({ code: 'api.code.deleted.product' })
 
   } catch (err) {
     console.error(err)

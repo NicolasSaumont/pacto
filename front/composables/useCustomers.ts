@@ -32,7 +32,7 @@ const customersStore = useCustomersStore()
     }
   ]
 
-  // const isDeleteProductConfirmationModalVisible = ref(false)
+  const isDeleteCustomerConfirmationModalVisible = ref(false)
 
   const loadCustomer = async () => {
     isCustomerGettingFetch.value = true
@@ -100,7 +100,7 @@ const customersStore = useCustomersStore()
   
   return { 
     columns,
-    // isDeleteProductConfirmationModalVisible,
+    isDeleteCustomerConfirmationModalVisible,
     loadCustomer,
     loadCustomers,
     sendCustomerToCreate,

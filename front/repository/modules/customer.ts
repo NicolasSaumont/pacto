@@ -2,11 +2,11 @@ const { fetcher } = apiFactory()
 
 export const customerRepository = {
 
-  // async deleteProduct(id: string): Promise<void> {
-  //   return fetcher<void>(`/products/${id}`, {
-  //     method: 'DELETE',
-  //   })
-  // },
+  async deleteCustomer(id: string): Promise<void> {
+    return fetcher<void>(`/customers/${id}`, {
+      method: 'DELETE',
+    })
+  },
 
   async getCustomer(id: string): Promise<ICustomer> {
     return fetcher<ICustomer>(`/customers/${id}`, {

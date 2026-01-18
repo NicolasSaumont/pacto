@@ -2,25 +2,25 @@ const express = require('express')
 const router = express.Router()
 const Customer = require('../models/Customer')
 
-// // DELETE /products/:id => supprime un produit existant selon l'id passé en paramètre
-// router.delete('/:id', async (req, res) => {
-//   const { id } = req.params
+// DELETE /customers/:id => supprime un client existant selon l'id passé en paramètre
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params
 
-//   try {
-//     const product = await Product.findByPk(id)
+  try {
+    const customer = await Customer.findByPk(id)
 
-//     if (!product) {
-//       return res.status(404).json({ code: 'api.code.not-found.product' })
-//     }
+    if (!customer) {
+      return res.status(404).json({ code: 'api.code.not-found.customer' })
+    }
 
-//     await product.destroy() // avec paranoid: true → soft delete
-//     return res.status(200).json({ code: 'product.api.code.deleted' })
+    await customer.destroy() // avec paranoid: true → soft delete
+    return res.status(200).json({ code: 'api.code.deleted.customer' })
 
-//   } catch (err) {
-//     console.error(err)
-//     res.status(500).json({ code: 'api.code.server-error' })
-//   }
-// })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ code: 'api.code.server-error' })
+  }
+})
 
 // GET /customers => renvoie tous les clients
 router.get('/', async (req, res) => {
