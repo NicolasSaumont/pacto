@@ -1,19 +1,22 @@
 const { sequelize } = require('./config/db')
-const Product = require('./models/Product')
-const Customer = require('./models/Customer')
+const { Product, Customer } = require('./models')
 
 ;(async () => {
   try {
     console.log('🧹 Réinitialisation des tables...')
 
-    // Supprime toutes les tables + réinitialise les séquences
-    await sequelize.query(`
-      TRUNCATE TABLE
-        "products",
-        "customers"
-      RESTART IDENTITY CASCADE;
-    `)
+    // // Supprime toutes les tables + réinitialise les séquences
+    // await sequelize.query(`
+    //   TRUNCATE TABLE
+    //     "customers",
+    //     "products"
+    //   RESTART IDENTITY CASCADE;
+    // `)
 
+    // Sync toutes les tables Sequelize
+    // force:true supprime/recrée toutes les tables, y compris les tables de liaison
+    await sequelize.sync({ force: true })
+    
     console.log('✅ Tables réinitialisées avec succès !')
     process.exit(0)
 
