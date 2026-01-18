@@ -54,38 +54,38 @@ router.get('/:id', async (req, res) => {
   }
 })
 
-// // PATCH /products/:id => modifie un produit existant selon l'id passé en paramètre
-// router.patch('/:id', async (req, res) => {
-//   const { id } = req.params
-//   const { name } = req.body
+// PATCH /customers/:id => modifie un client existant selon l'id passé en paramètre
+router.patch('/:id', async (req, res) => {
+  const { id } = req.params
+  const { name } = req.body
 
-//   if (!name?.trim()) {
-//     return res.status(400).json({ code: 'api.code.missing-required-field' })
-//   }
+  if (!name?.trim()) {
+    return res.status(400).json({ code: 'api.code.missing-required-field' })
+  }
 
-//   try {
-//     const product = await Product.findByPk(id)
+  try {
+    const customer = await Customer.findByPk(id)
 
-//     if (!product) {
-//       return res.status(404).json({ code: 'api.code.not-found.product' })
-//     }
+    if (!customer) {
+      return res.status(404).json({ code: 'api.code.not-found.product' })
+    }
 
-//     // Tentative de mise à jour
-//     await product.update({ name })
+    // Tentative de mise à jour
+    await customer.update({ name })
 
-//     res.json(product)
+    res.json(customer)
 
-//   } catch (error) {
-//     // Si le nom existe déjà
-//     if (error.name === 'SequelizeUniqueConstraintError') {
-//       return res.status(409).json({ code: 'api.code.duplicate-name.customer' })
-//     }
+  } catch (error) {
+    // Si le nom existe déjà
+    if (error.name === 'SequelizeUniqueConstraintError') {
+      return res.status(409).json({ code: 'api.code.duplicate-name.customer' })
+    }
 
-//     // Autres erreurs
-//     console.error(error)
-//     res.status(500).json({ code: 'api.code.server-error' })
-//   }
-// })
+    // Autres erreurs
+    console.error(error)
+    res.status(500).json({ code: 'api.code.server-error' })
+  }
+})
 
 // POST /customers => crée un nouveau client
 router.post('/', async (req, res) => {

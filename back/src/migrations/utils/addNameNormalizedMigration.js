@@ -3,10 +3,10 @@ async function addNameNormalizedMigration({
   table,
   triggerPrefix,
 }) {
-  // extension
+  // --- Extension unaccent ---
   await sequelize.query(`CREATE EXTENSION IF NOT EXISTS unaccent;`)
 
-  // colonne
+  // --- Colonne name_normalized (idempotent) ---
   await sequelize.query(`
     DO $$
     BEGIN
@@ -21,26 +21,39 @@ async function addNameNormalizedMigration({
     END$$;
   `)
 
-  // backfill
+  // --- Backfill existant avec normalisation complète ---
   await sequelize.query(`
     UPDATE ${table}
-    SET name_normalized = lower(unaccent(name))
-    WHERE name IS NOT NULL
-      AND (name_normalized IS NULL OR name_normalized = '');
+    SET name_normalized = btrim(
+      regexp_replace(
+        lower(unaccent(name)),
+        '[[:space:]]+',
+        ' ',
+        'g'
+      )
+    )
+    WHERE name IS NOT NULL;
   `)
 
-  // fonction trigger
+  // --- Fonction trigger pour normalisation future ---
   await sequelize.query(`
     CREATE OR REPLACE FUNCTION ${triggerPrefix}_set_name_normalized()
     RETURNS trigger AS $$
     BEGIN
-      NEW.name_normalized := lower(unaccent(NEW.name));
+      NEW.name_normalized := btrim(
+        regexp_replace(
+          lower(unaccent(NEW.name)),
+          '[[:space:]]+',
+          ' ',
+          'g'
+        )
+      );
       RETURN NEW;
     END;
     $$ LANGUAGE plpgsql;
   `)
 
-  // trigger
+  // --- Trigger pour INSERT / UPDATE ---
   await sequelize.query(`
     DROP TRIGGER IF EXISTS trg_${triggerPrefix}_name_normalized ON ${table};
     CREATE TRIGGER trg_${triggerPrefix}_name_normalized
@@ -49,14 +62,14 @@ async function addNameNormalizedMigration({
     EXECUTE FUNCTION ${triggerPrefix}_set_name_normalized();
   `)
 
-  // index unique partiel
+  // --- Index unique partiel ---
   await sequelize.query(`
     CREATE UNIQUE INDEX IF NOT EXISTS ${table}_name_unique_normalized
     ON ${table} (name_normalized)
     WHERE "deletedAt" IS NULL;
   `)
 
-  // NOT NULL
+  // --- NOT NULL ---
   await sequelize.query(`
     ALTER TABLE ${table}
     ALTER COLUMN name_normalized SET NOT NULL;

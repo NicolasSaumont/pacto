@@ -21,7 +21,7 @@ export const customerRepository = {
   },
 
   async patchCustomer(newCustomer: ICustomer): Promise<void> {
-    return fetcher<void>(`/products/${newCustomer.id}`, {
+    return fetcher<void>(`/customers/${newCustomer.id}`, {
       method: 'PATCH',
       body: { name: newCustomer.name }
     })

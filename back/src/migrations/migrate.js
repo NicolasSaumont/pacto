@@ -1,11 +1,11 @@
 require('dotenv').config()
 const { sequelize } = require('../config/db')
+const { addNameNormalizedMigration } = require('./utils/addNameNormalizedMigration')
 
 const migrations = [
   {
-    id: '2026-01-14_products_name_normalized_unique',
+    id: '2026-01-18_products_fix_spaces_normalization',
     up: async () => {
-      const { addNameNormalizedMigration } = require('./utils/nameNormalized')
       await addNameNormalizedMigration({
         sequelize,
         table: 'products',
@@ -14,9 +14,8 @@ const migrations = [
     },
   },
   {
-    id: '2026-01-14_customers_name_normalized_unique',
+    id: '2026-01-18_customers_fix_spaces_normalization',
     up: async () => {
-      const { addNameNormalizedMigration } = require('./utils/nameNormalized')
       await addNameNormalizedMigration({
         sequelize,
         table: 'customers',
@@ -56,13 +55,20 @@ async function markMigration(id) {
     await ensureMigrationsTable()
 
     for (const m of migrations) {
-      if (await hasMigration(m.id)) {
-        console.log(`↩️  Skip ${m.id}`)
+      const already = await hasMigration(m.id)
+      if (already) {
+        console.log(`↩️  Skip ${m.id} (already applied)`)
         continue
       }
 
       console.log(`➡️  Apply ${m.id}`)
-      await m.up()
+      await sequelize.transaction(async (t) => {
+        await m.up(t)
+      }).catch(async () => {
+        // Certaines commandes comme CREATE EXTENSION n’aiment pas les transactions
+        await m.up()
+      })
+
       await markMigration(m.id)
       console.log(`✅ Applied ${m.id}`)
     }
