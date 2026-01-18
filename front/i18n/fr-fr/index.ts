@@ -12,6 +12,7 @@ export default {
 
   'common.api.error-title': 'Échec',
   'common.api.success-title': 'Succès',
+  'common.available-products': 'Produit disponible | Produits disponibles', 
   'common.cancel': 'Annuler',
   'common.confirm': 'Confirmer',
   'common.customers': 'Client | Clients',
@@ -32,6 +33,7 @@ export default {
   'customer.api.post.success-message': 'Le client a bien été créé',
   'customer.edit': 'Modifier un client',
   'customer.name': 'Nom du client',
+  'customer.products': 'Produit du client | Produits du client',
 
   'customers.add-customer': '+ Nouveau client',
   'customers.api.code.get-error-message': 'Erreur lors de la récupération des clients',

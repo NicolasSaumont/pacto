@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const Customer = require('../models/Customer')
+const { Customer, Product } = require('../models')
 
 // DELETE /customers/:id => supprime un client existant selon l'id passé en paramètre
 router.delete('/:id', async (req, res) => {
@@ -40,14 +40,26 @@ router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params
     const customer = await Customer.findByPk(id, {
-      attributes: ['id', 'name'] 
+      attributes: ['id', 'name'],
+      include: [
+        {
+          model: Product,
+          as: 'products',              // renomme la relation
+          attributes: ['id', 'name'],
+          through: { attributes: [] }  // ignore les colonnes de la table de liaison
+        }
+      ]
     })
 
     if (!customer) {
       return res.status(404).json({ code: 'api.code.not-found' })
     }
 
-    res.json(customer)
+    res.json({
+      id: customer.id,
+      name: customer.name,
+      products: customer.products
+    })
   } catch (err) {
     console.error(err)
     res.status(500).json({ code: 'api.code.get-error-message.customer' })

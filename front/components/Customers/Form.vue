@@ -50,6 +50,7 @@ onUnmounted(resetForm)
 
 <template>
   <form 
+    class="flex flex-col gap-6"
     @submit.prevent="handleSubmitClick"
     @reset.prevent="handleResetClick"
   >
@@ -60,6 +61,9 @@ onUnmounted(resetForm)
       :loading="isCustomerGettingFetch"
       theme="light"
     />
+
+    <CustomersProducts />
+
     <CustomersFooter />
   </form>
 </template>

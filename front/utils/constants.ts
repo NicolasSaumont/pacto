@@ -27,5 +27,6 @@ export const DEFAULT_PRODUCT = {
 
 export const DEFAULT_CUSTOMER = {
   id: 0,
-  name: ''
+  name: '',
+  products: []
 }

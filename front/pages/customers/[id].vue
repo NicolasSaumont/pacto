@@ -2,8 +2,12 @@
 const { t } = useI18n()
 
 const { loadCustomer } = useCustomers()
+const { loadProducts } = useProducts()
 
-onMounted(loadCustomer)
+onMounted( () => {
+  loadCustomer()
+  loadProducts()
+})
 </script>
 
 <template>
