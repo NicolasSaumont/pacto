@@ -76,7 +76,7 @@ onMounted(loadProducts)
       <template #actions="{ row }">
         <div class="text-center">
           <Button 
-            color="red"
+            :color="ButtonColorEnum.RED"
             flat
             icon="trash" 
             @click.stop="handleOpenDeleteProductConfirmationModalClick(row)"

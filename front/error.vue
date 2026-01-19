@@ -56,7 +56,7 @@ const goBack = () => {
           />
           <Button
             :label="t('common.go-back-to-home')"
-            @click="clearError({ redirect: '/' })"
+            @click="clearError({ redirect: MAIN })"
           />
         </div>
       </div>
