@@ -12,7 +12,7 @@ export function useMenu() {
   }
 
   const menuItems: IMenuItem[] = [
-    { label: t('common.synthesis'), description: t('orders.synthesis'), path: '/', icon: 'file-contract' },
+    { label: t('common.synthesis'), description: t('common.dashboard'), path: '/', icon: 'file-contract' },
     { label: t('common.orders'), description: t('common.order-taking'), path: '/orders', icon: 'file-pen' },
     { label: t('common.customers', 2), description: t('customers.management'), path: '/customers', icon: 'users' },
     { label: t('common.products', 2), description: t('products.management'), path: '/products', icon: 'boxes-stacked' },

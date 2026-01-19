@@ -18,6 +18,7 @@ export default {
   'common.cancel': 'Annuler',
   'common.confirm': 'Confirmer',
   'common.customers': 'Client | Clients',
+  'common.dashboard': 'Tableau de bord',
   'common.go-back': 'Revenir en arrière',
   'common.go-back-to-home': 'Revenir en à l\'accueil',
   'common.order-taking': 'Prise de commande',
@@ -46,8 +47,6 @@ export default {
   'error.message.default': 'Quelque chose s\'est mal passé…',
   'error.title.404': '404 — Page introuvable',
   'error.title.500': 'Erreur inattendue',
-
-  'orders.synthesis': 'Synthèse des produits commandés',
 
   'product.add': 'Créer un nouveau produit',
   'product.api.delete.error-message': 'Le produit n\'a pas pu être supprimé',
