@@ -15,7 +15,6 @@ router.delete('/:id', async (req, res) => {
 
     await customer.destroy() // avec paranoid: true → soft delete
     return res.status(200).json({ code: 'api.code.deleted.customer' })
-
   } catch (err) {
     console.error(err)
     res.status(500).json({ code: 'api.code.server-error' })
@@ -26,7 +25,7 @@ router.delete('/:id', async (req, res) => {
 router.get('/', async (req, res) => {
   try {
     const customers = await Customer.findAll({
-      attributes: ['id', 'name'] 
+      attributes: ['id', 'name'],
     })
     res.json(customers)
   } catch (err) {
@@ -44,21 +43,21 @@ router.get('/:id', async (req, res) => {
       include: [
         {
           model: Product,
-          as: 'products',              // renomme la relation
+          as: 'products', // renomme la relation
           attributes: ['id', 'name'],
-          through: { attributes: [] }  // ignore les colonnes de la table de liaison
-        }
-      ]
+          through: { attributes: [] }, // ignore les colonnes de la table de liaison
+        },
+      ],
     })
 
     if (!customer) {
-      return res.status(404).json({ code: 'api.code.not-found' })
+      return res.status(404).json({ code: 'api.code.not-found.customer' })
     }
 
     res.json({
       id: customer.id,
       name: customer.name,
-      products: customer.products
+      products: customer.products,
     })
   } catch (err) {
     console.error(err)
@@ -79,14 +78,13 @@ router.patch('/:id', async (req, res) => {
     const customer = await Customer.findByPk(id)
 
     if (!customer) {
-      return res.status(404).json({ code: 'api.code.not-found.product' })
+      return res.status(404).json({ code: 'api.code.not-found.customer' })
     }
 
     // Tentative de mise à jour
     await customer.update({ name })
 
     res.json(customer)
-
   } catch (error) {
     // Si le nom existe déjà
     if (error.name === 'SequelizeUniqueConstraintError') {
@@ -111,7 +109,6 @@ router.post('/', async (req, res) => {
     const customer = await Customer.create({ name })
 
     return res.status(201).json(customer)
-
   } catch (error) {
     // Nom déjà existant
     if (error.name === 'SequelizeUniqueConstraintError') {

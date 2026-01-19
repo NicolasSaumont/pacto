@@ -22,9 +22,10 @@ export default defineNuxtConfig({
   },
 
   modules: [
-    '@pinia/nuxt',
+    '@formkit/auto-animate/nuxt',
     '@nuxtjs/i18n',
     '@nuxtjs/tailwindcss',
+    '@pinia/nuxt',
   ],
 
   imports: {
@@ -32,14 +33,14 @@ export default defineNuxtConfig({
       './composables/**',
       './repository/**',
       './stores/**',
-      './types/**', 
-      './utils/**', 
+      './types/**',
+      './utils/**',
     ],
   },
 
   css: [
     '@/assets/css/main.css',
-    '@fortawesome/fontawesome-svg-core/styles.css'
+    '@fortawesome/fontawesome-svg-core/styles.css',
   ],
 
   i18n: {
