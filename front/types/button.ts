@@ -1,5 +1,5 @@
 export interface IButtonProps {
-  color?: TButtonColor
+  color?: ButtonColorEnum
   disabled?: boolean
   flat?: boolean
   outline?: boolean
@@ -9,4 +9,8 @@ export interface IButtonProps {
   type?: 'button' | 'submit' | 'reset'
 }
 
-export type TButtonColor = 'primary' | 'red'
+export enum ButtonColorEnum {
+  PRIMARY = 'primary',
+  RED = 'red',
+  WHITE = 'white',
+}
