@@ -86,7 +86,6 @@ const customersStore = useCustomersStore()
   }
 
   const sendCustomerToEdit = async (customer: ICustomer) => {
-    console.log('sendCustomerToEdit', customer)
     await withNotify(
       async () => {
         await editCustomer(customer)

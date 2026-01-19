@@ -20,7 +20,6 @@ export const customerRepository = {
   },
 
   async patchCustomer(id: number, body: Record<string, unknown>): Promise<void> {
-    console.log('patchCustomer')
     return fetcher<void>(`/customers/${id}`, {
       method: 'PATCH',
       body,
