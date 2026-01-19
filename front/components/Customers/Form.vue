@@ -65,23 +65,29 @@ onUnmounted(resetForm)
 </script>
 
 <template>
-  <form 
-    class="flex flex-col gap-6"
-    @submit.prevent="handleSubmitClick"
-    @reset.prevent="handleResetClick"
-  >
-    <Input
-      v-model="customerName"
-      :disabled="isCustomerNameInputDisabled"
-      :label="t('customer.name')"
-      :loading="isCustomerGettingFetch"
-      theme="light"
-    />
+  <div class="flex-1 min-h-0 flex flex-col">
+    <form
+      class="flex flex-col gap-6 flex-1 min-h-0"
+      @submit.prevent="handleSubmitClick"
+      @reset.prevent="handleResetClick"
+    >
+      <Input
+        v-model="customerName"
+        :disabled="isCustomerNameInputDisabled"
+        :label="t('customer.name')"
+        :loading="isCustomerGettingFetch"
+        theme="light"
+        class="shrink-0"
+      />
 
-    <CustomersProductsSkeleton v-if="isCustomerGettingFetch || isProductGettingFetch"/>
+      <CustomersProductsSkeleton 
+        v-if="isCustomerGettingFetch || isProductGettingFetch" 
+        class="flex-1 min-h-0" 
+      />
 
-    <CustomersProducts v-else />
+      <CustomersProducts v-else class="flex-1 min-h-0" />
 
-    <CustomersFooter />
-  </form>
+      <CustomersFooter class="shrink-0" />
+    </form>
+  </div>
 </template>
