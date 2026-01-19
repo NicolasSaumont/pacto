@@ -61,7 +61,7 @@ onMounted(loadProducts)
       <template #header-right>
         <Button 
           :label="t('products.add-product')" 
-          @click="navigateTo(PRODUCTS_CREATE)"
+          @click="navigateTo(PRODUCTS_CREATE_URL)"
         />
       </template>
     </Header>

@@ -61,7 +61,7 @@ onMounted(loadCustomers)
       <template #header-right>
         <Button 
           :label="t('customers.add-customer')" 
-          @click="navigateTo(CUSTOMERS_CREATE)"
+          @click="navigateTo(CUSTOMERS_CREATE_URL)"
         />
       </template>
     </Header>

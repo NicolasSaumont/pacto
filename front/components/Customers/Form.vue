@@ -40,7 +40,7 @@ const customerName = computed<string>({
 const isCustomerNameInputDisabled = computed(() => isCustomerSaving.value || isCustomerGettingFetch.value)
 
 const handleResetClick = () => {
-  navigateTo(CUSTOMERS)
+  navigateTo(CUSTOMERS_URL)
 }
 
 const handleSubmitClick = async () => {
@@ -51,7 +51,7 @@ const handleSubmitClick = async () => {
     if (props.mode === ModeEnum.CREATION) await sendCustomerToCreate(customer.value)
     else if (props.mode === ModeEnum.EDITION) await sendCustomerToEdit(customer.value)
 
-    await navigateTo(CUSTOMERS)
+    await navigateTo(CUSTOMERS_URL)
   } catch {
     // IMPORTANT: on consomme l'erreur pour éviter le warning Vue
     // la notif est déjà affichée dans withNotify

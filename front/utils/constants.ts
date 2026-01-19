@@ -11,11 +11,12 @@ export enum ModeEnum {
 }
 /* URL */
 
-export const CUSTOMERS = '/customers'
-export const CUSTOMERS_CREATE = '/customers/create'
-export const MAIN = '/'
-export const PRODUCTS = '/products'
-export const PRODUCTS_CREATE = '/products/create'
+export const CUSTOMERS_URL = '/customers'
+export const CUSTOMERS_CREATE_URL = '/customers/create'
+export const MAIN_URL = '/'
+export const ORDERS_URL = '/orders'
+export const PRODUCTS_URL = '/products'
+export const PRODUCTS_CREATE_URL = '/products/create'
 
 /* PRODUCTS */
 

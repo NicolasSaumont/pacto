@@ -12,7 +12,7 @@ const goBack = () => {
   if (import.meta.client && window.history.length > 1) {
     router.back()
   } else {
-    clearError({ redirect: '/' })
+    clearError({ redirect: MAIN_URL })
   }
 }
 </script>
@@ -56,7 +56,7 @@ const goBack = () => {
           />
           <Button
             :label="t('common.go-back-to-home')"
-            @click="clearError({ redirect: MAIN })"
+            @click="clearError({ redirect: MAIN_URL })"
           />
         </div>
       </div>

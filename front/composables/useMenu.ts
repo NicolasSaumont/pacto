@@ -12,10 +12,10 @@ export function useMenu() {
   }
 
   const menuItems: IMenuItem[] = [
-    { label: t('common.synthesis'), description: t('common.dashboard'), path: '/', icon: 'file-contract' },
-    { label: t('common.orders'), description: t('common.order-taking'), path: '/orders', icon: 'file-pen' },
-    { label: t('common.customers', 2), description: t('customers.management'), path: '/customers', icon: 'users' },
-    { label: t('common.products', 2), description: t('products.management'), path: '/products', icon: 'boxes-stacked' },
+    { label: t('common.synthesis'), description: t('common.dashboard'), path: MAIN_URL, icon: 'file-contract' },
+    { label: t('common.orders'), description: t('common.order-taking'), path: ORDERS_URL, icon: 'file-pen' },
+    { label: t('common.customers', 2), description: t('customers.management'), path: CUSTOMERS_URL, icon: 'users' },
+    { label: t('common.products', 2), description: t('products.management'), path: PRODUCTS_URL, icon: 'boxes-stacked' },
     { label: 'Model', path: '/model', description: t('model'), icon: 'users' }
   ]
 

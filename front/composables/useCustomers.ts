@@ -39,7 +39,7 @@ const customersStore = useCustomersStore()
     try {
       const customerId = getRouteParam(route.params.id)
       if (!customerId) {
-        await navigateTo('/customers')
+        await navigateTo(CUSTOMERS_URL)
         return
       }
 
@@ -51,7 +51,7 @@ const customersStore = useCustomersStore()
         }
       )
     } catch {
-      await navigateTo('/customers')
+      await navigateTo(CUSTOMERS_URL)
     } finally {
       isCustomerGettingFetch.value = false
     }

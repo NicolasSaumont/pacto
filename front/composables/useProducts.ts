@@ -39,7 +39,7 @@ export function useProducts() {
     try {
       const productId = getRouteParam(route.params.id)
       if (!productId) {
-        await navigateTo('/products')
+        await navigateTo(PRODUCTS_URL)
         return
       }
 
@@ -51,7 +51,7 @@ export function useProducts() {
         }
       )
     } catch {
-      await navigateTo('/products')
+      await navigateTo(PRODUCTS_URL)
     } finally {
       isProductGettingFetch.value = false
     }
