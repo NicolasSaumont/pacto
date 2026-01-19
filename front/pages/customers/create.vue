@@ -1,5 +1,11 @@
 <script setup lang='ts'>
 const { t } = useI18n()
+
+const { loadProducts } = useProducts()
+
+onMounted( () => {
+  loadProducts()
+})
 </script>
 
 <template>

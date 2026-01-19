@@ -19,16 +19,6 @@ export const customerRepository = {
     })
   },
 
-  // async patchCustomer(newCustomer: ICustomer): Promise<void> {
-  //   return fetcher<void>(`/customers/${newCustomer.id}`, {
-  //     method: 'PATCH',
-  //     body: {
-  //       name: newCustomer.name,
-  //       productIds: (newCustomer.products ?? []).map((product) => product.id),
-  //     },
-  //   })
-  // },
-
   async patchCustomer(id: number, body: Record<string, unknown>): Promise<void> {
     console.log('patchCustomer')
     return fetcher<void>(`/customers/${id}`, {
@@ -40,7 +30,10 @@ export const customerRepository = {
   async postCustomer(newCustomer: ICustomer): Promise<ICustomer> {
     return fetcher<ICustomer>('/customers', {
       method: 'POST',
-      body: { name: newCustomer.name },
+      body: { 
+        name: newCustomer.name,
+        productIds: (newCustomer.products ?? []).map(product => product.id),
+      },
     })
   },
 }

@@ -10,12 +10,8 @@ export const useCustomersStore = defineStore('customers', () => {
   const isConfirmButtonDisabled = computed(() => !customer.value.name)
   
   const editCustomer = async (customer: ICustomer) => {
-    console.log('editCustomer')
     try {
       const body: Record<string, unknown> = {}
-
-      console.log('customer.name', customer.name)
-      console.log('originalCustomer.name', originalCustomer.value.name)
 
       // name
       if (customer.name !== originalCustomer.value.name) {

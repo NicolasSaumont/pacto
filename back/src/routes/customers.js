@@ -70,7 +70,7 @@ router.patch('/:id', async (req, res) => {
   const { id } = req.params
   const { name, productIds } = req.body
 
-  // name optionnel en PATCH (sinon impossible de patch juste les produits)
+  // name optionnel en PATCH (sinon impossible de patch uniquement les produits)
   if (name !== undefined && !String(name).trim()) {
     return res.status(400).json({ code: 'api.code.invalid-field.name' })
   }
@@ -101,9 +101,6 @@ router.patch('/:id', async (req, res) => {
       await customer.setProducts(uniqueIds)
     }
 
-    // // Tentative de mise à jour
-    // await customer.update({ name })
-
     res.json(customer)
   } catch (error) {
     // Si le nom existe déjà
@@ -119,14 +116,25 @@ router.patch('/:id', async (req, res) => {
 
 // POST /customers => crée un nouveau client
 router.post('/', async (req, res) => {
-  const { name } = req.body
+  const { name, productIds } = req.body
 
   if (!name?.trim()) {
     return res.status(400).json({ code: 'api.code.missing-required-field' })
   }
 
+  // productIds optionnel
+  if (productIds !== undefined && !Array.isArray(productIds)) {
+    return res.status(400).json({ code: 'api.code.invalid-field.product-ids' })
+  }
+
   try {
     const customer = await Customer.create({ name })
+
+    // Si produits fournis, on crée les associations
+    if (productIds?.length) {
+      const uniqueIds = [...new Set(productIds)]
+      await customer.setProducts(uniqueIds)
+    }
 
     return res.status(201).json(customer)
   } catch (error) {
