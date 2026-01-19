@@ -22,8 +22,12 @@ const availableProducts = computed(() => {
 
 <template>
   <div class="flex bg-gray-900 p-6 rounded-2xl border border-gray-600">
+    <!-- COLONNE GAUCHE -->
     <div class="flex-1 text-center border-r border-gray-600">
+      <!-- Titre -->
       <div>{{ t('common.available-products', 2) }}</div>
+
+      <!-- Lignes -->
       <div 
         v-for="product in availableProducts" 
         :key="product.id" 
@@ -32,8 +36,13 @@ const availableProducts = computed(() => {
         {{ product.name }}
       </div>
     </div>
+
+    <!-- COLONNE DROITE -->
     <div class="flex-1 text-center">
+      <!-- Titre -->
       <div>{{ t('customer.products', 2) }}</div>
+
+      <!-- Lignes -->
       <div 
         v-for="product in customer.products" 
         :key="product.id" 

@@ -11,6 +11,7 @@ const {
 } = useCustomers()
 
 const customersStore = useCustomersStore()
+const productsStore = useProductsStore()
 
 const {
   resetForm,
@@ -22,8 +23,11 @@ const {
   customer
 } = storeToRefs(customersStore)
 
-const isCustomerNameInputDisabled = computed(() => isCustomerSaving.value || isCustomerGettingFetch.value)
+const {
+  isProductGettingFetch,
+} = storeToRefs(productsStore)
 
+const isCustomerNameInputDisabled = computed(() => isCustomerSaving.value || isCustomerGettingFetch.value)
 
 const handleResetClick = () => {
   navigateTo(CUSTOMERS)
@@ -62,7 +66,9 @@ onUnmounted(resetForm)
       theme="light"
     />
 
-    <CustomersProducts />
+    <CustomersProductsSkeleton v-if="isCustomerGettingFetch || isProductGettingFetch"/>
+
+    <CustomersProducts v-else />
 
     <CustomersFooter />
   </form>
