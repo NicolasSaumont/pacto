@@ -21,8 +21,8 @@ const assignProduct = (product: IProduct) => {
   if (!customer.value) return
   if (!customer.value.products) customer.value.products = []
 
-  // évite doublon
-  if (customer.value.products.some(p => p.id === product.id)) return
+  // Évite doublon
+  if (customer.value.products.some(customerProduct => customerProduct.id === product.id)) return
 
   customer.value.products.push(product)
 }

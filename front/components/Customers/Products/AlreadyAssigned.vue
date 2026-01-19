@@ -6,8 +6,8 @@ const { customer } = storeToRefs(customersStore)
 
 const unassignProduct = (product: IProduct) => {
   if (!customer.value?.products) return
-  const idx = customer.value.products.findIndex(p => p.id === product.id)
-  if (idx >= 0) customer.value.products.splice(idx, 1)
+  const index = customer.value.products.findIndex(customerProduct => customerProduct.id === product.id)
+  if (index >= 0) customer.value.products.splice(index, 1)
 }
 </script>
 
@@ -17,7 +17,7 @@ const unassignProduct = (product: IProduct) => {
 
     <div v-auto-animate>
       <div 
-        v-for="product in customer.products" 
+        v-for="product in (customer?.products ?? [])" 
         :key="product.id" 
         class="flex gap-2 items-center bg-gray-800 m-4 mr-0 py-2 px-3 rounded-lg border border-gray-600"
       >

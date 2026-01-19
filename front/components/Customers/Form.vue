@@ -27,6 +27,16 @@ const {
   isProductGettingFetch,
 } = storeToRefs(productsStore)
 
+const customerName = computed<string>({
+  get() {
+    return customer.value?.name ?? DEFAULT_CUSTOMER.name
+  },
+  set(value) {
+    if (!customer.value) return
+    customer.value.name = value
+  },
+})
+
 const isCustomerNameInputDisabled = computed(() => isCustomerSaving.value || isCustomerGettingFetch.value)
 
 const handleResetClick = () => {
@@ -34,6 +44,8 @@ const handleResetClick = () => {
 }
 
 const handleSubmitClick = async () => {
+  if (!customer.value) return
+
   isCustomerSaving.value = true
   try {
     if (props.mode === ModeEnum.CREATION) await sendCustomerToCreate(customer.value)
@@ -59,7 +71,7 @@ onUnmounted(resetForm)
     @reset.prevent="handleResetClick"
   >
     <Input
-      v-model="customer.name"
+      v-model="customerName"
       :disabled="isCustomerNameInputDisabled"
       :label="t('customer.name')"
       :loading="isCustomerGettingFetch"

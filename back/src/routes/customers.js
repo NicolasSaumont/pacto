@@ -68,10 +68,16 @@ router.get('/:id', async (req, res) => {
 // PATCH /customers/:id => modifie un client existant selon l'id passé en paramètre
 router.patch('/:id', async (req, res) => {
   const { id } = req.params
-  const { name } = req.body
+  const { name, productIds } = req.body
 
-  if (!name?.trim()) {
-    return res.status(400).json({ code: 'api.code.missing-required-field' })
+  // name optionnel en PATCH (sinon impossible de patch juste les produits)
+  if (name !== undefined && !String(name).trim()) {
+    return res.status(400).json({ code: 'api.code.invalid-field.name' })
+  }
+
+  // productIds optionnel
+  if (productIds !== undefined && !Array.isArray(productIds)) {
+    return res.status(400).json({ code: 'api.code.invalid-field.product-ids' })
   }
 
   try {
@@ -81,8 +87,22 @@ router.patch('/:id', async (req, res) => {
       return res.status(404).json({ code: 'api.code.not-found.customer' })
     }
 
-    // Tentative de mise à jour
-    await customer.update({ name })
+    // 1) update du client (si fourni)
+    if (name !== undefined) {
+      await customer.update({ name })
+    }
+
+    // 2) update des associations produits (si fourni)
+    if (productIds !== undefined) {
+      // Optionnel: sécuriser en filtrant ids uniques
+      const uniqueIds = [...new Set(productIds)]
+
+      // Remplace totalement les associations
+      await customer.setProducts(uniqueIds)
+    }
+
+    // // Tentative de mise à jour
+    // await customer.update({ name })
 
     res.json(customer)
   } catch (error) {

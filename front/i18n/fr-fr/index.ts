@@ -5,6 +5,8 @@ export default {
   'api.code.duplicate-name.product': 'Un produit avec ce nom existe déjà',
   'api.code.get-error-message.customer': 'Erreur lors de la récupération du client',
   'api.code.get-error-message.product': 'Erreur lors de la récupération du produit',
+  'api.code.invalid-field.name': 'Champ "nom" invalide',
+  'api.code.invalid-field.product-ids': 'Champ "produits" invalide',
   'api.code.missing-required-field': 'Champ requis manquant',
   'api.code.not-found.customer': 'Client non trouvé',
   'api.code.not-found.product': 'Produit non trouvé',
