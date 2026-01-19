@@ -25,9 +25,14 @@ const availableProducts = computed(() => {
     <div 
       v-for="product in availableProducts" 
       :key="product.id" 
-      class="bg-gray-800 m-4 ml-0 py-2 px-3 rounded-lg border border-gray-600"
+      class="flex gap-2 items-center bg-gray-800 m-4 ml-0 py-2 px-3 rounded-lg border border-gray-600"
     >
-      {{ product.name }}
+      <span class="flex-1">{{ product.name }}</span>
+      <Button 
+        :color="ButtonColorEnum.WHITE"
+        icon="arrow-right"
+        outline
+      />
     </div>
   </div>
 </template>

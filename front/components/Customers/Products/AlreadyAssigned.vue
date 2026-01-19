@@ -12,9 +12,14 @@ const { customer } = storeToRefs(customersStore)
     <div 
       v-for="product in customer.products" 
       :key="product.id" 
-      class="bg-gray-800 m-4 mr-0 py-2 px-3 rounded-lg border border-gray-600"
+      class="flex gap-2 items-center bg-gray-800 m-4 mr-0 py-2 px-3 rounded-lg border border-gray-600"
     >
-      {{ product.name }}
+      <Button 
+        :color="ButtonColorEnum.WHITE"
+        icon="arrow-left"
+        outline
+      />
+      <span class="flex-1">{{ product.name }}</span>
     </div>
   </div>
 </template>

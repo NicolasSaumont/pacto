@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const props = withDefaults(defineProps<{
-  color?: TButtonColor
+  color?: ButtonColorEnum
   disabled?: boolean
   flat?: boolean
   icon?: string
@@ -9,7 +9,7 @@ const props = withDefaults(defineProps<{
   outline?: boolean
   type?: 'button' | 'submit' | 'reset'
 }>(), {
-  color: 'primary',
+  color: ButtonColorEnum.PRIMARY,
   disabled: false,
   flat: false,
   outline: false,
