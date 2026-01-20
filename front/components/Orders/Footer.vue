@@ -1,20 +1,38 @@
 <script setup lang='ts'>
 const { t } = useI18n()
 
+const { notify } = useNotify()
+
 const handleDuplicateClick = () => {
-  console.log('Duplicate')
+  notify({
+    state: 'info',
+    title: t('common.duplicate'),
+    content: t('common.unavailable-feature'),
+  })
 }
 
 const handlePrintClick = () => {
-  console.log('Print')
+  notify({
+    state: 'info',
+    title: t('common.print'),
+    content: t('common.unavailable-feature'),
+  })
 }
 
 const handleResetClick = () => {
-  console.log('Reset')
+  notify({
+    state: 'info',
+    title: t('common.reset'),
+    content: t('common.unavailable-feature'),
+  })
 }
 
 const handleSaveClick = () => {
-  console.log('Save')
+  notify({
+    state: 'info',
+    title: t('common.save'),
+    content: t('common.unavailable-feature'),
+  })
 }
 </script>
 

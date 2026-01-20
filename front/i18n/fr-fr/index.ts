@@ -30,6 +30,7 @@ export default {
   'common.save': 'Enregistrer',
   'common.search': 'Rechercher',
   'common.synthesis': 'Synthèse',
+  'common.unavailable-feature': 'Cette fonctionnalité n\'est pas encore disponible.',
 
   'customer.add': 'Créer un nouveau client',
   'customer.api.edit.error-message': 'Le client n\'a pas pu être modifié',
