@@ -16,6 +16,7 @@ export default {
   'common.api.success-title': 'Succès',
   'common.available-products': 'Produit disponible | Produits disponibles', 
   'common.cancel': 'Annuler',
+  'common.comments': 'Remarque | Remarques',
   'common.confirm': 'Confirmer',
   'common.customers': 'Client | Clients',
   'common.dashboard': 'Tableau de bord',

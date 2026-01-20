@@ -1,11 +1,29 @@
-<script setup lang='ts'></script>
+<script setup lang='ts'>
+const { t } = useI18n()
+const { notify } = useNotify()
+
+const handleAddProductClick = () => {
+  notify({
+    state: 'info',
+    content: t('common.unavailable-feature'),
+  })
+}
+</script>
 
 <template>
-  <form class="flex-1 bg-gray-900 p-6 rounded-2xl border border-gray-600">
+  <form class="flex flex-col gap-6 flex-1 bg-gray-900 p-6 rounded-2xl border border-gray-600">
     <div>Select client</div>
     <div>Date picker commande</div>
     <div>Date picker livraison</div>
-    <div>Select multiple produit</div>
-    <div>Text area remarque</div>
+    <div class="flex gap-4 items-center">
+      <div>Select multiple produit</div>
+      <Button
+        icon="plus"
+        @click="handleAddProductClick"
+      />
+    </div>
+    <TextArea 
+      :label="t('common.comments', 2)"
+    />
   </form>
 </template>
