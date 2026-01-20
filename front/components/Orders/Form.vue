@@ -22,8 +22,11 @@ const handleAddProductClick = () => {
         @click="handleAddProductClick"
       />
     </div>
-    <TextArea 
-      :label="t('common.comments', 2)"
-    />
+    <div class="flex-1 min-h-0">
+      <TextArea 
+        :label="t('common.comments', 2)" 
+        class="h-full" 
+      />
+    </div>
   </form>
 </template>

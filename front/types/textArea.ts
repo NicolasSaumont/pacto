@@ -5,5 +5,7 @@ export interface ITextareaProps {
   label?: string
   loading?: boolean
   placeholder?: string
+  resize?: boolean
+  rows?: number
   theme?: TInputTheme
 }
