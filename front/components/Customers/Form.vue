@@ -87,7 +87,7 @@ onUnmounted(resetForm)
 
       <CustomersProducts v-else class="flex-1 min-h-0" />
 
-      <CustomersFooter class="shrink-0" />
+      <CustomersFooter class="shrink-0 mt-6" />
     </form>
   </div>
 </template>
