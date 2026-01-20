@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 export const useProductsStore = defineStore('products', () => {
   const isProductSaving = ref(false)
   const isProductGettingFetch = ref(false)
-  const product = ref<IProduct>({ ...DEFAULT_PRODUCT })
+  const product = ref<IProduct>(structuredClone(DEFAULT_PRODUCT))
   const products = ref<IProduct[]>([])
 
   const isConfirmButtonDisabled = computed(() => !product.value.name)
@@ -33,7 +33,7 @@ export const useProductsStore = defineStore('products', () => {
   }
 
   const resetForm = () => {
-    product.value = { ...DEFAULT_PRODUCT }
+    product.value = structuredClone(DEFAULT_PRODUCT)
   }
 
   const setProduct = async (productId: string) => {
