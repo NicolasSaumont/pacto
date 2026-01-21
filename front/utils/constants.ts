@@ -35,3 +35,10 @@ export const DEFAULT_CUSTOMER = {
   name: '',
   products: []
 }
+
+/* ORDERS */
+
+export const DEFAULT_SEARCH_DATES = {
+  end: '20/02/2026',
+  start: '21/06/2026'
+}

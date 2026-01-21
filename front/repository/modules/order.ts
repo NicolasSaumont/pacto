@@ -13,9 +13,13 @@ export const orderRepository = {
   //   })
   // },
 
-  async getOrders(): Promise<IOrder[]> {
+  async getOrders(searchDates: IOrderSearchDates): Promise<IOrder[]> {
     // return fetcher<IOrder[]>('/orders', {
     //   method: 'GET',
+    //   params: {
+    //     startDate: searchDates.start, 
+    //     endDate: searchDates.end 
+    //   }
     // })
     return MOCKED_ORDERS
   },

@@ -13,3 +13,10 @@ export interface IOrder {
   orderDate: Dayjs
   products: IOrderProduct[]
 }
+
+export interface IOrderSearchDates {
+  // end: Dayjs
+  // start: Dayjs
+  end: string
+  start: string
+}

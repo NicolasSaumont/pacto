@@ -18,8 +18,9 @@ const ordersStore = useOrdersStore()
 // } = ordersStore
 
 const { 
-  orders,
   isOrderGettingFetch,
+  orders,
+  searchDates,
 } = storeToRefs(ordersStore)
 
 // const customerToDelete = ref<ICustomer | null>(null)
@@ -66,7 +67,15 @@ const handleRowClick = (row: IOrder) => {
   navigateTo(`/orders/${row.id}`)
 }
 
-onMounted(loadOrders)
+const handleSearchClick = () => {
+  notify({
+    state: 'info',
+    content: t('common.unavailable-feature'),
+  })
+  // loadOrders(searchDates.value)
+}
+
+onMounted(loadOrders(searchDates.value))
 </script>
 
 <template>
@@ -80,6 +89,23 @@ onMounted(loadOrders)
       </template>
     </Header>
 
+    <div class="flex gap-6 items-end">
+      <Input
+        v-model="searchDates.start"
+        :label="t('common.date.start')"
+        theme="light"
+      />
+      <Input
+        v-model="searchDates.end"
+        :label="t('common.date.end')"
+        theme="light"
+      />
+      <Button 
+        icon="magnifying-glass" 
+        @click.stop="handleSearchClick"
+      />
+    </div>
+
     <Table 
       :columns="columns" 
       :data="orders"
@@ -90,7 +116,7 @@ onMounted(loadOrders)
       <template #products="{ row }">
         {{ row.products.length }}
       </template>
-      
+
       <template #actions="{ row }">
         <div class="flex gap-2 justify-center">
           <Button 

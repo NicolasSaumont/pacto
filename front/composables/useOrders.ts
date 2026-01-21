@@ -80,12 +80,12 @@ export function useOrders() {
   //   }
   // }
 
-  const loadOrders = async () => {
+  const loadOrders = async (searchDates: IOrderSearchDates) => {
     isOrderGettingFetch.value = true
 
     await withNotify(
       async () => {
-        await setOrders()
+        await setOrders(searchDates)
       },
       {
         errorContent: t('orders.api.get.error-message'),
