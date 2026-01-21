@@ -79,6 +79,7 @@ onMounted(loadCustomers)
             :color="ButtonColorEnum.RED"
             flat
             icon="trash" 
+            :title="t('common.delete')"
             @click.stop="handleOpenDeleteCustomerConfirmationModalClick(row)"
           />
         </div>

@@ -5,7 +5,7 @@ export function useCustomers() {
   const { t } = useI18n()
   const { withNotify } = useNotifyAction()
 
-const customersStore = useCustomersStore()
+  const customersStore = useCustomersStore()
 
   const { 
     editCustomer,

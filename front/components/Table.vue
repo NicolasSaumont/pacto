@@ -21,7 +21,9 @@ const { t } = useI18n()
 
 const {
   displayRows,
+  getCellTitle,
   getCellValue,
+  getColumnClass,
   getColumnStyle,
   search,
   sortColumn,
@@ -89,7 +91,9 @@ const handleRowClick = (row: T) => {
               v-for="(column, colIndex) in columns"
               :key="isDataColumn(column) ? String(column.key) : `slot-${column.slot}-${colIndex}`"
               :style="getColumnStyle(column)"
+              :title="!loading ? getCellTitle(row, column) : undefined"
               class="py-4 px-3"
+              :class="getColumnClass(column)"
               @click="isDataColumn(column) && handleRowClick(row)"
             >
               <template v-if="loading">

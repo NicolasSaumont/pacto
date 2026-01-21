@@ -46,7 +46,7 @@ export function useButton(props: IButtonProps) {
   const buttonStyle = computed(() => [
     ...basicClasses.value,
     buttonPadding.value,
-    props.label && 'w-48',
+    props.label && 'w-50',
     ...colorStylesClasses.value,
   ])
 

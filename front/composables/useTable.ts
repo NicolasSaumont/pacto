@@ -1,4 +1,5 @@
 import { useDebounce } from '@vueuse/core'
+import dayjs from 'dayjs'
 
 export function useTable<T extends { id: string | number }>(props: ITableProps<T>) {
   const SKELETON_ROWS = 8
@@ -66,7 +67,44 @@ export function useTable<T extends { id: string | number }>(props: ITableProps<T
     )
   })
 
-  const getCellValue = (row: T, key: keyof T) => row[key]
+  const getCellTitle = (row: T, column: IColumn<T>) => {
+    if (!column.title) return undefined
+
+    // --- DATA COLUMN ---
+    if (isDataColumn(column)) {
+      const rawValue = row[column.key]
+
+      if (column.title === true) {
+        const displayed = getCellValue(row, column.key)
+        return displayed != null ? String(displayed) : undefined
+      }
+
+      if (typeof column.title === 'string') {
+        return column.title
+      }
+
+      return column.title(row, rawValue)
+    }
+
+    // --- SLOT COLUMN ---
+    if (column.title === true) return undefined
+    if (typeof column.title === 'string') return column.title
+    return column.title(row, undefined)
+  }
+
+  const getCellValue = (row: T, key: keyof T) => {
+    const value = row[key]
+
+    if (dayjs.isDayjs(value)) {
+      return value.format(DATE_FORMAT)
+    }
+
+    return value
+  }
+
+  const getColumnClass = (column: IColumn<T>) => {
+    return 'customClasses' in column ? column.customClasses : undefined
+  }
 
   const getColumnStyle = (column: IColumn<T>) => {
     if (!('size' in column) || !column.size) return {}
@@ -136,7 +174,9 @@ export function useTable<T extends { id: string | number }>(props: ITableProps<T
     sortColumn,
     sortOrder,
     toggleSort,
+    getCellTitle,
     getCellValue,
+    getColumnClass,
     getColumnStyle,
   }
 }

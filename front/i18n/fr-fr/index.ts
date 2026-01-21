@@ -20,6 +20,8 @@ export default {
   'common.confirm': 'Confirmer',
   'common.customers': 'Client | Clients',
   'common.dashboard': 'Tableau de bord',
+  'common.date': 'Date',
+  'common.delete': 'Supprimer',
   'common.duplicate': 'Dupliquer',
   'common.go-back': 'Revenir en arrière',
   'common.go-back-to-home': 'Revenir en à l\'accueil',
@@ -52,6 +54,13 @@ export default {
   'error.message.default': 'Quelque chose s\'est mal passé…',
   'error.title.404': '404 — Page introuvable',
   'error.title.500': 'Erreur inattendue',
+
+  'order.delivery-date': 'Date de livraison',
+  'order.edit': 'Modifier une commande',
+  'order.new': 'Créer une nouvelle commande',
+
+  'orders.add-order': '+ Nouvelle commande',
+  'orders.api.get.error-message': 'Les commandes n\'ont pas pu être chargées',
 
   'product.add': 'Créer un nouveau produit',
   'product.api.delete.error-message': 'Le produit n\'a pas pu être supprimé',

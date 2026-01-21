@@ -2,6 +2,10 @@
 const { t } = useI18n()
 const { notify } = useNotify()
 
+const handleCancelClick = () => {
+  navigateTo(ORDERS_URL)
+}
+
 const handleDuplicateClick = () => {
   notify({
     state: 'info',
@@ -50,10 +54,15 @@ const handleSaveClick = () => {
       @click="handlePrintClick"
     />
     <Button
+      :color="ButtonColorEnum.SECONDARY"
       icon="arrow-rotate-left"
       :label="t('common.reset')"
-      outline
       @click="handleResetClick"
+    />
+    <Button 
+      :label="t('common.cancel')" 
+      outline 
+      @click="handleCancelClick"
     />
     <Button
       icon="floppy-disk"

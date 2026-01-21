@@ -7,6 +7,7 @@ const props = withDefaults(defineProps<{
   label?: string
   loading?: boolean
   outline?: boolean
+  title?: string
   type?: 'button' | 'submit' | 'reset'
 }>(), {
   color: ButtonColorEnum.PRIMARY,
@@ -36,6 +37,7 @@ defineExpose({
     ref="buttonRef"
     :type="type"
     :disabled="disabled || loading"
+    :title="!disabled && !loading ? title : ''"
     :class="buttonStyle"
     @click="emit('click', $event)"
   >
