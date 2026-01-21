@@ -94,7 +94,7 @@ const handleRowClick = (row: T) => {
               :title="!loading ? getCellTitle(row, column) : undefined"
               class="py-4 px-3"
               :class="getColumnClass(column)"
-              @click="isDataColumn(column) && handleRowClick(row)"
+              @click="handleRowClick(row)"
             >
               <template v-if="loading">
                 <div class="animate-pulse">

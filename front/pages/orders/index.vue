@@ -87,9 +87,10 @@ onMounted(loadOrders)
       :loading="isOrderGettingFetch"
       @row-click="handleRowClick"
     >
-    <template #products="{ row }">
-      {{ row.products.length }}
-    </template>
+      <template #products="{ row }">
+        {{ row.products.length }}
+      </template>
+      
       <template #actions="{ row }">
         <div class="flex gap-2 justify-center">
           <Button 
