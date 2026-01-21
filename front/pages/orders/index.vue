@@ -75,7 +75,7 @@ const handleSearchClick = () => {
   // loadOrders(searchDates.value)
 }
 
-onMounted(loadOrders(searchDates.value))
+onMounted(() => loadOrders(searchDates.value))
 </script>
 
 <template>
