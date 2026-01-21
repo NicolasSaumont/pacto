@@ -75,6 +75,8 @@ const handleSearchClick = () => {
   // loadOrders(searchDates.value)
 }
 
+watchEffect(() => console.log(searchDates.value))
+
 onMounted(() => loadOrders(searchDates.value))
 </script>
 
@@ -90,12 +92,12 @@ onMounted(() => loadOrders(searchDates.value))
     </Header>
 
     <div class="flex gap-6 items-end">
-      <Input
+      <DatePicker
         v-model="searchDates.start"
         :label="t('common.date.start')"
         theme="light"
       />
-      <Input
+      <DatePicker
         v-model="searchDates.end"
         :label="t('common.date.end')"
         theme="light"

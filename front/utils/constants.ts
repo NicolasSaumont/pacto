@@ -1,3 +1,5 @@
+import dayjs from "dayjs"
+
 /* GENERAL */
 
 export const APP_NAME = 'pacto'
@@ -39,6 +41,6 @@ export const DEFAULT_CUSTOMER = {
 /* ORDERS */
 
 export const DEFAULT_SEARCH_DATES = {
-  end: '20/02/2026',
-  start: '21/06/2026'
+  end: dayjs().add(1, 'month'),
+  start: dayjs()
 }

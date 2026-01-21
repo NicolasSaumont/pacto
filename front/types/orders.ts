@@ -15,8 +15,6 @@ export interface IOrder {
 }
 
 export interface IOrderSearchDates {
-  // end: Dayjs
-  // start: Dayjs
-  end: string
-  start: string
+  end: Dayjs
+  start: Dayjs
 }
