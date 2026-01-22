@@ -22,6 +22,9 @@ const emit = defineEmits<{
   (e: 'update:modelValue', value: T | undefined): void
 }>()
 
+const open = ref(false)
+const rootRef = ref<HTMLElement | null>(null)
+
 const inputValue = computed<string>(() => {
   if (!props.modelValue) return ''
 
@@ -62,19 +65,64 @@ const onClickInput = () => {
   // TODO: ouvrir le calendrier
   console.log('blabla')
 }
+
+const onToggle = () => {
+  if (props.disabled || props.loading) return
+  open.value = !open.value
+}
+
+const onSelect = (value: Dayjs | IRangeDates) => {
+  emit('update:modelValue', value as unknown as T)
+}
+
+const close = () => { open.value = false }
+
+const onDocClick = (e: MouseEvent) => {
+  if (!open.value) return
+  const el = rootRef.value
+  if (!el) return
+  if (!el.contains(e.target as Node)) close()
+}
+
+const onKeydown = (e: KeyboardEvent) => {
+  if (!open.value) return
+  if (e.key === 'Escape') close()
+}
+
+onMounted(() => {
+  document.addEventListener('mousedown', onDocClick)
+  document.addEventListener('keydown', onKeydown)
+})
+onBeforeUnmount(() => {
+  document.removeEventListener('mousedown', onDocClick)
+  document.removeEventListener('keydown', onKeydown)
+})
 </script>
 
 <template>
-  <Input 
-    :model-value="inputValue"
-    :disabled
-    icon="calendar"
-    icon-clickable
-    :label
-    :loading
-    :placeholder
-    readonly
-    :theme
-    @icon-click="onClickInput"
-  />
+  <div ref="rootRef" class="relative inline-block">
+    <Input
+      :model-value="inputValue"
+      :disabled="disabled"
+      :label="label"
+      :loading="loading"
+      :placeholder="placeholder"
+      :theme="theme"
+      readonly
+      icon-clickable
+      icon="calendar"
+      @icon-click="onToggle"
+    />
+
+    <div v-if="open" class="absolute z-50 mt-2">
+      <Calendar
+        :model-value="(modelValue as any)"
+        :range="!!range"
+        :min="min"
+        :max="max"
+        @select="onSelect"
+        @close="close"
+      />
+    </div>
+  </div>
 </template>
