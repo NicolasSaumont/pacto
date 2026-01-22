@@ -2,16 +2,19 @@
 const props = withDefaults(defineProps<{
   disabled?: boolean
   icon?: string
-  modelValue?: string
+  iconClickable?: boolean
   label?: string
   loading?: boolean
+  modelValue?: string
   placeholder?: string
+  readonly?: boolean
   theme?: TInputTheme
 }>(), {
   theme: 'dark',
 })
 
 const emit = defineEmits<{
+  (e: 'icon-click'): void
   (e: 'update:modelValue', value: string): void
 }>()
 
@@ -44,6 +47,7 @@ const handleResetClick = () => {
         :value="modelValue"
         :disabled="disabled"
         :placeholder="placeholder ? `${placeholder}...` : undefined"
+        :readonly
         class="w-full"
         :class="[
           inputClasses,
@@ -77,11 +81,13 @@ const handleResetClick = () => {
       <FontAwesomeIcon
         v-if="icon"
         :icon="icon"
-        class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"
+        class="absolute right-3 top-1/2 -translate-y-1/2"
         :class="[
           iconColorClass,
           (disabled || loading) && 'opacity-50',
+          iconClickable ? 'cursor-pointer' : 'pointer-events-none',
         ]"
+        @click="iconClickable ? emit('icon-click') : undefined"
       />
     </div>
   </div>

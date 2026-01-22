@@ -6,7 +6,7 @@ export const useOrdersStore = defineStore('orders', () => {
   // const customer = ref<ICustomer>(structuredClone(DEFAULT_CUSTOMER))
   const orders = ref<IOrder[]>([])
   // const originalCustomer = ref<ICustomer>(structuredClone(DEFAULT_CUSTOMER))
-  const searchDates = reactive<IOrderSearchDates>(structuredClone(DEFAULT_SEARCH_DATES))
+  const searchDates = reactive<IRangeDates>(structuredClone(DEFAULT_SEARCH_DATES))
 
   // const isConfirmButtonDisabled = computed(() => !customer.value.name)
   
@@ -64,7 +64,7 @@ export const useOrdersStore = defineStore('orders', () => {
   //   originalCustomer.value = structuredClone(toRaw(customer.value))
   // }
 
-  const setOrders = async (searchDates: IOrderSearchDates) => {
+  const setOrders = async (searchDates: IRangeDates) => {
     orders.value = await orderRepository.getOrders(searchDates) 
   }
 

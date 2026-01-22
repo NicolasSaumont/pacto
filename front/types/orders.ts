@@ -14,7 +14,7 @@ export interface IOrder {
   products: IOrderProduct[]
 }
 
-export interface IOrderSearchDates {
+export interface IRangeDates {
   end: Dayjs
   start: Dayjs
 }

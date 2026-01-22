@@ -67,16 +67,6 @@ const handleRowClick = (row: IOrder) => {
   navigateTo(`/orders/${row.id}`)
 }
 
-const handleSearchClick = () => {
-  notify({
-    state: 'info',
-    content: t('common.unavailable-feature'),
-  })
-  // loadOrders(searchDates.value)
-}
-
-watchEffect(() => console.log(searchDates.value))
-
 onMounted(() => loadOrders(searchDates.value))
 </script>
 
@@ -93,18 +83,10 @@ onMounted(() => loadOrders(searchDates.value))
 
     <div class="flex gap-6 items-end">
       <DatePicker
-        v-model="searchDates.start"
-        :label="t('common.date.start')"
+        v-model="searchDates"
+        :label="t('common.dates', 2)"
+        range
         theme="light"
-      />
-      <DatePicker
-        v-model="searchDates.end"
-        :label="t('common.date.end')"
-        theme="light"
-      />
-      <Button 
-        icon="magnifying-glass" 
-        @click.stop="handleSearchClick"
       />
     </div>
 

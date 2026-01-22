@@ -80,7 +80,7 @@ export function useOrders() {
   //   }
   // }
 
-  const loadOrders = async (searchDates: IOrderSearchDates) => {
+  const loadOrders = async (searchDates: IRangeDates) => {
     isOrderGettingFetch.value = true
 
     await withNotify(

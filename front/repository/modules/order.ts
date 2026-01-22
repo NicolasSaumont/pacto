@@ -13,7 +13,7 @@ export const orderRepository = {
   //   })
   // },
 
-  async getOrders(searchDates: IOrderSearchDates): Promise<IOrder[]> {
+  async getOrders(searchDates: IRangeDates): Promise<IOrder[]> {
     // return fetcher<IOrder[]>('/orders', {
     //   method: 'GET',
     //   params: {
