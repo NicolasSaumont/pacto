@@ -6,11 +6,13 @@ import { isProxy, toRaw } from 'vue'
 const props = withDefaults(
   defineProps<{
     modelValue?: Dayjs | IRangeDates
-    range?: boolean
-    min?: Dayjs
     max?: Dayjs
+    min?: Dayjs
+    range?: boolean
   }>(),
-  { range: false },
+  { 
+    range: false 
+  },
 )
 
 const emit = defineEmits<{
@@ -35,7 +37,7 @@ const WEEK_DAYS = [
 const monthTitle = computed(() => formatMonthTitle(viewMonth.value))
 
 const isRangeValue = (value: unknown): value is IRangeDates =>
-  !!value && typeof value === 'object' && 'start' in (value as any) && 'end' in (value as any)
+  !!value && typeof value === 'object' && 'start' in value && 'end' in value
 
 // --- Normalisation modelValue -> valeurs sûres Dayjs ---
 const selectedSingle = computed<Dayjs | null>(() => {
@@ -71,15 +73,18 @@ watch([selectedSingle, selectedRange], () => {
 })
 
 // --- Grille 6 semaines (42 jours), semaine commençant lundi ---
+const SHOWN_WEEKS_COUNT = 6
+const DAYS_PER_WEEK = 7
+
 const startOfGrid = computed(() => {
   const first = viewMonth.value.startOf('month')
-  const dow = (first.day() + 6) % 7 // dim(0)..sam(6) -> lun(0)..dim(6)
+  const dow = (first.day() + SHOWN_WEEKS_COUNT) % DAYS_PER_WEEK // dim(0)..sam(6) -> lun(0)..dim(6)
   return first.subtract(dow, 'day')
 })
 
 const days = computed(() => {
   const start = startOfGrid.value
-  return Array.from({ length: 42 }, (_, index) => start.add(index, 'day'))
+  return Array.from({ length: SHOWN_WEEKS_COUNT * DAYS_PER_WEEK }, (_, index) => start.add(index, 'day'))
 })
 
 const isOutOfMonth = (date: Dayjs) => date.month() !== viewMonth.value.month()

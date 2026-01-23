@@ -42,5 +42,5 @@ export const DEFAULT_CUSTOMER = {
 
 export const DEFAULT_SEARCH_DATES = {
   end: dayjs(),
-  start: dayjs().subtract(1, 'month')
+  start: dayjs().subtract(2, 'weeks')
 }

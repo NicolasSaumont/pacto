@@ -26,13 +26,13 @@ export function useDatePicker() {
     const raw = isProxy(value) ? toRaw(value) : value
 
     // Si c'est déjà un vrai Dayjs (avec clone), on le garde
-    if (dayjs.isDayjs(raw) && typeof (raw as any).clone === 'function') {
+    if (dayjs.isDayjs(raw) && typeof raw.clone === 'function') {
       return raw as Dayjs
     }
 
     // Si c'est un "dayjs-like" (ex: Proxy/Object avec $d), on repart du Date
     const base = (raw as any).$d ?? raw
-    const date = dayjs(base as any)
+    const date = dayjs(base)
     return date.isValid() ? date : null
   }
 

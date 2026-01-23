@@ -1,5 +1,5 @@
 <script lang="ts" setup generic="T extends Dayjs | IRangeDates">
-import dayjs, { type Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
 
 const props = withDefaults(
   defineProps<{
@@ -105,7 +105,7 @@ onBeforeUnmount(() => {
 
     <div v-if="isCalendarOpen" class="absolute z-50 mt-2">
       <Calendar
-        :model-value="(modelValue as any)"
+        :model-value="modelValue"
         :min
         :max
         :range
