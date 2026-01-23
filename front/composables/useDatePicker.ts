@@ -1,50 +1,42 @@
-export function useDatePicker(props: IDatePickerProps) {
-  const basicClasses = [
-    'border rounded-lg pl-3 py-1 text-sm focus:outline-none focus:ring-2',
-  ]
+import type { Dayjs } from "dayjs"
+import dayjs from "dayjs"
 
-  const themeClasses: Record<TInputTheme, string[]> = {
-    dark: [
-      'bg-gray-800 border-gray-600 text-white',
-      'focus:ring-blue-500',
-    ],
-    light: [
-      'bg-white border-gray-300 text-gray-900',
-      'focus:ring-blue-500',
-    ],
+export function useDatePicker() {
+  /**
+   * Normalise une valeur "date-like" en véritable instance Dayjs.
+   *
+   * Contexte :
+   * - Avec Vue (props, stores, réactivité), un Dayjs peut être "proxyfié"
+   *   ou transformé en objet "dayjs-like" (ex: avec une propriété `$d`),
+   *   ce qui casse certaines méthodes (`format`, `isAfter`, `clone`, etc.).
+   *
+   * Cette fonction garantit que :
+   * - on retourne toujours un vrai `Dayjs` utilisable en toute sécurité
+   * - ou `null` si la valeur est absente ou invalide
+   *
+   * Stratégie :
+   * 1. Dé-proxyfie la valeur si nécessaire
+   * 2. Si c'est déjà un Dayjs "propre", on le retourne tel quel
+   * 3. Sinon, on reconstruit un Dayjs à partir du `Date` interne (`$d`)
+   *    ou de la valeur brute
+   */
+  const convertToDayjs = (value: DateLike): Dayjs | null => {
+    if (!value) return null
+
+    const raw = isProxy(value) ? toRaw(value) : value
+
+    // Si c'est déjà un vrai Dayjs (avec clone), on le garde
+    if (dayjs.isDayjs(raw) && typeof (raw as any).clone === 'function') {
+      return raw as Dayjs
+    }
+
+    // Si c'est un "dayjs-like" (ex: Proxy/Object avec $d), on repart du Date
+    const base = (raw as any).$d ?? raw
+    const date = dayjs(base as any)
+    return date.isValid() ? date : null
   }
 
-  const inputClasses = computed(() => [
-    ...basicClasses,
-    ...themeClasses[props.theme ?? 'dark']
-  ])
-
-  const iconColorClass = computed(() =>
-    props.theme === 'light' ? 'text-gray-500' : 'text-gray-400'
-  )
-
-  const hasTrailingIcon = computed(() => Boolean(props.icon))           // icône à droite (loupe/users)
-  const hasClear = computed(() => Boolean(props.modelValue?.length))    // bouton clear visible
-
-  // padding droite de l'input selon ce qu'on affiche à droite
-  const rightPaddingClass = computed(() => {
-    // clear + trailing icon
-    if (hasClear.value && hasTrailingIcon.value) return 'pr-16'
-    // clear seul OU trailing icon seul
-    if (hasClear.value || hasTrailingIcon.value) return 'pr-10'
-    // rien à droite
-    return 'pr-3'
-  })
-
-  // position du clear
-  const clearRightClass = computed(() =>
-    hasTrailingIcon.value ? 'right-10' : 'right-3'
-  )
-
   return { 
-    clearRightClass,
-    iconColorClass,
-    inputClasses,
-    rightPaddingClass,
+    convertToDayjs,
   }
 }

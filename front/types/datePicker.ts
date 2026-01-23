@@ -2,7 +2,6 @@ import { Dayjs } from 'dayjs'
 
 export interface IDatePickerProps {
   disabled?: boolean
-  icon?: string
   modelValue?: Dayjs
   label?: string
   loading?: boolean
@@ -15,4 +14,4 @@ export interface IRangeDates {
   end: Dayjs
 }
 
-export type DateLike = Dayjs | Date | string | null | undefined
+export type DateLike = Dayjs | Date | IRangeDates | string | null | undefined

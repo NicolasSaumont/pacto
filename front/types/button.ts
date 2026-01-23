@@ -11,7 +11,7 @@ export interface IButtonProps {
 
 export enum ButtonColorEnum {
   PRIMARY = 'primary',
-  RED = 'red',
   SECONDARY = 'secondary',
+  RED = 'red',
   WHITE = 'white',
 }

@@ -18,29 +18,29 @@ const emit = defineEmits<{
   (e: 'close'): void
 }>()
 
+const {
+  convertToDayjs,
+} = useDatePicker()
+
+const WEEK_DAYS = [
+  'Lu',
+  'Ma',
+  'Me',
+  'Je',
+  'Ve',
+  'Sa',
+  'Di',
+]
+
 const monthTitle = computed(() => formatMonthTitle(viewMonth.value))
 
-/**
- * IMPORTANT:
- * Vue peut proxyfier des objets Dayjs -> dayjs.isDayjs() peut “croire” que c’est Dayjs,
- * puis Dayjs essaie clone() et plante.
- * On reconstruit donc systématiquement via dayjs(raw.$d ?? raw).
- */
-const toDayjs = (value?: unknown): Dayjs | null => {
-  if (!value) return null
-  const raw = isProxy(value) ? toRaw(value) : value
-  const base = (raw as any).$d ?? raw
-  const d = dayjs(base as any)
-  return d.isValid() ? d : null
-}
-
-const isRangeValue = (v: unknown): v is IRangeDates =>
-  !!v && typeof v === 'object' && 'start' in (v as any) && 'end' in (v as any)
+const isRangeValue = (value: unknown): value is IRangeDates =>
+  !!value && typeof value === 'object' && 'start' in (value as any) && 'end' in (value as any)
 
 // --- Normalisation modelValue -> valeurs sûres Dayjs ---
 const selectedSingle = computed<Dayjs | null>(() => {
   if (props.range) return null
-  return toDayjs(props.modelValue)
+  return convertToDayjs(props.modelValue)
 })
 
 const selectedRange = computed<{ start: Dayjs; end: Dayjs } | null>(() => {
@@ -48,8 +48,8 @@ const selectedRange = computed<{ start: Dayjs; end: Dayjs } | null>(() => {
   const mvRaw = props.modelValue ? (isProxy(props.modelValue) ? toRaw(props.modelValue) : props.modelValue) : null
   if (!mvRaw || !isRangeValue(mvRaw)) return null
 
-  const start = toDayjs(mvRaw.start)
-  const end = toDayjs(mvRaw.end)
+  const start = convertToDayjs(mvRaw.start)
+  const end = convertToDayjs(mvRaw.end)
   if (!start || !end) return null
 
   return end.isBefore(start, 'day') ? { start: end, end: start } : { start, end }
@@ -57,10 +57,10 @@ const selectedRange = computed<{ start: Dayjs; end: Dayjs } | null>(() => {
 
 // --- Mois affiché ---
 const initViewMonth = () => {
-  const r = selectedRange.value
-  if (r) return r.start.startOf('month')
-  const s = selectedSingle.value
-  if (s) return s.startOf('month')
+  const range = selectedRange.value
+  if (range) return range.start.startOf('month')
+  const single = selectedSingle.value
+  if (single) return single.startOf('month')
   return dayjs().startOf('month')
 }
 
@@ -79,43 +79,43 @@ const startOfGrid = computed(() => {
 
 const days = computed(() => {
   const start = startOfGrid.value
-  return Array.from({ length: 42 }, (_, i) => start.add(i, 'day'))
+  return Array.from({ length: 42 }, (_, index) => start.add(index, 'day'))
 })
 
-const isOutOfMonth = (d: Dayjs) => d.month() !== viewMonth.value.month()
+const isOutOfMonth = (date: Dayjs) => date.month() !== viewMonth.value.month()
 
-const minD = computed(() => toDayjs(props.min))
-const maxD = computed(() => toDayjs(props.max))
+const minimalDate = computed(() => convertToDayjs(props.min))
+const maximalDate = computed(() => convertToDayjs(props.max))
 
-const isDisabled = (d: Dayjs) => {
-  const mn = minD.value
-  const mx = maxD.value
-  if (mn && d.isBefore(mn, 'day')) return true
-  if (mx && d.isAfter(mx, 'day')) return true
+const isDisabled = (date: Dayjs) => {
+  const min = minimalDate.value
+  const max = maximalDate.value
+  if (min && date.isBefore(min, 'day')) return true
+  if (max && date.isAfter(max, 'day')) return true
   return false
 }
 
 // --- Styles sélection ---
-const isSelectedSingle = (d: Dayjs) => {
-  const s = selectedSingle.value
-  return !!s && d.isSame(s, 'day')
+const isSelectedSingle = (date: Dayjs) => {
+  const single = selectedSingle.value
+  return !!single && date.isSame(single, 'day')
 }
 
-const isInSelectedRange = (d: Dayjs) => {
-  const r = selectedRange.value
-  if (!r) return false
-  return (d.isSame(r.start, 'day') || d.isAfter(r.start, 'day')) &&
-    (d.isSame(r.end, 'day') || d.isBefore(r.end, 'day'))
+const isInSelectedRange = (date: Dayjs) => {
+  const range = selectedRange.value
+  if (!range) return false
+  return (date.isSame(range.start, 'day') || date.isAfter(range.start, 'day')) &&
+    (date.isSame(range.end, 'day') || date.isBefore(range.end, 'day'))
 }
 
-const isRangeEdge = (d: Dayjs) => {
-  const r = selectedRange.value
-  if (!r) return false
-  return d.isSame(r.start, 'day') || d.isSame(r.end, 'day')
+const isRangeEdge = (date: Dayjs) => {
+  const range = selectedRange.value
+  if (!range) return false
+  return date.isSame(range.start, 'day') || date.isSame(range.end, 'day')
 }
 
 // --- Navigation mois ---
-const prevMonth = () => {
+const previousMonth = () => {
   viewMonth.value = viewMonth.value.subtract(1, 'month')
 }
 const nextMonth = () => {
@@ -123,38 +123,38 @@ const nextMonth = () => {
 }
 
 // --- Sélection (single / range) ---
-const rangeDraftStart = ref<Dayjs | null>(null)
+const rangeStartSelection = ref<Dayjs | null>(null)
 
 watch(
   () => props.range,
   () => {
-    rangeDraftStart.value = null
+    rangeStartSelection.value = null
   },
 )
 
-const onPick = (d: Dayjs) => {
-  if (isDisabled(d)) return
+const onPick = (date: Dayjs) => {
+  if (isDisabled(date)) return
 
   if (!props.range) {
-    emit('select', d)
+    emit('select', date)
     emit('close')
     return
   }
 
   // Range: 1er clic => start (et end=start pour feedback immédiat)
-  if (!rangeDraftStart.value) {
-    rangeDraftStart.value = d
-    emit('select', { start: d, end: d })
+  if (!rangeStartSelection.value) {
+    rangeStartSelection.value = date
+    emit('select', { start: date, end: date })
     return
   }
 
   // 2e clic => end (auto-tri)
-  const start = rangeDraftStart.value
-  const end = d
-  const r = end.isBefore(start, 'day') ? { start: end, end: start } : { start, end }
+  const start = rangeStartSelection.value
+  const end = date
+  const range = end.isBefore(start, 'day') ? { start: end, end: start } : { start, end }
 
-  rangeDraftStart.value = null
-  emit('select', r)
+  rangeStartSelection.value = null
+  emit('select', range)
   emit('close')
 }
 </script>
@@ -162,48 +162,54 @@ const onPick = (d: Dayjs) => {
 <template>
   <div class="w-80 rounded-xl bg-white shadow-lg px-6 py-4 text-gray-800">
     <!-- Header -->
-    <div class="flex items-center justify-between mb-2">
-      <button type="button" class="px-2 py-1 rounded hover:bg-gray-200" @click="prevMonth">‹</button>
+    <div class="flex items-center justify-between mb-4">
+      <button 
+        type="button" 
+        class="rounded-lg p-2 hover:bg-gray-200"
+        @click="previousMonth"
+      >
+        <FontAwesomeIcon icon="chevron-left" />
+      </button>
       <div class="font-medium">
         {{ monthTitle }}
       </div>
-      <button type="button" class="px-2 py-1 rounded hover:bg-gray-200" @click="nextMonth">›</button>
+      <button 
+        type="button" 
+        class="rounded-lg p-2 hover:bg-gray-200"
+        @click="nextMonth"
+      >
+        <FontAwesomeIcon icon="chevron-right" />
+      </button>
     </div>
 
     <!-- Weekdays -->
-    <div class="grid grid-cols-7 text-xs text-gray-800 mb-2">
-      <div class="text-center">Lu</div>
-      <div class="text-center">Ma</div>
-      <div class="text-center">Me</div>
-      <div class="text-center">Je</div>
-      <div class="text-center">Ve</div>
-      <div class="text-center">Sa</div>
-      <div class="text-center">Di</div>
+    <div class="grid grid-cols-7 text-xs text-gray-800 mb-3 pb-1 border-b border-gray-500">
+      <div v-for="day in WEEK_DAYS" :key="day" class="text-center">{{ day }}</div>
     </div>
 
     <!-- Days -->
     <div class="grid grid-cols-7 gap-1">
       <button
-        v-for="d in days"
-        :key="d.valueOf()"
+        v-for="day in days"
+        :key="day.valueOf()"
         type="button"
         class="h-9 rounded text-sm"
-        :disabled="isDisabled(d)"
+        :disabled="isDisabled(day)"
         :class="[
-          isOutOfMonth(d) && 'text-gray-400',
-          isDisabled(d) && 'opacity-40 cursor-not-allowed',
-          !isDisabled(d) && 'hover:bg-gray-200',
+          isOutOfMonth(day) && 'text-gray-400',
+          isDisabled(day) && 'opacity-40 cursor-not-allowed',
+          !isDisabled(day) && 'hover:bg-gray-200',
 
-          // range background first (so edges can override)
-          isInSelectedRange(d) && 'bg-blue-300',
+          // range background en premier (pour que les dates limite puissent venir par dessus)
+          isInSelectedRange(day) && 'bg-blue-300',
 
-          // edges / selected override
-          isRangeEdge(d) && 'bg-blue-600 text-white hover:bg-blue-600 hover:text-gray-800',
-          isSelectedSingle(d) && 'bg-blue-600 text-white hover:bg-blue-600 hover:text-gray-800',
+          // edges / selected override background
+          isRangeEdge(day) && 'bg-blue-600 text-white hover:bg-blue-600 hover:text-gray-800',
+          isSelectedSingle(day) && 'bg-blue-600 text-white hover:bg-blue-600 hover:text-gray-800',
         ]"
-        @click="onPick(d)"
+        @click="onPick(day)"
       >
-        {{ d.date() }}
+        {{ day.date() }}
       </button>
     </div>
   </div>
