@@ -26,7 +26,7 @@ export function useOrders() {
       title: (row) => row.customerName
     },
     {
-      header: t('common.date'),
+      header: t('common.dates', 1),
       key: 'orderDate',
       sortable: true,
       sortByDefault: sortOrderEnum.DESC

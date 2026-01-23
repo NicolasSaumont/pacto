@@ -41,6 +41,6 @@ export const DEFAULT_CUSTOMER = {
 /* ORDERS */
 
 export const DEFAULT_SEARCH_DATES = {
-  end: dayjs().add(1, 'month'),
-  start: dayjs()
+  end: dayjs(),
+  start: dayjs().subtract(1, 'month')
 }

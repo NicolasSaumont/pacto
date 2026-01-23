@@ -1,5 +1,5 @@
 <script lang="ts" setup generic="T extends Dayjs | IRangeDates">
-import dayjs, { isDayjs, type Dayjs } from 'dayjs'
+import dayjs, { type Dayjs } from 'dayjs'
 
 const props = withDefaults(
   defineProps<{
@@ -15,6 +15,7 @@ const props = withDefaults(
     theme?: TInputTheme
 }>(), {
   displayedFormat: DATE_FORMAT,
+  range: false,
   theme: 'dark',
 })
 
@@ -22,24 +23,52 @@ const emit = defineEmits<{
   (e: 'update:modelValue', value: T | undefined): void
 }>()
 
-const open = ref(false)
-const rootRef = ref<HTMLElement | null>(null)
+const wrapperRef = ref<HTMLElement | null>(null)
 
-const inputValue = computed<string>(() => {
+const isCalendarOpen = ref(false)
+
+const inputValue = computed(() => {
   if (!props.modelValue) return ''
-
-  if (props.range) {
-    const raw = (isProxy(props.modelValue) ? toRaw(props.modelValue) : props.modelValue) as unknown as IRangeDates
-    const start = formatDay(raw.start)
-    const end = formatDay(raw.end)
-    if (!start || !end) return ''
-    return `${start} - ${end}`
-  }
-
-  return formatDay(props.modelValue)
+  return props.range
+    ? formatRange(props.modelValue as unknown as IRangeDates)
+    : formatSingle(props.modelValue as unknown as Dayjs)
 })
 
-const toDayjs = (value?: unknown): Dayjs | null => {
+const closeCalendar = () => { isCalendarOpen.value = false }
+
+const formatSingle = (value: DateLike) => {
+  const date = toDayjs(value)
+  return date ? date.format(props.displayedFormat) : ''
+}
+
+const formatRange = (value: IRangeDates | null | undefined) => {
+  if (!value) return ''
+  const raw = isProxy(value) ? toRaw(value) : value
+  const start = formatSingle(raw.start)
+  const end = formatSingle(raw.end)
+  if (!start || !end) return ''
+  return `${start} - ${end}`
+}
+
+/**
+ * Normalise une valeur "date-like" en véritable instance Dayjs.
+ *
+ * Contexte :
+ * - Avec Vue (props, stores, réactivité), un Dayjs peut être "proxyfié"
+ *   ou transformé en objet "dayjs-like" (ex: avec une propriété `$d`),
+ *   ce qui casse certaines méthodes (`format`, `isAfter`, `clone`, etc.).
+ *
+ * Cette fonction garantit que :
+ * - on retourne toujours un vrai `Dayjs` utilisable en toute sécurité
+ * - ou `null` si la valeur est absente ou invalide
+ *
+ * Stratégie :
+ * 1. Dé-proxyfie la valeur si nécessaire
+ * 2. Si c'est déjà un Dayjs "propre", on le retourne tel quel
+ * 3. Sinon, on reconstruit un Dayjs à partir du `Date` interne (`$d`)
+ *    ou de la valeur brute
+ */
+const toDayjs = (value: DateLike): Dayjs | null => {
   if (!value) return null
 
   const raw = isProxy(value) ? toRaw(value) : value
@@ -51,77 +80,66 @@ const toDayjs = (value?: unknown): Dayjs | null => {
 
   // Si c'est un "dayjs-like" (ex: Proxy/Object avec $d), on repart du Date
   const base = (raw as any).$d ?? raw
-  const d = dayjs(base as any)
-  return d.isValid() ? d : null
-}
-
-const formatDay = (value?: unknown) => {
-  const date = toDayjs(value)
-  return date ? date.format(props.displayedFormat) : ''
-}
-
-const onClickInput = () => {
-  if (props.disabled || props.loading) return
-  // TODO: ouvrir le calendrier
-  console.log('blabla')
-}
-
-const onToggle = () => {
-  if (props.disabled || props.loading) return
-  open.value = !open.value
+  const date = dayjs(base as any)
+  return date.isValid() ? date : null
 }
 
 const onSelect = (value: Dayjs | IRangeDates) => {
   emit('update:modelValue', value as unknown as T)
 }
 
-const close = () => { open.value = false }
-
-const onDocClick = (e: MouseEvent) => {
-  if (!open.value) return
-  const el = rootRef.value
+const onClick = (e: MouseEvent) => {
+  if (!isCalendarOpen.value) return
+  const el = wrapperRef.value
   if (!el) return
-  if (!el.contains(e.target as Node)) close()
+  if (!el.contains(e.target as Node)) closeCalendar()
 }
 
 const onKeydown = (e: KeyboardEvent) => {
-  if (!open.value) return
-  if (e.key === 'Escape') close()
+  if (!isCalendarOpen.value) return
+  if (e.key === 'Escape') closeCalendar()
 }
 
+const toggleCalendar = () => {
+  if (props.disabled || props.loading) return
+  isCalendarOpen.value = !isCalendarOpen.value
+}
+ 
 onMounted(() => {
-  document.addEventListener('mousedown', onDocClick)
+  document.addEventListener('mousedown', onClick)
   document.addEventListener('keydown', onKeydown)
 })
+
 onBeforeUnmount(() => {
-  document.removeEventListener('mousedown', onDocClick)
+  document.removeEventListener('mousedown', onClick)
   document.removeEventListener('keydown', onKeydown)
 })
 </script>
 
 <template>
-  <div ref="rootRef" class="relative inline-block">
+  <div ref="wrapperRef" class="relative inline-block">
     <Input
       :model-value="inputValue"
-      :disabled="disabled"
-      :label="label"
-      :loading="loading"
-      :placeholder="placeholder"
-      :theme="theme"
+      :clearable="false"
+      :disabled
+      icon="calendar-day"
+      :label
+      :loading
+      :placeholder
       readonly
-      icon-clickable
-      icon="calendar"
-      @icon-click="onToggle"
+      :theme
+      class="cursor-pointer"
+      @click="toggleCalendar"
     />
 
-    <div v-if="open" class="absolute z-50 mt-2">
+    <div v-if="isCalendarOpen" class="absolute z-50 mt-2">
       <Calendar
         :model-value="(modelValue as any)"
-        :range="!!range"
-        :min="min"
-        :max="max"
+        :min
+        :max
+        :range
         @select="onSelect"
-        @close="close"
+        @close="closeCalendar"
       />
     </div>
   </div>

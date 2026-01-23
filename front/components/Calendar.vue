@@ -1,11 +1,7 @@
 <script setup lang="ts">
 import dayjs, { type Dayjs } from 'dayjs'
+import { formatMonthTitle } from '~/utils/date'
 import { isProxy, toRaw } from 'vue'
-
-export interface IRangeDates {
-  start: Dayjs
-  end: Dayjs
-}
 
 const props = withDefaults(
   defineProps<{
@@ -21,6 +17,8 @@ const emit = defineEmits<{
   (e: 'select', value: Dayjs | IRangeDates): void
   (e: 'close'): void
 }>()
+
+const monthTitle = computed(() => formatMonthTitle(viewMonth.value))
 
 /**
  * IMPORTANT:
@@ -162,25 +160,25 @@ const onPick = (d: Dayjs) => {
 </script>
 
 <template>
-  <div class="w-80 rounded-xl bg-white shadow-lg p-3">
+  <div class="w-80 rounded-xl bg-white shadow-lg px-6 py-4 text-gray-800">
     <!-- Header -->
     <div class="flex items-center justify-between mb-2">
-      <button type="button" class="px-2 py-1 rounded hover:bg-gray-100" @click="prevMonth">‹</button>
+      <button type="button" class="px-2 py-1 rounded hover:bg-gray-200" @click="prevMonth">‹</button>
       <div class="font-medium">
-        {{ viewMonth.format('MMMM YYYY') }}
+        {{ monthTitle }}
       </div>
-      <button type="button" class="px-2 py-1 rounded hover:bg-gray-100" @click="nextMonth">›</button>
+      <button type="button" class="px-2 py-1 rounded hover:bg-gray-200" @click="nextMonth">›</button>
     </div>
 
     <!-- Weekdays -->
-    <div class="grid grid-cols-7 text-xs text-gray-500 mb-1">
-      <div class="text-center">L</div>
-      <div class="text-center">M</div>
-      <div class="text-center">M</div>
-      <div class="text-center">J</div>
-      <div class="text-center">V</div>
-      <div class="text-center">S</div>
-      <div class="text-center">D</div>
+    <div class="grid grid-cols-7 text-xs text-gray-800 mb-2">
+      <div class="text-center">Lu</div>
+      <div class="text-center">Ma</div>
+      <div class="text-center">Me</div>
+      <div class="text-center">Je</div>
+      <div class="text-center">Ve</div>
+      <div class="text-center">Sa</div>
+      <div class="text-center">Di</div>
     </div>
 
     <!-- Days -->
@@ -194,14 +192,14 @@ const onPick = (d: Dayjs) => {
         :class="[
           isOutOfMonth(d) && 'text-gray-400',
           isDisabled(d) && 'opacity-40 cursor-not-allowed',
-          !isDisabled(d) && 'hover:bg-gray-100',
+          !isDisabled(d) && 'hover:bg-gray-200',
 
           // range background first (so edges can override)
-          isInSelectedRange(d) && 'bg-blue-50',
+          isInSelectedRange(d) && 'bg-blue-300',
 
           // edges / selected override
-          isRangeEdge(d) && 'bg-blue-600 text-white hover:bg-blue-600',
-          isSelectedSingle(d) && 'bg-blue-600 text-white hover:bg-blue-600',
+          isRangeEdge(d) && 'bg-blue-600 text-white hover:bg-blue-600 hover:text-gray-800',
+          isSelectedSingle(d) && 'bg-blue-600 text-white hover:bg-blue-600 hover:text-gray-800',
         ]"
         @click="onPick(d)"
       >

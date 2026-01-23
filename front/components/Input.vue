@@ -1,5 +1,6 @@
 <script setup lang='ts'>
 const props = withDefaults(defineProps<{
+  clearable?: boolean
   disabled?: boolean
   icon?: string
   iconClickable?: boolean
@@ -10,6 +11,7 @@ const props = withDefaults(defineProps<{
   readonly?: boolean
   theme?: TInputTheme
 }>(), {
+  clearable: true,
   theme: 'dark',
 })
 
@@ -17,6 +19,10 @@ const emit = defineEmits<{
   (e: 'icon-click'): void
   (e: 'update:modelValue', value: string): void
 }>()
+
+defineOptions({ inheritAttrs: false })
+
+const attrs = useAttrs()
 
 const { 
   clearRightClass,
@@ -43,6 +49,7 @@ const handleResetClick = () => {
     <!-- Input wrapper -->
     <div class="relative">
       <input
+        v-bind="attrs"
         type="text"
         :value="modelValue"
         :disabled="disabled"
@@ -58,7 +65,7 @@ const handleResetClick = () => {
       />
 
       <FontAwesomeIcon
-        v-if="modelValue && !disabled && !loading"
+        v-if="modelValue && clearable && !disabled && !loading"
         icon="circle-xmark"
         class="absolute top-1/2 -translate-y-1/2 cursor-pointer"
         :class="[iconColorClass, clearRightClass]"

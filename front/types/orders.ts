@@ -13,8 +13,3 @@ export interface IOrder {
   orderDate: Dayjs
   products: IOrderProduct[]
 }
-
-export interface IRangeDates {
-  end: Dayjs
-  start: Dayjs
-}

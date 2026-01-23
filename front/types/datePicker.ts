@@ -10,4 +10,9 @@ export interface IDatePickerProps {
   theme?: TInputTheme
 }
 
-export type TInputTheme = 'dark' | 'light'
+export interface IRangeDates {
+  start: Dayjs
+  end: Dayjs
+}
+
+export type DateLike = Dayjs | Date | string | null | undefined
