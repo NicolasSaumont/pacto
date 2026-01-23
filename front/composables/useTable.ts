@@ -44,10 +44,18 @@ export function useTable<T extends { id: string | number }>(props: ITableProps<T
         if (valA == null) return 1
         if (valB == null) return -1
 
+        // Dayjs → timestamp
+        if (dayjs.isDayjs(valA) && dayjs.isDayjs(valB)) {
+          const diff = valA.valueOf() - valB.valueOf()
+          return sortOrder.value === sortOrderEnum.ASC ? diff : -diff
+        }
+
+        // Number
         if (typeof valA === 'number' && typeof valB === 'number') {
           return sortOrder.value === sortOrderEnum.ASC ? valA - valB : valB - valA
         }
 
+        // Fallback string
         const strA = String(valA).toLowerCase()
         const strB = String(valB).toLowerCase()
         return sortOrder.value === sortOrderEnum.ASC
