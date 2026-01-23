@@ -109,9 +109,7 @@ const handleRowClick = (row: T) => {
               
                 <!-- colonne slot -->
                 <template v-else>
-                  <div @click.stop>
-                    <slot :name="column.slot" :row="row" />
-                  </div>
+                  <slot :name="column.slot" :row="row" />
                 </template>
               </template>
             </td>

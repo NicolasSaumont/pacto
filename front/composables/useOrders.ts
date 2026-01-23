@@ -40,7 +40,7 @@ export function useOrders() {
       slot: 'products',
       title: (row) =>
         row.products
-          .map(p => `${p.product.name} × ${p.quantity}`)
+          .map(orderProduct => `${orderProduct.product.name} × ${orderProduct.quantity}`)
           .join('\n')
     },
     {
