@@ -5,9 +5,9 @@ const { t } = useI18n()
 const { notify } = useNotify()
 
 const {
-  columns,
   // isDeleteCustomerConfirmationModalVisible,
   loadOrders,
+  ordersColumns,
 } = useOrders()
 
 const ordersStore = useOrdersStore()
@@ -91,7 +91,7 @@ onMounted(() => loadOrders(searchDates.value))
     </div>
 
     <Table 
-      :columns="columns" 
+      :columns="ordersColumns" 
       :data="orders"
       filter
       :loading="isOrderGettingFetch"

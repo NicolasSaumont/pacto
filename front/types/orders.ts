@@ -1,6 +1,7 @@
 import type { Dayjs } from "dayjs"
 
-interface IOrderProduct {
+export interface IOrderProduct {
+  id: number
   product: IProduct
   quantity: number
 }

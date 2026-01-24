@@ -30,6 +30,7 @@ export default {
   'common.print': 'Imprimer',
   'common.products': 'Produit | Produits',
   'common.reset': 'Réinitialiser',
+  'common.quantity': 'Quantité',
   'common.save': 'Enregistrer',
   'common.search': 'Rechercher',
   'common.synthesis': 'Synthèse',

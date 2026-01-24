@@ -16,8 +16,8 @@ export const MOCKED_ORDERS: IOrder[] = [
     deliveryDate: dayjs().add(1, 'day'),
     orderDate: dayjs(),
     products: [
-      { product: MOCKED_PRODUCTS[0]!, quantity: 10 },
-      { product: MOCKED_PRODUCTS[1]!, quantity: 5 }
+      { id: 1, product: MOCKED_PRODUCTS[0]!, quantity: 10 },
+      { id: 2, product: MOCKED_PRODUCTS[1]!, quantity: 5 }
     ]
   },
   {
@@ -27,7 +27,7 @@ export const MOCKED_ORDERS: IOrder[] = [
     deliveryDate: dayjs().add(2, 'day'),
     orderDate: dayjs().subtract(1, 'day'),
     products: [
-      { product: MOCKED_PRODUCTS[2]!, quantity: 20 }
+      { id: 1, product: MOCKED_PRODUCTS[2]!, quantity: 20 }
     ]
   },
   {
@@ -37,9 +37,9 @@ export const MOCKED_ORDERS: IOrder[] = [
     deliveryDate: dayjs().add(3, 'day'),
     orderDate: dayjs(),
     products: [
-      { product: MOCKED_PRODUCTS[0]!, quantity: 50 },
-      { product: MOCKED_PRODUCTS[1]!, quantity: 30 },
-      { product: MOCKED_PRODUCTS[2]!, quantity: 40 }
+      { id: 1, product: MOCKED_PRODUCTS[0]!, quantity: 50 },
+      { id: 2, product: MOCKED_PRODUCTS[1]!, quantity: 30 },
+      { id: 3, product: MOCKED_PRODUCTS[2]!, quantity: 40 }
     ]
   },
   {
@@ -49,7 +49,7 @@ export const MOCKED_ORDERS: IOrder[] = [
     deliveryDate: dayjs().add(1, 'week'),
     orderDate: dayjs(),
     products: [
-      { product: MOCKED_PRODUCTS[1]!, quantity: 15 }
+      { id: 1, product: MOCKED_PRODUCTS[1]!, quantity: 15 }
     ]
   },
   {
@@ -59,7 +59,7 @@ export const MOCKED_ORDERS: IOrder[] = [
     deliveryDate: dayjs().add(5, 'day'),
     orderDate: dayjs().subtract(2, 'day'),
     products: [
-      { product: MOCKED_PRODUCTS[0]!, quantity: 25 }
+      { id: 1, product: MOCKED_PRODUCTS[0]!, quantity: 25 }
     ]
   },
   {
@@ -69,7 +69,7 @@ export const MOCKED_ORDERS: IOrder[] = [
     deliveryDate: dayjs().add(4, 'day'),
     orderDate: dayjs(),
     products: [
-      { product: MOCKED_PRODUCTS[2]!, quantity: 60 }
+      { id: 1, product: MOCKED_PRODUCTS[2]!, quantity: 60 }
     ]
   },
   {
@@ -79,8 +79,8 @@ export const MOCKED_ORDERS: IOrder[] = [
     deliveryDate: dayjs().add(6, 'day'),
     orderDate: dayjs(),
     products: [
-      { product: MOCKED_PRODUCTS[1]!, quantity: 12 },
-      { product: MOCKED_PRODUCTS[2]!, quantity: 18 }
+      { id: 1, product: MOCKED_PRODUCTS[1]!, quantity: 12 },
+      { id: 2, product: MOCKED_PRODUCTS[2]!, quantity: 18 }
     ]
   },
   {
@@ -90,7 +90,7 @@ export const MOCKED_ORDERS: IOrder[] = [
     deliveryDate: dayjs().add(2, 'week'),
     orderDate: dayjs().subtract(3, 'day'),
     products: [
-      { product: MOCKED_PRODUCTS[0]!, quantity: 8 }
+      { id: 1, product: MOCKED_PRODUCTS[0]!, quantity: 8 }
     ]
   },
   {
@@ -100,9 +100,9 @@ export const MOCKED_ORDERS: IOrder[] = [
     deliveryDate: dayjs().add(1, 'day'),
     orderDate: dayjs(),
     products: [
-      { product: MOCKED_PRODUCTS[0]!, quantity: 5 },
-      { product: MOCKED_PRODUCTS[1]!, quantity: 5 },
-      { product: MOCKED_PRODUCTS[2]!, quantity: 5 }
+      { id: 1, product: MOCKED_PRODUCTS[0]!, quantity: 5 },
+      { id: 2, product: MOCKED_PRODUCTS[1]!, quantity: 5 },
+      { id: 3, product: MOCKED_PRODUCTS[2]!, quantity: 5 }
     ]
   },
   {
@@ -112,7 +112,7 @@ export const MOCKED_ORDERS: IOrder[] = [
     deliveryDate: dayjs().add(10, 'day'),
     orderDate: dayjs(),
     products: [
-      { product: MOCKED_PRODUCTS[1]!, quantity: 40 }
+      { id: 1, product: MOCKED_PRODUCTS[1]!, quantity: 40 }
     ]
   }
 ]
@@ -124,7 +124,7 @@ export const MOCKED_ORDER = {
   deliveryDate: dayjs().add(1, 'day'),
   orderDate: dayjs(),
   products: [
-    { product: MOCKED_PRODUCTS[0]!, quantity: 10 },
-    { product: MOCKED_PRODUCTS[1]!, quantity: 5 }
+    { id: 1, product: MOCKED_PRODUCTS[0]!, quantity: 10 },
+    { id: 2, product: MOCKED_PRODUCTS[1]!, quantity: 5 }
   ]
 }

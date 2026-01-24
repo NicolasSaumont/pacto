@@ -18,7 +18,7 @@ export function useOrders() {
     isOrderGettingFetch,
   } = storeToRefs(ordersStore)
 
-  const columns: IColumn<IOrder>[] = [
+  const ordersColumns: IColumn<IOrder>[] = [
     {
       header: t('common.customers', 1),
       key: 'customerName',
@@ -52,6 +52,21 @@ export function useOrders() {
       header: '',
       size: '10%',
       slot: 'actions'
+    }
+  ]
+
+  const orderProductsColumns: IColumn<IOrderProduct>[] = [
+    {
+      header: t('common.products', 1),
+      key: 'product',
+      sortable: true,
+      sortByDefault: sortOrderEnum.ASC,
+      title: (row) => row.product.name
+    },
+    {
+      header: t('common.quantity'),
+      key: 'quantity',
+      sortable: true,
     }
   ]
 
@@ -122,10 +137,11 @@ export function useOrders() {
   // }
   
   return { 
-    columns,
     // isDeleteCustomerConfirmationModalVisible,
     loadOrder,
     loadOrders,
+    ordersColumns,
+    orderProductsColumns,
     // sendCustomerToCreate,
     // sendCustomerToEdit,
   }
