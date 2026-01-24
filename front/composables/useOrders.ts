@@ -57,28 +57,28 @@ export function useOrders() {
 
   // const isDeleteCustomerConfirmationModalVisible = ref(false)
 
-  // const loadCustomer = async () => {
-  //   isCustomerGettingFetch.value = true
-  //   try {
-  //     const customerId = getRouteParam(route.params.id)
-  //     if (!customerId) {
-  //       await navigateTo(CUSTOMERS_URL)
-  //       return
-  //     }
+  const loadOrder = async () => {
+    isCustomerGettingFetch.value = true
+    try {
+      const customerId = getRouteParam(route.params.id)
+      if (!customerId) {
+        await navigateTo(CUSTOMERS_URL)
+        return
+      }
 
-  //     await withNotify(
-  //       () => setCustomer(customerId),
-  //       {
-  //         errorContent: t('customer.api.get.error-message'),
-  //         rethrow: true,
-  //       }
-  //     )
-  //   } catch {
-  //     await navigateTo(CUSTOMERS_URL)
-  //   } finally {
-  //     isCustomerGettingFetch.value = false
-  //   }
-  // }
+      await withNotify(
+        () => setCustomer(customerId),
+        {
+          errorContent: t('customer.api.get.error-message'),
+          rethrow: true,
+        }
+      )
+    } catch {
+      await navigateTo(CUSTOMERS_URL)
+    } finally {
+      isCustomerGettingFetch.value = false
+    }
+  }
 
   const loadOrders = async (searchDates: IRangeDates) => {
     isOrderGettingFetch.value = true
@@ -124,8 +124,8 @@ export function useOrders() {
   return { 
     columns,
     // isDeleteCustomerConfirmationModalVisible,
+    loadOrder,
     loadOrders,
-    // loadCustomers,
     // sendCustomerToCreate,
     // sendCustomerToEdit,
   }

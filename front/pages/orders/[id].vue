@@ -1,5 +1,9 @@
 <script setup lang='ts'>
 const { t } = useI18n()
+
+const { loadOrder } = useOrders()
+
+onMounted(loadOrder)
 </script>
 
 <template>
