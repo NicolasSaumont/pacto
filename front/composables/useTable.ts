@@ -121,6 +121,11 @@ export function useTable<T extends { id: string | number }>(props: ITableProps<T
     return { width: column.size }
   }
 
+  const isColumnClickable = (column: IColumn<T> | ISlotColumn<T>) => {
+    // Par défaut true
+    return column.isClickable !== false
+  }
+
   const toggleSort = (column: IColumn<T>) => {
     if (props.loading) return
     if (!isDataColumn(column)) return
@@ -178,13 +183,14 @@ export function useTable<T extends { id: string | number }>(props: ITableProps<T
 
   return {
     displayRows,
-    search,
-    sortColumn,
-    sortOrder,
-    toggleSort,
     getCellTitle,
     getCellValue,
     getColumnClass,
     getColumnStyle,
+    isColumnClickable,
+    search,
+    sortColumn,
+    sortOrder,
+    toggleSort,
   }
 }

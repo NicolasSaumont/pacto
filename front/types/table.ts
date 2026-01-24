@@ -25,6 +25,7 @@ export enum sortOrderEnum {
 export interface IDataColumn<T> {
   customClasses?: string
   header: string
+  isClickable? : boolean
   key: keyof T
   searchable?: boolean
   size?: TColumnSize
@@ -36,6 +37,7 @@ export interface IDataColumn<T> {
 export interface ISlotColumn<T> {
   customClasses?: string
   header: string
+  isClickable? : boolean
   slot: string            // ex: "actions"
   size?: TColumnSize
   title?: TColumnTitle<T>

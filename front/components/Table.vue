@@ -25,6 +25,7 @@ const {
   getCellValue,
   getColumnClass,
   getColumnStyle,
+  isColumnClickable,
   search,
   sortColumn,
   sortOrder,
@@ -93,8 +94,8 @@ const handleRowClick = (row: T) => {
               :style="getColumnStyle(column)"
               :title="!loading ? getCellTitle(row, column) : undefined"
               class="py-4 px-3"
-              :class="getColumnClass(column)"
-              @click="handleRowClick(row)"
+              :class="[getColumnClass(column), isColumnClickable(column) ? 'cursor-pointer' : 'cursor-default']"
+              @click="isColumnClickable(column) ? handleRowClick(row) : undefined"
             >
               <template v-if="loading">
                 <div class="animate-pulse">
