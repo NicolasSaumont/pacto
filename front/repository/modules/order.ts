@@ -7,11 +7,12 @@ export const orderRepository = {
   //   })
   // },
 
-  // async getCustomer(id: string): Promise<ICustomer> {
-  //   return fetcher<ICustomer>(`/customers/${id}`, {
-  //     method: 'GET',
-  //   })
-  // },
+  async getOrder(id: string): Promise<IOrder> {
+    // return fetcher<IOrder>(`/orders/${id}`, {
+    //   method: 'GET',
+    // })
+    return MOCKED_ORDER
+  },
 
   async getOrders(searchDates: IRangeDates): Promise<IOrder[]> {
     // return fetcher<IOrder[]>('/orders', {

@@ -2,6 +2,12 @@
 const { t } = useI18n()
 const { notify } = useNotify()
 
+const orderStore = useOrdersStore()
+
+const {
+  order
+} = storeToRefs(orderStore)
+
 const handleAddProductClick = () => {
   notify({
     state: 'info',
@@ -24,6 +30,7 @@ const handleAddProductClick = () => {
     </div>
     <div class="flex-1 min-h-0">
       <TextArea 
+        v-model="order.comment"
         :label="t('common.comments', 2)" 
         class="h-full" 
       />

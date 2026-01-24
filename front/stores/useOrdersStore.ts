@@ -3,9 +3,9 @@ import { defineStore } from 'pinia'
 export const useOrdersStore = defineStore('orders', () => {
   // const isCustomerSaving = ref(false)
   const isOrderGettingFetch = ref(false)
-  // const customer = ref<ICustomer>(structuredClone(DEFAULT_CUSTOMER))
+  const order = ref<IOrder>(structuredClone(DEFAULT_ORDER))
   const orders = ref<IOrder[]>([])
-  // const originalCustomer = ref<ICustomer>(structuredClone(DEFAULT_CUSTOMER))
+  const originalOrder = ref<IOrder>(structuredClone(DEFAULT_ORDER))
   const searchDates = reactive<IRangeDates>(structuredClone(DEFAULT_SEARCH_DATES))
 
   // const isConfirmButtonDisabled = computed(() => !customer.value.name)
@@ -59,28 +59,28 @@ export const useOrdersStore = defineStore('orders', () => {
   //   console.log(customer.value)
   // }
 
-  // const setCustomer = async (customerId: string) => {
-  //   customer.value = await customerRepository.getCustomer(customerId)
-  //   originalCustomer.value = structuredClone(toRaw(customer.value))
-  // }
+  const setOrder = async (orderId: string) => {
+    order.value = await orderRepository.getOrder(orderId)
+    originalOrder.value = structuredClone(toRaw(order.value))
+  }
 
   const setOrders = async (searchDates: IRangeDates) => {
     orders.value = await orderRepository.getOrders(searchDates) 
   }
 
   return {
-    // customer,
     // deleteCustomer,
     // editCustomer,
     // isConfirmButtonDisabled,
     isOrderGettingFetch,
     // isCustomerSaving,
+    order,
     orders,
     // originalCustomer,
     // postNewCustomer,
     // resetForm,
-    // setCustomer,
     searchDates,
+    setOrder,
     setOrders,
   }
 })

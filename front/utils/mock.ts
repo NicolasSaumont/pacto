@@ -116,3 +116,15 @@ export const MOCKED_ORDERS: IOrder[] = [
     ]
   }
 ]
+
+export const MOCKED_ORDER = {
+  id: 1,
+  comment: 'Livraison urgente',
+  customerName: 'Boucherie Martin',
+  deliveryDate: dayjs().add(1, 'day'),
+  orderDate: dayjs(),
+  products: [
+    { product: MOCKED_PRODUCTS[0]!, quantity: 10 },
+    { product: MOCKED_PRODUCTS[1]!, quantity: 5 }
+  ]
+}

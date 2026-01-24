@@ -10,7 +10,7 @@ export function useOrders() {
   const { 
   //   editCustomer,
   //   postNewCustomer,
-  //   setCustomer,
+    setOrder,
     setOrders,
   } = ordersStore
 
@@ -58,25 +58,25 @@ export function useOrders() {
   // const isDeleteCustomerConfirmationModalVisible = ref(false)
 
   const loadOrder = async () => {
-    isCustomerGettingFetch.value = true
+    isOrderGettingFetch.value = true
     try {
-      const customerId = getRouteParam(route.params.id)
-      if (!customerId) {
-        await navigateTo(CUSTOMERS_URL)
+      const orderId = getRouteParam(route.params.id)
+      if (!orderId) {
+        await navigateTo(ORDERS_URL)
         return
       }
 
       await withNotify(
-        () => setCustomer(customerId),
+        () => setOrder(orderId),
         {
-          errorContent: t('customer.api.get.error-message'),
+          errorContent: t('order.api.get.error-message'),
           rethrow: true,
         }
       )
     } catch {
-      await navigateTo(CUSTOMERS_URL)
+      await navigateTo(ORDERS_URL)
     } finally {
-      isCustomerGettingFetch.value = false
+      isOrderGettingFetch.value = false
     }
   }
 
