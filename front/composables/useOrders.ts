@@ -58,7 +58,7 @@ export function useOrders() {
   const orderProductsColumns: IColumn<IOrderProduct>[] = [
     {
       header: t('common.products', 1),
-      key: 'product',
+      slot: 'products',
       sortable: true,
       sortByDefault: sortOrderEnum.ASC,
       title: (row) => row.product.name
