@@ -56,6 +56,7 @@ export default {
   'error.title.500': 'Erreur inattendue',
 
   'order.api.get.error-message': 'La commande n\'a pas pu être chargée',
+  'order.date': 'Date de la commande',
   'order.delivery-date': 'Date de livraison',
   'order.edit': 'Modifier une commande',
   'order.new': 'Créer une nouvelle commande',

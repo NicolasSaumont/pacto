@@ -2,6 +2,13 @@
 const { t } = useI18n()
 const { notify } = useNotify()
 
+const orderStore = useOrdersStore()
+
+const {
+  originalOrder,
+  order,
+} = storeToRefs(orderStore)
+
 const handleCancelClick = () => {
   navigateTo(ORDERS_URL)
 }
@@ -23,11 +30,7 @@ const handlePrintClick = () => {
 }
 
 const handleResetClick = () => {
-  notify({
-    state: 'info',
-    title: t('common.reset'),
-    content: t('common.unavailable-feature'),
-  })
+  order.value = structuredClone(toRaw(originalOrder.value))
 }
 
 const handleSaveClick = () => {

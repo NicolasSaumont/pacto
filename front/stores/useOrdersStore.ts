@@ -76,7 +76,7 @@ export const useOrdersStore = defineStore('orders', () => {
     // isCustomerSaving,
     order,
     orders,
-    // originalCustomer,
+    originalOrder,
     // postNewCustomer,
     // resetForm,
     searchDates,
