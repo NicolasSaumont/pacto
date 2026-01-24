@@ -4,6 +4,7 @@ import dayjs from "dayjs"
 
 export const APP_NAME = 'pacto'
 export const DATE_FORMAT = 'DD/MM/YYYY'
+export const DATE_FORMAT_MONTH_YEAR_ONLY = 'MMMM YYYY'
 export const INPUT_DEBOUNCE = 300
 export const NOTIFICATION_DEFAULT_DURATION = 5000
 export const SKELETON_ROWS = 8

@@ -20,21 +20,25 @@ const emit = defineEmits<{
   (e: 'close'): void
 }>()
 
+const { t } = useI18n()
+
 const {
   convertToDayjs,
 } = useDatePicker()
 
 const WEEK_DAYS = [
-  'Lu',
-  'Ma',
-  'Me',
-  'Je',
-  'Ve',
-  'Sa',
-  'Di',
+  t('common.weekdays.shortcut.monday'),
+  t('common.weekdays.shortcut.tuesday'),
+  t('common.weekdays.shortcut.wednesday'),
+  t('common.weekdays.shortcut.thursday'),
+  t('common.weekdays.shortcut.friday'),
+  t('common.weekdays.shortcut.saturday'),
+  t('common.weekdays.shortcut.sunday'),
 ]
 
-const monthTitle = computed(() => formatMonthTitle(viewMonth.value))
+const { locale } = useI18n()
+const monthTitle = computed(() => formatMonthTitle(viewMonth.value, locale.value))
+// const monthTitle = computed(() => formatMonthTitle(viewMonth.value))
 
 const isRangeValue = (value: unknown): value is IRangeDates =>
   !!value && typeof value === 'object' && 'start' in value && 'end' in value
@@ -201,7 +205,7 @@ const onPick = (date: Dayjs) => {
         class="h-9 rounded text-sm"
         :disabled="isDisabled(day)"
         :class="[
-          isOutOfMonth(day) && 'text-gray-400',
+          isOutOfMonth(day) && 'opacity-40',
           isDisabled(day) && 'opacity-40 cursor-not-allowed',
           !isDisabled(day) && 'hover:bg-gray-200',
 

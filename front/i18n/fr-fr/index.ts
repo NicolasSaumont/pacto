@@ -14,7 +14,7 @@ export default {
 
   'common.api.error-title': 'Échec',
   'common.api.success-title': 'Succès',
-  'common.available-products': 'Produit disponible | Produits disponibles', 
+  'common.available-products': 'Produit disponible | Produits disponibles',
   'common.cancel': 'Annuler',
   'common.comments': 'Remarque | Remarques',
   'common.confirm': 'Confirmer',
@@ -34,6 +34,13 @@ export default {
   'common.search': 'Rechercher',
   'common.synthesis': 'Synthèse',
   'common.unavailable-feature': 'Cette fonctionnalité n\'est pas encore disponible.',
+  'common.weekdays.shortcut.friday': 'Ve',
+  'common.weekdays.shortcut.monday': 'Lu',
+  'common.weekdays.shortcut.saturday': 'Sa',
+  'common.weekdays.shortcut.sunday': 'Di',
+  'common.weekdays.shortcut.thursday': 'Je',
+  'common.weekdays.shortcut.tuesday': 'Ma',
+  'common.weekdays.shortcut.wednesday': 'Me',
 
   'customer.add': 'Créer un nouveau client',
   'customer.api.edit.error-message': 'Le client n\'a pas pu être modifié',
