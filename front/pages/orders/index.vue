@@ -71,7 +71,7 @@ onMounted(() => loadOrders(searchDates.value))
 </script>
 
 <template>
-  <div class="w-full max-h-full flex flex-col gap-12">
+  <div class="w-full max-h-full flex flex-col gap-6">
     <Header>
       <template #header-right>
         <Button 
