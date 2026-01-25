@@ -18,6 +18,10 @@ const {
       :is-clickable="false"
     >
       <template #products="{ row }">
+        <span>{{ row.product.name }}</span>
+      </template>
+
+      <template #quantity="{ row }">
         {{ row.product.name }}
       </template>
     </Table>

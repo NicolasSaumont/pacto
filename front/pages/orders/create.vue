@@ -6,7 +6,7 @@ const { t } = useI18n()
   <div class="w-full h-full flex flex-col gap-12">
     <Header>
       <template #title>
-        {{ t('order.new') }}
+        <span>{{ t('order.new') }}</span>
       </template>
     </Header>
     <div class="flex flex-1 gap-4 min-h-0">

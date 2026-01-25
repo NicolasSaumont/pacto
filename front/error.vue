@@ -23,7 +23,7 @@ const goBack = () => {
 
       <Header>
         <template #title>
-          {{ is404 ? t('error.title.404') : t('error.title.500') }}
+          <span>{{ is404 ? t('error.title.404') : t('error.title.500') }}</span>
         </template>
       </Header>
 

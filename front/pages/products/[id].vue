@@ -10,7 +10,7 @@ onMounted(loadProduct)
   <div class="w-full max-h-full flex flex-col gap-12">
     <Header>
       <template #title>
-        {{ t('product.edit') }}
+        <span>{{ t('product.edit') }}</span>
       </template>
     </Header>
 

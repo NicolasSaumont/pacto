@@ -98,7 +98,7 @@ onMounted(() => loadOrders(searchDates.value))
       @row-click="handleRowClick"
     >
       <template #products="{ row }">
-        {{ row.products.length }}
+        <span>{{ row.products.length }}</span>
       </template>
 
       <template #actions="{ row }">

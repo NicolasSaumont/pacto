@@ -14,7 +14,7 @@ onMounted( () => {
   <div class="w-full max-h-full flex flex-col gap-12">
     <Header>
       <template #title>
-        {{ t('customer.edit') }}
+        <span>{{ t('customer.edit') }}</span>
       </template>
     </Header>
 

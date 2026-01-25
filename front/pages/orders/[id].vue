@@ -10,7 +10,7 @@ onMounted(loadOrder)
   <div class="w-full h-full flex flex-col gap-12">
     <Header>
       <template #title>
-        {{ t('order.edit') }}
+        <span>{{ t('order.edit') }}</span>
       </template>
     </Header>
     <div class="flex flex-1 gap-4 min-h-0">
