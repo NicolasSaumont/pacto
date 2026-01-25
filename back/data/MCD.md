@@ -1,16 +1,24 @@
-sauvegarde: code sauvegarde, slot
-personnage: code personnage, nom, points de vie, points de mana, age, position x, position y
-zone: code zone, code, nom, description, image, musique, timer actif, age d'accès
-objet: code objet, code, nom de l'objet, description, quantité
-famille d'objet: code de famille, nom, age d'accès
-capacité: code capacité, code, nom de la capacité, description
-point de progression: code point de progression, code
+CLIENT
+- code_client (PK)
+- nom
 
-exister, 11 personnage, 0N sauvegarde 
-posséder, 0N personnage, 0N objet
-contenir, 0N famille d'objet, 11 objet
-maitriser, 0N personnage, 0N capacité 
-débloquer, 0N personnage, 0N point de progression
-requérir, 0N zone, 0N objet
-nécessiter, 0N zone, 0N capacité
-exiger, 0N zone, 0N point de progression
+PRODUIT
+- code_produit (PK)
+- nom
+
+COMMANDE
+- code_commande (PK)
+- date_commande
+- date_livraison
+- commentaire
+
+✔ une commande a 1 client
+✔ un client a 0..N commandes
+CLIENT (1,N) —— PASSER —— (1,1) COMMANDE
+
+CONTENIR
+- quantité
+
+✔ une commande contient au moins 1 produit
+✔ un produit peut être dans 0..N commandes
+COMMANDE (1,N) —— CONTENIR —— (0,N) PRODUIT
