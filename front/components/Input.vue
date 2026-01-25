@@ -1,12 +1,15 @@
 <script setup lang='ts'>
+import type { InputTypeHTMLAttribute } from 'vue';
+
 const props = withDefaults(defineProps<{
   clearable?: boolean
   disabled?: boolean
   icon?: string
   iconClickable?: boolean
+  isNumberInput?: boolean
   label?: string
   loading?: boolean
-  modelValue?: string
+  modelValue?: string | number
   placeholder?: string
   readonly?: boolean
   theme?: TInputTheme
@@ -17,7 +20,7 @@ const props = withDefaults(defineProps<{
 
 const emit = defineEmits<{
   (e: 'icon-click'): void
-  (e: 'update:modelValue', value: string): void
+  (e: 'update:modelValue', value: string | number): void
 }>()
 
 defineOptions({ inheritAttrs: false })
@@ -33,6 +36,57 @@ const {
 
 const handleResetClick = () => {
   emit('update:modelValue', '')
+}
+
+const onInput = (e: Event) => {
+  const el = e.target as HTMLInputElement
+  let value = el.value
+
+  if (!props.isNumberInput) {
+    emit('update:modelValue', value)
+    return
+  }
+
+  // enlève tout sauf chiffres et .
+  value = value.replace(/[^\d.]/g, '')
+
+  // empêche plusieurs points
+  const parts = value.split('.')
+  if (parts.length > 2) {
+    value = parts[0] + '.' + parts.slice(1).join('')
+  }
+
+  el.value = value
+
+  emit(
+    'update:modelValue',
+    value === '' || value === '.'
+      ? ''
+      : Number(value)
+  )
+}
+
+const onKeyDown = (e: KeyboardEvent) => {
+  if (!props.isNumberInput) return
+
+  const allowedKeys = [
+    'Backspace',
+    'Delete',
+    'ArrowLeft',
+    'ArrowRight',
+    'Tab',
+  ]
+
+  if (allowedKeys.includes(e.key)) return
+
+  // chiffre
+  if (/^\d$/.test(e.key)) return
+
+  // point décimal (1 seul)
+  if (e.key === '.') {
+    const value = String(props.modelValue ?? '')
+    if (!value.includes('.')) return
+  }
 }
 </script>
 
@@ -51,17 +105,19 @@ const handleResetClick = () => {
       <input
         v-bind="attrs"
         type="text"
+        inputmode="decimal"
+        pattern="[0-9]*"
         :value="modelValue"
         :disabled="disabled"
-        :placeholder="placeholder ? `${placeholder}...` : undefined"
-        :readonly
+        :readonly="readonly"
         class="w-full"
         :class="[
           inputClasses,
           rightPaddingClass,
           (disabled || loading) && 'cursor-not-allowed opacity-80',
         ]"
-        @input="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
+        @keydown="onKeyDown"
+        @input="onInput"
       />
 
       <FontAwesomeIcon

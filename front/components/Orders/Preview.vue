@@ -22,7 +22,11 @@ const {
       </template>
 
       <template #quantity="{ row }">
-        {{ row.product.name }}
+        <Input 
+          v-model="row.quantity"
+          is-number-input
+          theme="light"
+        />
       </template>
     </Table>
   </div>
