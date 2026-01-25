@@ -58,7 +58,6 @@ export function useOrders() {
   const orderProductsColumns: IColumn<IOrderProduct>[] = [
     {
       header: t('common.products', 1),
-      isClickable: false,
       slot: 'products',
       sortable: true,
       sortByDefault: sortOrderEnum.ASC,
@@ -66,7 +65,6 @@ export function useOrders() {
     },
     {
       header: t('common.quantity'),
-      isClickable: false,
       key: 'quantity',
       sortable: true,
     }

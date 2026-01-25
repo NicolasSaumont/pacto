@@ -15,6 +15,7 @@ const {
     <Table 
       :columns="orderProductsColumns"
       :data="order.products"
+      :is-clickable="false"
     >
       <template #products="{ row }">
         {{ row.product.name }}

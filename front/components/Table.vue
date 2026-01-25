@@ -5,10 +5,12 @@ const props = withDefaults(
     columns: IColumn<T>[]
     data: T[]
     filter?: boolean
+    isClickable?: boolean
     loading?: boolean
   }>(),
   { 
     filter: false, 
+    isClickable: true, 
     loading: false 
   }
 )
@@ -94,8 +96,8 @@ const handleRowClick = (row: T) => {
               :style="getColumnStyle(column)"
               :title="!loading ? getCellTitle(row, column) : undefined"
               class="py-4 px-3"
-              :class="[getColumnClass(column), isColumnClickable(column) ? 'cursor-pointer' : 'cursor-default']"
-              @click="isColumnClickable(column) ? handleRowClick(row) : undefined"
+              :class="[getColumnClass(column), isClickable && isColumnClickable(column) ? 'cursor-pointer' : 'cursor-default']"
+              @click="isClickable && isColumnClickable(column) ? handleRowClick(row) : undefined"
             >
               <template v-if="loading">
                 <div class="animate-pulse">
