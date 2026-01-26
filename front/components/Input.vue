@@ -1,19 +1,7 @@
 <script setup lang='ts'>
-import type { InputTypeHTMLAttribute } from 'vue';
+import type { IInputProps } from '../types/input'
 
-const props = withDefaults(defineProps<{
-  clearable?: boolean
-  disabled?: boolean
-  icon?: string
-  iconClickable?: boolean
-  isNumberInput?: boolean
-  label?: string
-  loading?: boolean
-  modelValue?: string | number
-  placeholder?: string
-  readonly?: boolean
-  theme?: TInputTheme
-}>(), {
+const props = withDefaults(defineProps<IInputProps>(), {
   clearable: true,
   theme: 'dark',
 })
@@ -130,7 +118,7 @@ const onKeyDown = (e: KeyboardEvent) => {
 
       <!-- LOADING -->
       <span
-        v-if="loading"
+        v-if="loading && !disabled"
         class="absolute top-1/2 -translate-y-1/2"
         :class="clearRightClass"
         aria-label="loading"
@@ -141,6 +129,7 @@ const onKeyDown = (e: KeyboardEvent) => {
         />
       </span>
 
+      <!-- TRAILING ICON -->
       <FontAwesomeIcon
         v-if="icon"
         :icon="icon"
