@@ -55,7 +55,6 @@ export const useCustomersStore = defineStore('customers', () => {
 
   const resetForm = () => {
     customer.value = structuredClone(DEFAULT_CUSTOMER)
-    console.log(customer.value)
   }
 
   const setCustomer = async (customerId: string) => {

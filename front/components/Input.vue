@@ -93,8 +93,8 @@ const onKeyDown = (e: KeyboardEvent) => {
       <input
         v-bind="attrs"
         type="text"
-        inputmode="decimal"
-        pattern="[0-9]*"
+        :inputmode="isNumberInput ? 'decimal' : undefined"
+        :pattern="isNumberInput ? '[0-9]*' : undefined"
         :value="modelValue"
         :disabled="disabled"
         :readonly="readonly"
