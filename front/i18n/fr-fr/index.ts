@@ -25,6 +25,7 @@ export default {
   'common.duplicate': 'Dupliquer',
   'common.go-back': 'Revenir en arrière',
   'common.go-back-to-home': 'Revenir en à l\'accueil',
+  'common.no-data': 'Aucune donnée',
   'common.order-taking': 'Prise de commande',
   'common.orders': 'Commandes',
   'common.print': 'Imprimer',

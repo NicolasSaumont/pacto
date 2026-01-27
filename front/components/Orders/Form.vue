@@ -3,10 +3,15 @@ const { t } = useI18n()
 const { notify } = useNotify()
 
 const orderStore = useOrdersStore()
+const { order } = storeToRefs(orderStore)
 
-const {
-  order,
-} = storeToRefs(orderStore)
+const { loadCustomers } = useCustomers()
+const customerStore = useCustomersStore()
+const { setCustomer } = customerStore
+const { customer, customers } = storeToRefs(customerStore)
+
+const { getAvailableProducts, loadProducts } = useProducts()
+const productsStore = useProductsStore()
 
 const handleAddProductClick = () => {
   notify({
@@ -14,57 +19,29 @@ const handleAddProductClick = () => {
     content: t('common.unavailable-feature'),
   })
 }
+const selectedCustomerId = ref<number | null>(null)
+const selectedProducts = ref([])
 
-const customer = ref()
-const products = ref([])
-const customerOptions = [
-  {
-    label: 'client 1',
-    value: 1,
-  },
-  {
-    label: 'client 2',
-    value: 2,
-  },
-  {
-    label: 'client 3',
-    value: 3,
-  },
-  {
-    label: 'client 4',
-    value: 4,
-  },
-  {
-    label: 'client 5',
-    value: 5,
-  }
-]
-const productsOptions = [
-  {
-    label: 'produit 1',
-    value: 1,
-  },
-  {
-    label: 'produit 2',
-    value: 2,
-  },
-  {
-    label: 'produit 3',
-    value: 3,
-  },
-  {
-    label: 'produit 4',
-    value: 4,
-  }
-]
+// Surveille le changement de client sélectionné, pour mettre à jour la variable customer, et ainsi récupére la liste des produits disponibles
+watch(selectedCustomerId, async (id) => {
+  if (!id) return
+  await setCustomer(id.toString())
+}, { immediate: true })
+
+onMounted(() => {
+  loadCustomers()
+  loadProducts()
+})
 </script>
 
 <template>
   <form class="flex flex-col gap-6 flex-1 bg-gray-900 p-6 rounded-2xl border border-gray-600">
     <Select 
-      v-model="customer"
+      v-model="selectedCustomerId"
       :label="t('common.customers', 1)"
-      :options="customerOptions"
+      label-key="name"
+      :options="customers"
+      valueKey="id"
     />
     <DatePicker 
       v-model="order.orderDate"
@@ -78,10 +55,12 @@ const productsOptions = [
     />
     <div class="flex gap-4 items-end">
       <Select 
-        v-model="products"
+        v-model="selectedProducts"
         :label="t('common.products', 2)"
+        label-key="name"
         multiple
-        :options="productsOptions"
+        :options="getAvailableProducts(customer)"
+        valueKey="id"
       />
       <Button
         icon="plus"

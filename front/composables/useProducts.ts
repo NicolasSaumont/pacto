@@ -16,6 +16,7 @@ export function useProducts() {
 
   const { 
     isProductGettingFetch,
+    products,
   } = storeToRefs(productsStore)
 
   const columns: IColumn<IProduct>[] = [
@@ -33,6 +34,17 @@ export function useProducts() {
   ]
 
   const isDeleteProductConfirmationModalVisible = ref(false)
+
+
+  const getAvailableProducts = (customer: ICustomer) => {
+    if (!customer || !customer.products) return products.value
+
+    // Création d'un Set contenant tous les id des produits déjà associés au client
+    const customerProductIds = new Set(customer.products.map(product => product.id))
+
+    // On filtre la liste complète des produits pour exclure ceux déjà assignés au client
+    return products.value.filter(product => !customerProductIds.has(product.id))
+  }
 
   const loadProduct = async () => {
     isProductGettingFetch.value = true
@@ -100,6 +112,7 @@ export function useProducts() {
   
   return { 
     columns,
+    getAvailableProducts,
     isDeleteProductConfirmationModalVisible,
     loadProduct,
     loadProducts,

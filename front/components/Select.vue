@@ -1,18 +1,22 @@
 <script setup lang="ts">
 import type { ISelectProps } from '../types/select'
 
-const props = withDefaults(defineProps<ISelectProps>(), {
+const props = withDefaults(defineProps<ISelectProps<any, any>>(), {
   clearable: true,
   theme: 'dark',
+  multiple: false,
+  maxChipsToShow: 2,
 })
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: SelectOptionValue | SelectOptionValue[] | null): void
+  (e: 'update:modelValue', value: any[] | any | null): void
   (e: 'icon-click'): void
 }>()
 
 defineOptions({ inheritAttrs: false })
+
 const attrs = useAttrs()
+const { t } = useI18n()
 
 const {
   selectClasses,
@@ -21,60 +25,91 @@ const {
   clearRightClass,
 } = useSelect(props)
 
+type OptionT = any
+type ValueT = any
+
 const rootRef = ref<HTMLElement | null>(null)
 const triggerRef = ref<HTMLButtonElement | null>(null)
 
 const isDropdownOpen = ref(false)
 const activeIndex = ref<number>(-1)
 
-const selectedOption = computed(() => {
-  return props.options.find(option => option.value === props.modelValue) ?? null
-})
+// --- extractors (label/value/disabled) ---
+const getLabel = (opt: OptionT): string => {
+  if (props.getOptionLabel) return props.getOptionLabel(opt)
+  if (props.labelKey) return String(opt?.[props.labelKey] ?? '')
+  if (opt?.label !== undefined) return String(opt.label)
+  return String(opt ?? '')
+}
 
-const selectedValues = computed<SelectOptionValue[]>(() => {
-  if (props.multiple) {
-    return Array.isArray(props.modelValue) ? props.modelValue : []
-  }
+const getValue = (opt: OptionT): ValueT => {
+  if (props.getOptionValue) return props.getOptionValue(opt)
+  if (props.valueKey) return opt?.[props.valueKey]
+  if (opt?.value !== undefined) return opt.value
+  return opt
+}
+
+const isOptDisabled = (opt: OptionT): boolean => {
+  if (props.getOptionDisabled) return props.getOptionDisabled(opt)
+  return Boolean(opt?.disabled)
+}
+
+// --- selection ---
+const selectedValues = computed<ValueT[]>(() => {
+  if (props.multiple) return Array.isArray(props.modelValue) ? props.modelValue : []
   return props.modelValue === null || props.modelValue === undefined || props.modelValue === ''
     ? []
-    : [props.modelValue as SelectOptionValue]
+    : [props.modelValue as ValueT]
 })
 
-const isSelected = (value: SelectOptionValue) =>
-  selectedValues.value.includes(value)
+const isSelectedOpt = (opt: OptionT) => {
+  const v = getValue(opt)
+  return selectedValues.value.some((sv) => sv === v)
+}
 
-const selectedOptions = computed(() =>
-  props.options.filter(o => isSelected(o.value))
+const selectedOptions = computed<OptionT[]>(() =>
+  props.options.filter((opt) => isSelectedOpt(opt)),
 )
 
-// const displayLabel = computed(() => {
-//   if (selectedOption.value) return selectedOption.value.label
-//   return props.placeholder ?? ''
-// })
-
-const displayLabel = computed(() => {
-  if (props.multiple) {
-    if (selectedOptions.value.length) {
-      // variante 1: compteur
-      // return `${selectedOptions.value.length} sélectionné(s)`
-      // variante 2: liste jointe (si tu préfères)
-      return selectedOptions.value.map(o => o.label).join(', ')
-    }
-    return props.placeholder ?? ''
-  }
-
-  const single = props.options.find(o => o.value === props.modelValue) ?? null
-  return single ? single.label : (props.placeholder ?? '')
-})
-
-// const hasValue = computed(() =>
-//   props.modelValue !== undefined && props.modelValue !== null && props.modelValue !== ''
-// )
 const hasValue = computed(() => {
   if (props.multiple) return selectedValues.value.length > 0
   return props.modelValue !== undefined && props.modelValue !== null && props.modelValue !== ''
 })
 
+// --- trigger display ---
+const selectedOption = computed(() => {
+  // utile pour le placeholder en single
+  if (props.multiple) return null
+  return props.options.find((opt) => getValue(opt) === props.modelValue) ?? null
+})
+
+const displayLabel = computed(() => {
+  if (props.multiple) {
+    return selectedOptions.value.length ? '' : (props.placeholder ?? '')
+  }
+  return selectedOption.value ? getLabel(selectedOption.value) : (props.placeholder ?? '')
+})
+
+// chips
+const visibleChips = computed(() => {
+  if (!props.multiple) return []
+  return selectedOptions.value.slice(0, props.maxChipsToShow ?? 2)
+})
+
+const extraChipsCount = computed(() => {
+  if (!props.multiple) return 0
+  return Math.max(0, selectedOptions.value.length - visibleChips.value.length)
+})
+
+const removeValue = (value: ValueT) => {
+  if (!props.multiple) return
+  const current = selectedValues.value.slice()
+  const idx = current.findIndex(v => v === value)
+  if (idx >= 0) current.splice(idx, 1)
+  emit('update:modelValue', current)
+}
+
+// --- dropdown open/close ---
 const closeDropdown = () => {
   isDropdownOpen.value = false
   activeIndex.value = -1
@@ -84,13 +119,15 @@ const openDropdown = () => {
   if (props.disabled || props.loading) return
   isDropdownOpen.value = true
 
-  // Mettre le focus clavier sur l'option sélectionnée, sinon première enabled
-  const selectedIdx = props.options.findIndex(o => o.value === props.modelValue)
-  if (selectedIdx >= 0 && !props.options[selectedIdx]?.disabled) {
-    activeIndex.value = selectedIdx
-  } else {
-    activeIndex.value = props.options.findIndex(o => !o.disabled)
+  // focus clavier : selected sinon premier non-disabled
+  if (!props.multiple) {
+    const selectedIdx = props.options.findIndex(o => getValue(o) === props.modelValue)
+    if (selectedIdx >= 0 && !isOptDisabled(props.options[selectedIdx])) {
+      activeIndex.value = selectedIdx
+      return
+    }
   }
+  activeIndex.value = props.options.findIndex(o => !isOptDisabled(o))
 }
 
 const toggleDropdown = () => {
@@ -98,48 +135,25 @@ const toggleDropdown = () => {
   else openDropdown()
 }
 
-const MAX_CHIPS_TO_SHOW = 2
+// --- select option ---
+const selectOption = (opt: OptionT) => {
+  if (isOptDisabled(opt)) return
 
-const visibleChips = computed(() => {
-  if (!props.multiple) return []
-  return selectedOptions.value.slice(0, MAX_CHIPS_TO_SHOW)
-})
-
-const extraChipsCount = computed(() => {
-  if (!props.multiple) return 0
-  return Math.max(0, selectedOptions.value.length - visibleChips.value.length)
-})
-
-const removeValue = (value: SelectOptionValue) => {
-  if (!props.multiple) return
-  const current = selectedValues.value.slice()
-  const idx = current.indexOf(value)
-  if (idx >= 0) current.splice(idx, 1)
-  emit('update:modelValue', current)
-}
-
-// const selectOption = (opt: ISelectOption) => {
-//   if (opt.disabled) return
-//   emit('update:modelValue', opt.value)
-//   closeDropdown()
-// }
-const selectOption = (opt: ISelectOption) => {
-  if (opt.disabled) return
+  const v = getValue(opt)
 
   if (!props.multiple) {
-    emit('update:modelValue', opt.value)
+    emit('update:modelValue', v)
     closeDropdown()
     return
   }
 
   const current = selectedValues.value.slice()
-  const idx = current.indexOf(opt.value)
+  const idx = current.findIndex(x => x === v)
 
   if (idx >= 0) current.splice(idx, 1)
-  else current.push(opt.value)
+  else current.push(v)
 
   emit('update:modelValue', current)
-  // en multiple on ne ferme pas automatiquement
 }
 
 const reset = () => {
@@ -165,8 +179,8 @@ onMounted(() => {
       {{ label }}
     </label>
 
-    <!-- Trigger -->
     <div class="relative">
+      <!-- Trigger -->
       <button
         ref="triggerRef"
         type="button"
@@ -188,20 +202,20 @@ onMounted(() => {
             <template v-if="selectedOptions.length">
               <span
                 v-for="opt in visibleChips"
-                :key="String(opt.value)"
-                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs max-w-[10rem]"
+                :key="String(getValue(opt))"
+                :title="getLabel(opt)"
+                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs max-w-20"
                 :class="theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-gray-100 text-gray-900'"
                 @mousedown.prevent
                 @click.stop
               >
-                <span class="truncate max-w-[8rem]">{{ opt.label }}</span>
+                <span class="truncate max-w-[8rem]">{{ getLabel(opt) }}</span>
 
-                <!-- remove chip -->
                 <FontAwesomeIcon
                   icon="xmark"
                   class="text-[10px] opacity-80 hover:opacity-100 cursor-pointer"
                   @mousedown.prevent
-                  @click.stop="removeValue(opt.value)"
+                  @click.stop="removeValue(getValue(opt))"
                 />
               </span>
 
@@ -220,13 +234,11 @@ onMounted(() => {
             </span>
           </template>
 
-          <!-- SINGLE: label normal -->
+          <!-- SINGLE -->
           <template v-else>
             <span
               class="truncate flex-1 min-w-0"
-              :class="[
-                !selectedOption && placeholder ? 'text-gray-500' : '',
-              ]"
+              :class="[!selectedOption && placeholder ? 'text-gray-500' : '']"
             >
               {{ displayLabel }}
             </span>
@@ -256,7 +268,7 @@ onMounted(() => {
         />
       </span>
 
-      <!-- Optional trailing icon (à droite) -->
+      <!-- Optional trailing icon -->
       <FontAwesomeIcon
         v-if="icon"
         :icon="icon"
@@ -264,7 +276,7 @@ onMounted(() => {
         :class="[iconColorClass, (disabled || loading) && 'opacity-50']"
       />
 
-      <!-- Chevron animé -->
+      <!-- Chevron -->
       <FontAwesomeIcon
         icon="chevron-down"
         class="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer transition-transform duration-200"
@@ -273,10 +285,8 @@ onMounted(() => {
           (disabled || loading) && 'opacity-50',
           isDropdownOpen && 'rotate-180',
         ]"
-        @click="() => {
-          triggerRef?.focus()
-          toggleDropdown()
-        }"
+        @mousedown.prevent
+        @click="() => { triggerRef?.focus(); toggleDropdown() }"
       />
 
       <!-- Dropdown -->
@@ -291,47 +301,45 @@ onMounted(() => {
         <ul
           v-if="isDropdownOpen"
           class="absolute z-50 mt-1 w-full max-h-32 overflow-auto rounded-lg border shadow-lg scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800"
-          :class="[
-            theme === 'dark'
-              ? 'bg-gray-800 border-gray-600'
-              : 'bg-white border-gray-300',
-          ]"
+          :class="[theme === 'dark' ? 'bg-gray-800 border-gray-600' : 'bg-white border-gray-300']"
           role="listbox"
           tabindex="0"
         >
           <li
             v-for="(opt, idx) in options"
-            :key="String(opt.value)"
+            :key="String(getValue(opt))"
             role="option"
-            :aria-selected="isSelected(opt.value)"
+            :aria-selected="isSelectedOpt(opt)"
             class="px-3 py-2 text-sm cursor-pointer select-none"
             :class="[
-              opt.disabled && 'opacity-50 cursor-not-allowed',
-              idx === activeIndex && !opt.disabled && (theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100'),
+              isOptDisabled(opt) && 'opacity-50 cursor-not-allowed',
+              idx === activeIndex && !isOptDisabled(opt) && (theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100'),
               theme === 'dark' ? 'text-white' : 'text-gray-900',
             ]"
-            @mouseenter="!opt.disabled && (activeIndex = idx)"
+            @mouseenter="!isOptDisabled(opt) && (activeIndex = idx)"
             @mousedown.prevent
             @click="selectOption(opt)"
           >
-            <div class="flex items-center justify-between gap-2">
-              <span
-                class="truncate"
-                :class="[
-                  opt.value === modelValue && 'font-semibold',
-                ]"
-              >
-                {{ opt.label }}
+            <div class="flex items-center justify-between gap-2 min-w-0">
+              <span class="truncate flex-1 min-w-0" :class="[isSelectedOpt(opt) && 'font-semibold']">
+                {{ getLabel(opt) }}
               </span>
 
               <FontAwesomeIcon
-                v-if="isSelected(opt.value)"
+                v-if="isSelectedOpt(opt)"
                 icon="check"
                 class="shrink-0"
                 :class="iconColorClass"
               />
             </div>
           </li>
+          <div 
+            v-if="options.length === 0" 
+            class="px-3 py-2 text-sm italic select-none"
+            @click="toggleDropdown"
+          >
+            {{ t('common.no-data') }}
+          </div>
         </ul>
       </Transition>
     </div>
