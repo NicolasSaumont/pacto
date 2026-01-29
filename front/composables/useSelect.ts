@@ -1,4 +1,3 @@
-// useSelect.ts
 export function useSelect(props: ISelectProps) {
   const basicClasses = [
     'border rounded-lg pl-3 py-1 text-sm focus:outline-none focus:ring-2 appearance-none',

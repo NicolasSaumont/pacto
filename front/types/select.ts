@@ -7,6 +7,8 @@ export interface ISelectProps<TOption = any, TValue = Primitive> {
   getOptionDisabled?: (opt: TOption) => boolean
   getOptionLabel?: (opt: TOption) => string
   getOptionValue?: (opt: TOption) => TValue
+  filter?: boolean
+  filterFn?: (option: OptionT, query: string) => boolean
   icon?: string
   label?: string
   labelKey?: KeyOf<TOption>

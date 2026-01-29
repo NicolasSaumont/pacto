@@ -31,6 +31,8 @@ const triggerRef = ref<HTMLButtonElement | null>(null)
 
 const isDropdownOpen = ref(false)
 const activeIndex = ref<number>(-1)
+const filterQuery = ref('')
+const filterInputRef = ref<HTMLInputElement | null>(null)
 
 // --- extractors (label/value/disabled) ---
 const getLabel = (option: OptionT): string => {
@@ -111,6 +113,7 @@ const removeValue = (value: ValueT) => {
 const closeDropdown = () => {
   isDropdownOpen.value = false
   activeIndex.value = -1
+  filterQuery.value = ''
 }
 
 const onClick = (event: MouseEvent) => {
@@ -123,15 +126,23 @@ const openDropdown = () => {
   if (props.disabled || props.loading) return
   isDropdownOpen.value = true
 
-  // focus clavier : selected sinon premier non-disabled
+  // focus input si filter
+  if (props.filter) {
+    // optionnel: reset à chaque ouverture
+    filterQuery.value = ''
+    nextTick(() => filterInputRef.value?.focus())
+  }
+
+  const opts = filteredOptions.value
+
   if (!props.multiple) {
-    const selectedIdx = props.options.findIndex(o => getValue(o) === props.modelValue)
-    if (selectedIdx >= 0 && !isOptDisabled(props.options[selectedIdx])) {
+    const selectedIdx = opts.findIndex(o => getValue(o) === props.modelValue)
+    if (selectedIdx >= 0 && !isOptDisabled(opts[selectedIdx])) {
       activeIndex.value = selectedIdx
       return
     }
   }
-  activeIndex.value = props.options.findIndex(o => !isOptDisabled(o))
+  activeIndex.value = opts.findIndex(o => !isOptDisabled(o))
 }
 
 const toggleDropdown = () => {
@@ -164,6 +175,32 @@ const reset = () => {
   emit('update:modelValue', props.multiple ? [] : null)
   closeDropdown()
 }
+
+// --- filter ---
+const normalizedQuery = computed(() => filterQuery.value.trim().toLowerCase())
+
+const filteredOptions = computed(() => {
+  if (!props.filter) return props.options
+  const q = normalizedQuery.value
+  if (!q) return props.options
+
+  // si l’utilisateur fournit sa logique de filtre
+  if (props.filterFn) {
+    return props.options.filter(opt => props.filterFn!(opt, filterQuery.value))
+  }
+
+  // filtre par défaut: sur le label
+  return props.options.filter((opt) => {
+    const label = getLabel(opt).toLowerCase()
+    return label.includes(q)
+  })
+})
+
+watch([() => props.filter, normalizedQuery], () => {
+  if (!isDropdownOpen.value) return
+  const idx = filteredOptions.value.findIndex(o => !isOptDisabled(o))
+  activeIndex.value = idx
+})
 
 onMounted(() => document.addEventListener('mousedown', onClick))
 
@@ -307,28 +344,49 @@ onUnmounted(() => document.removeEventListener('mousedown', onClick))
           role="listbox"
           tabindex="0"
         >
+          <!-- FILTER INPUT -->
+          <li 
+            v-if="filter" 
+            class="px-2 py-2 sticky top-0 z-10"
+            :class="[theme === 'dark' ? 'bg-gray-800' : 'bg-white']"
+            @mousedown.stop
+            @click.stop
+          >
+            <input
+              ref="filterInputRef"
+              v-model="filterQuery"
+              type="text"
+              class="w-full h-8 rounded-md px-2 text-sm border focus:outline-none focus:ring-2"
+              :class="theme === 'dark'
+                ? 'bg-gray-900 border-gray-600 text-white focus:ring-blue-500 placeholder:text-gray-500'
+                : 'bg-white border-gray-300 text-gray-900 focus:ring-blue-500 placeholder:text-gray-400'"
+              :placeholder="t('common.search')"
+              @keydown.stop
+            />
+          </li>
+
           <li
-            v-for="(opt, idx) in options"
-            :key="String(getValue(opt))"
+            v-for="(option, index) in filteredOptions"
+            :key="String(getValue(option))"
             role="option"
-            :aria-selected="isSelectedOpt(opt)"
+            :aria-selected="isSelectedOpt(option)"
             class="px-3 py-2 text-sm cursor-pointer select-none"
             :class="[
-              isOptDisabled(opt) && 'opacity-50 cursor-not-allowed',
-              idx === activeIndex && !isOptDisabled(opt) && (theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100'),
+              isOptDisabled(option) && 'opacity-50 cursor-not-allowed',
+              index === activeIndex && !isOptDisabled(option) && (theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100'),
               theme === 'dark' ? 'text-white' : 'text-gray-900',
             ]"
-            @mouseenter="!isOptDisabled(opt) && (activeIndex = idx)"
+            @mouseenter="!isOptDisabled(option) && (activeIndex = index)"
             @mousedown.prevent
-            @click="selectOption(opt)"
+            @click="selectOption(option)"
           >
             <div class="flex items-center justify-between gap-2 min-w-0">
-              <span class="truncate flex-1 min-w-0" :class="[isSelectedOpt(opt) && 'font-semibold']">
-                {{ getLabel(opt) }}
+              <span class="truncate flex-1 min-w-0" :class="[isSelectedOpt(option) && 'font-semibold']">
+                {{ getLabel(option) }}
               </span>
 
               <FontAwesomeIcon
-                v-if="isSelectedOpt(opt)"
+                v-if="isSelectedOpt(option)"
                 icon="check"
                 class="shrink-0"
                 :class="iconColorClass"
@@ -336,7 +394,7 @@ onUnmounted(() => document.removeEventListener('mousedown', onClick))
             </div>
           </li>
           <div 
-            v-if="options.length === 0" 
+            v-if="filteredOptions.length === 0" 
             class="px-3 py-2 text-sm italic select-none"
             @click="toggleDropdown"
           >

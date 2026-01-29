@@ -61,6 +61,7 @@ onMounted(() => {
     <div class="flex gap-4 items-end">
       <Select 
         v-model="selectedProducts"
+        filter
         :label="t('common.products', 2)"
         label-key="name"
         multiple
