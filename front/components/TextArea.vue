@@ -52,7 +52,7 @@ const handleResetClick = () => {
         class="relative w-full rounded-lg border transition focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2"
         :class="[
           ...wrapperClasses,
-          (disabled || loading) && 'opacity-80',
+          (disabled || loading) && 'opacity-50',
         ]"
       >
         <textarea

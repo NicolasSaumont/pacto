@@ -10,7 +10,7 @@ const { t } = useI18n()
       </template>
     </Header>
     <div class="flex flex-1 gap-4 min-h-0">
-      <OrdersForm />
+      <OrdersForm :mode="ModeEnum.CREATION" />
       <OrdersPreview />
     </div>
     <OrdersFooter />

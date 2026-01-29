@@ -102,7 +102,7 @@ const onKeyDown = (e: KeyboardEvent) => {
         :class="[
           inputClasses,
           rightPaddingClass,
-          (disabled || loading) && 'cursor-not-allowed opacity-80',
+          (disabled || loading) && 'cursor-not-allowed opacity-50',
         ]"
         @keydown="onKeyDown"
         @input="onInput"

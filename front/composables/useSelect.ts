@@ -1,7 +1,7 @@
 // useSelect.ts
 export function useSelect(props: ISelectProps) {
   const basicClasses = [
-    'border rounded-lg pl-3 py-1 text-sm cursor-pointer focus:outline-none focus:ring-2 appearance-none',
+    'border rounded-lg pl-3 py-1 text-sm focus:outline-none focus:ring-2 appearance-none',
   ]
 
   const themeClasses: Record<TInputTheme, string[]> = {
@@ -19,10 +19,7 @@ export function useSelect(props: ISelectProps) {
   )
 
   const hasTrailingIcon = computed(() => Boolean(props.icon))
-  // const hasClear = computed(() => {
-  //   const v = props.modelValue
-  //   return props.clearable && v !== undefined && v !== null && v !== ''
-  // })
+
   const hasClear = computed(() => {
     const v = props.modelValue
     if (!props.clearable) return false

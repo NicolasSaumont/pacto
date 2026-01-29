@@ -99,7 +99,7 @@ onBeforeUnmount(() => {
       :placeholder
       readonly
       :theme
-      class="cursor-pointer"
+      :class="{'cursor-pointer' : !disabled}"
       @click="toggleCalendar"
     />
 

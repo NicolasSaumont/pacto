@@ -1,4 +1,8 @@
 <script setup lang='ts'>
+const props = defineProps<{
+  mode: ModeEnum
+}>()
+
 const { t } = useI18n()
 const { notify } = useNotify()
 
@@ -11,7 +15,6 @@ const { setCustomer } = customerStore
 const { customer, customers } = storeToRefs(customerStore)
 
 const { getAvailableProducts, loadProducts } = useProducts()
-const productsStore = useProductsStore()
 
 const handleAddProductClick = () => {
   notify({
@@ -38,6 +41,7 @@ onMounted(() => {
   <form class="flex flex-col gap-6 flex-1 bg-gray-900 p-6 rounded-2xl border border-gray-600">
     <Select 
       v-model="selectedCustomerId"
+      :disabled="mode === ModeEnum.EDITION"
       :label="t('common.customers', 1)"
       label-key="name"
       :options="customers"
@@ -45,6 +49,7 @@ onMounted(() => {
     />
     <DatePicker 
       v-model="order.orderDate"
+      :disabled="mode === ModeEnum.EDITION"
       :label="t('order.date')"
       :min="order.orderDate"
     />

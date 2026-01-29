@@ -5,7 +5,6 @@ const props = withDefaults(defineProps<ISelectProps<any, any>>(), {
   clearable: true,
   theme: 'dark',
   multiple: false,
-  maxChipsToShow: 2,
 })
 
 const emit = defineEmits<{
@@ -25,8 +24,7 @@ const {
   clearRightClass,
 } = useSelect(props)
 
-type OptionT = any
-type ValueT = any
+const MAX_CHIPS_TO_SHOW = 2
 
 const rootRef = ref<HTMLElement | null>(null)
 const triggerRef = ref<HTMLButtonElement | null>(null)
@@ -35,23 +33,23 @@ const isDropdownOpen = ref(false)
 const activeIndex = ref<number>(-1)
 
 // --- extractors (label/value/disabled) ---
-const getLabel = (opt: OptionT): string => {
-  if (props.getOptionLabel) return props.getOptionLabel(opt)
-  if (props.labelKey) return String(opt?.[props.labelKey] ?? '')
-  if (opt?.label !== undefined) return String(opt.label)
-  return String(opt ?? '')
+const getLabel = (option: OptionT): string => {
+  if (props.getOptionLabel) return props.getOptionLabel(option)
+  if (props.labelKey) return String(option?.[props.labelKey] ?? '')
+  if (option?.label !== undefined) return String(option.label)
+  return String(option ?? '')
 }
 
-const getValue = (opt: OptionT): ValueT => {
-  if (props.getOptionValue) return props.getOptionValue(opt)
-  if (props.valueKey) return opt?.[props.valueKey]
-  if (opt?.value !== undefined) return opt.value
-  return opt
+const getValue = (option: OptionT): ValueT => {
+  if (props.getOptionValue) return props.getOptionValue(option)
+  if (props.valueKey) return option?.[props.valueKey]
+  if (option?.value !== undefined) return option.value
+  return option
 }
 
-const isOptDisabled = (opt: OptionT): boolean => {
-  if (props.getOptionDisabled) return props.getOptionDisabled(opt)
-  return Boolean(opt?.disabled)
+const isOptDisabled = (option: OptionT): boolean => {
+  if (props.getOptionDisabled) return props.getOptionDisabled(option)
+  return Boolean(option?.disabled)
 }
 
 // --- selection ---
@@ -62,13 +60,13 @@ const selectedValues = computed<ValueT[]>(() => {
     : [props.modelValue as ValueT]
 })
 
-const isSelectedOpt = (opt: OptionT) => {
-  const v = getValue(opt)
-  return selectedValues.value.some((sv) => sv === v)
+const isSelectedOpt = (option: OptionT) => {
+  const value = getValue(option)
+  return selectedValues.value.some((selectedValue) => selectedValue === value)
 }
 
 const selectedOptions = computed<OptionT[]>(() =>
-  props.options.filter((opt) => isSelectedOpt(opt)),
+  props.options.filter((option) => isSelectedOpt(option)),
 )
 
 const hasValue = computed(() => {
@@ -80,7 +78,7 @@ const hasValue = computed(() => {
 const selectedOption = computed(() => {
   // utile pour le placeholder en single
   if (props.multiple) return null
-  return props.options.find((opt) => getValue(opt) === props.modelValue) ?? null
+  return props.options.find((option) => getValue(option) === props.modelValue) ?? null
 })
 
 const displayLabel = computed(() => {
@@ -93,7 +91,7 @@ const displayLabel = computed(() => {
 // chips
 const visibleChips = computed(() => {
   if (!props.multiple) return []
-  return selectedOptions.value.slice(0, props.maxChipsToShow ?? 2)
+  return selectedOptions.value.slice(0, MAX_CHIPS_TO_SHOW)
 })
 
 const extraChipsCount = computed(() => {
@@ -104,8 +102,8 @@ const extraChipsCount = computed(() => {
 const removeValue = (value: ValueT) => {
   if (!props.multiple) return
   const current = selectedValues.value.slice()
-  const idx = current.findIndex(v => v === value)
-  if (idx >= 0) current.splice(idx, 1)
+  const index = current.findIndex(selectedValue => selectedValue === value)
+  if (index >= 0) current.splice(index, 1)
   emit('update:modelValue', current)
 }
 
@@ -113,6 +111,12 @@ const removeValue = (value: ValueT) => {
 const closeDropdown = () => {
   isDropdownOpen.value = false
   activeIndex.value = -1
+}
+
+const onClick = (event: MouseEvent) => {
+  if (!rootRef.value) return
+  const target = event.target as Node
+  if (!rootRef.value.contains(target)) closeDropdown()
 }
 
 const openDropdown = () => {
@@ -136,22 +140,22 @@ const toggleDropdown = () => {
 }
 
 // --- select option ---
-const selectOption = (opt: OptionT) => {
-  if (isOptDisabled(opt)) return
+const selectOption = (option: OptionT) => {
+  if (isOptDisabled(option)) return
 
-  const v = getValue(opt)
+  const value = getValue(option)
 
   if (!props.multiple) {
-    emit('update:modelValue', v)
+    emit('update:modelValue', value)
     closeDropdown()
     return
   }
 
   const current = selectedValues.value.slice()
-  const idx = current.findIndex(x => x === v)
+  const index = current.findIndex(selectedValue => selectedValue === value)
 
-  if (idx >= 0) current.splice(idx, 1)
-  else current.push(v)
+  if (index >= 0) current.splice(index, 1)
+  else current.push(value)
 
   emit('update:modelValue', current)
 }
@@ -161,16 +165,9 @@ const reset = () => {
   closeDropdown()
 }
 
-// click outside
-onMounted(() => {
-  const onDocClick = (e: MouseEvent) => {
-    if (!rootRef.value) return
-    const target = e.target as Node
-    if (!rootRef.value.contains(target)) closeDropdown()
-  }
-  document.addEventListener('mousedown', onDocClick)
-  onUnmounted(() => document.removeEventListener('mousedown', onDocClick))
-})
+onMounted(() => document.addEventListener('mousedown', onClick))
+
+onUnmounted(() => document.removeEventListener('mousedown', onClick))
 </script>
 
 <template>
@@ -190,7 +187,7 @@ onMounted(() => {
           selectClasses,
           rightPaddingClass,
           'flex items-center justify-between min-w-0',
-          (disabled || loading) && 'cursor-not-allowed opacity-80',
+          (disabled || loading) ? 'cursor-not-allowed opacity-50' : 'cursor-pointer',
         ]"
         @click="toggleDropdown"
         aria-haspopup="listbox"
@@ -213,7 +210,8 @@ onMounted(() => {
 
                 <FontAwesomeIcon
                   icon="xmark"
-                  class="text-[10px] opacity-80 hover:opacity-100 cursor-pointer"
+                  class="text-[10px] hover:opacity-100"
+                  :class="(disabled || loading) ? 'cursor-not-allowed opacity-50' : 'cursor-pointer opacity-80'"
                   @mousedown.prevent
                   @click.stop="removeValue(getValue(opt))"
                 />
@@ -250,8 +248,12 @@ onMounted(() => {
       <FontAwesomeIcon
         v-if="hasValue && clearable && !disabled && !loading"
         icon="circle-xmark"
-        class="absolute top-1/2 -translate-y-1/2 cursor-pointer"
-        :class="[iconColorClass, clearRightClass]"
+        class="absolute top-1/2 -translate-y-1/2"
+        :class="[
+          iconColorClass, 
+          clearRightClass,
+          (disabled || loading) ? 'cursor-not-allowed opacity-50' : 'cursor-pointer',
+        ]"
         @click.stop="reset"
       />
 
@@ -279,10 +281,10 @@ onMounted(() => {
       <!-- Chevron -->
       <FontAwesomeIcon
         icon="chevron-down"
-        class="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer transition-transform duration-200"
+        class="absolute right-3 top-1/2 -translate-y-1/2 transition-transform duration-200"
         :class="[
           iconColorClass,
-          (disabled || loading) && 'opacity-50',
+          (disabled || loading) ? 'cursor-not-allowed opacity-50' : 'cursor-pointer',
           isDropdownOpen && 'rotate-180',
         ]"
         @mousedown.prevent
