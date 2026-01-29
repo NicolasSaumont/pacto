@@ -352,16 +352,10 @@ onUnmounted(() => document.removeEventListener('mousedown', onClick))
             @mousedown.stop
             @click.stop
           >
-            <input
+            <Input 
               ref="filterInputRef"
               v-model="filterQuery"
-              type="text"
-              class="w-full h-8 rounded-md px-2 text-sm border focus:outline-none focus:ring-2"
-              :class="theme === 'dark'
-                ? 'bg-gray-900 border-gray-600 text-white focus:ring-blue-500 placeholder:text-gray-500'
-                : 'bg-white border-gray-300 text-gray-900 focus:ring-blue-500 placeholder:text-gray-400'"
               :placeholder="t('common.search')"
-              @keydown.stop
             />
           </li>
 
