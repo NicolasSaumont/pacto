@@ -49,7 +49,7 @@ const getValue = (option: OptionT): ValueT => {
   return option
 }
 
-const isOptDisabled = (option: OptionT): boolean => {
+const isOptionDisabled = (option: OptionT): boolean => {
   if (props.getOptionDisabled) return props.getOptionDisabled(option)
   return Boolean(option?.disabled)
 }
@@ -133,16 +133,16 @@ const openDropdown = () => {
     nextTick(() => filterInputRef.value?.focus())
   }
 
-  const opts = filteredOptions.value
+  const options = filteredOptions.value
 
   if (!props.multiple) {
-    const selectedIdx = opts.findIndex(o => getValue(o) === props.modelValue)
-    if (selectedIdx >= 0 && !isOptDisabled(opts[selectedIdx])) {
+    const selectedIdx = options.findIndex(option => getValue(option) === props.modelValue)
+    if (selectedIdx >= 0 && !isOptionDisabled(options[selectedIdx])) {
       activeIndex.value = selectedIdx
       return
     }
   }
-  activeIndex.value = opts.findIndex(o => !isOptDisabled(o))
+  activeIndex.value = options.findIndex(option => !isOptionDisabled(option))
 }
 
 const toggleDropdown = () => {
@@ -152,7 +152,7 @@ const toggleDropdown = () => {
 
 // --- select option ---
 const selectOption = (option: OptionT) => {
-  if (isOptDisabled(option)) return
+  if (isOptionDisabled(option)) return
 
   const value = getValue(option)
 
@@ -181,25 +181,28 @@ const normalizedQuery = computed(() => filterQuery.value.trim().toLowerCase())
 
 const filteredOptions = computed(() => {
   if (!props.filter) return props.options
-  const q = normalizedQuery.value
-  if (!q) return props.options
+  const query = normalizedQuery.value
+  if (!query) return props.options
 
   // si l’utilisateur fournit sa logique de filtre
   if (props.filterFn) {
-    return props.options.filter(opt => props.filterFn!(opt, filterQuery.value))
+    return props.options.filter(option => props.filterFn!(option, filterQuery.value))
   }
 
   // filtre par défaut: sur le label
-  return props.options.filter((opt) => {
-    const label = getLabel(opt).toLowerCase()
-    return label.includes(q)
+  return props.options.filter((option) => {
+    const label = getLabel(option).toLowerCase()
+    return label.includes(query)
   })
 })
 
+// Quand la liste filtrée change, l’option actuellement active
+// peut ne plus exister : on recalcule donc l’index actif
+// en pointant vers la première option sélectionnable 
 watch([() => props.filter, normalizedQuery], () => {
   if (!isDropdownOpen.value) return
-  const idx = filteredOptions.value.findIndex(o => !isOptDisabled(o))
-  activeIndex.value = idx
+  const index = filteredOptions.value.findIndex(option => !isOptionDisabled(option))
+  activeIndex.value = index
 })
 
 onMounted(() => document.addEventListener('mousedown', onClick))
@@ -235,22 +238,22 @@ onUnmounted(() => document.removeEventListener('mousedown', onClick))
           <template v-if="multiple">
             <template v-if="selectedOptions.length">
               <span
-                v-for="opt in visibleChips"
-                :key="String(getValue(opt))"
-                :title="getLabel(opt)"
+                v-for="option in visibleChips"
+                :key="String(getValue(option))"
+                :title="getLabel(option)"
                 class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs max-w-20"
                 :class="theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-gray-100 text-gray-900'"
                 @mousedown.prevent
                 @click.stop
               >
-                <span class="truncate max-w-[8rem]">{{ getLabel(opt) }}</span>
+                <span class="truncate max-w-[8rem]">{{ getLabel(option) }}</span>
 
                 <FontAwesomeIcon
                   icon="xmark"
                   class="text-[10px] hover:opacity-100"
                   :class="(disabled || loading) ? 'cursor-not-allowed opacity-50' : 'cursor-pointer opacity-80'"
                   @mousedown.prevent
-                  @click.stop="removeValue(getValue(opt))"
+                  @click.stop="removeValue(getValue(option))"
                 />
               </span>
 
@@ -366,11 +369,11 @@ onUnmounted(() => document.removeEventListener('mousedown', onClick))
             :aria-selected="isSelectedOpt(option)"
             class="px-3 py-2 text-sm cursor-pointer select-none"
             :class="[
-              isOptDisabled(option) && 'opacity-50 cursor-not-allowed',
-              index === activeIndex && !isOptDisabled(option) && (theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100'),
+              isOptionDisabled(option) && 'opacity-50 cursor-not-allowed',
+              index === activeIndex && !isOptionDisabled(option) && (theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100'),
               theme === 'dark' ? 'text-white' : 'text-gray-900',
             ]"
-            @mouseenter="!isOptDisabled(option) && (activeIndex = index)"
+            @mouseenter="!isOptionDisabled(option) && (activeIndex = index)"
             @mousedown.prevent
             @click="selectOption(option)"
           >
