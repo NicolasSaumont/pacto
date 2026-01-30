@@ -21,8 +21,11 @@ export function useOrders() {
   const ordersColumns: IColumn<IOrder>[] = [
     {
       header: t('common.customers', 1),
+      searchable: true,
+      searchValue: (row) => row.customer?.name,
       slot: 'customers',
       sortable: true,
+      sortValue: (row) => row.customer?.name,
       title: (row) => row.customer.name
     },
     {

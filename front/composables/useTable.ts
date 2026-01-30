@@ -23,14 +23,30 @@ export function useTable<T extends { id: string | number }>(props: ITableProps<T
     const query = debouncedSearch.value.toLowerCase()
 
     return props.data.filter((row) =>
-      dataColumns.value.some((column) => {
+      props.columns.some((column) => {
         if (column.searchable === false) return false
-        const value = row[column.key]
+
+        let value: unknown
+
+        if (isDataColumn(column)) {
+          value = row[column.key]
+        } else {
+          // ✅ slot column searchable via searchValue
+          value = column.searchValue ? column.searchValue(row) : undefined
+        }
+
         if (value == null) return false
+
+        // Si c’est un Dayjs, on cherche sur la valeur affichée
+        if (dayjs.isDayjs(value)) {
+          return value.format(DATE_FORMAT).toLowerCase().includes(query)
+        }
+
         return String(value).toLowerCase().includes(query)
       })
     )
   })
+
 
   const sortedData = computed(() => {
     const data = [...filteredData.value]

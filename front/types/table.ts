@@ -22,25 +22,30 @@ export enum sortOrderEnum {
   DESC = 'descending'
 }
 
-export interface IDataColumn<T> {
+type TColumnValue = string | number | null | undefined
+
+interface IColumnBase<T> {
   customClasses?: string
   header: string
-  isClickable? : boolean
-  key: keyof T
+  isClickable?: boolean
   searchable?: boolean
   size?: TColumnSize
-  sortable?: boolean
-  sortByDefault?: sortOrderEnum | null
   title?: TColumnTitle<T>
 }
 
-export interface ISlotColumn<T> {
-  customClasses?: string
-  header: string
-  isClickable? : boolean
-  slot: string            // ex: "actions"
-  size?: TColumnSize
-  title?: TColumnTitle<T>
+export interface IDataColumn<T> extends IColumnBase<T> {
+  key: keyof T
+  sortable?: boolean
+  sortByDefault?: sortOrderEnum | null
+}
+
+export interface ISlotColumn<T> extends IColumnBase<T> {
+  key?: never
+  searchValue?: (row: T) => TColumnValue
+  slot: string          // ex: "actions"
+  sortable?: boolean
+  sortByDefault?: sortOrderEnum | null
+  sortValue?: (row: T) => TColumnValue
 }
 
 export type IColumn<T> = IDataColumn<T> | ISlotColumn<T>
