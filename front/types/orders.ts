@@ -1,6 +1,6 @@
 import type { Dayjs } from "dayjs"
 
-export interface IOrderProduct {
+export interface IItem {
   id: number
   product: IProduct
   quantity: number
@@ -12,5 +12,5 @@ export interface IOrder {
   orderDate: Dayjs
   deliveryDate?: Dayjs
   customer: ICustomerOnly
-  products: IOrderProduct[]
+  items: IItem[]
 }

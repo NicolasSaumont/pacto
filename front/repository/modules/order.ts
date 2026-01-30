@@ -10,10 +10,15 @@ export const orderRepository = {
   // },
 
   async getOrder(id: string): Promise<IOrder> {
-    // return fetcher<IOrder>(`/orders/${id}`, {
-    //   method: 'GET',
-    // })
-    return MOCKED_ORDER
+    const order = await fetcher<IOrder>(`/orders/${id}`, {
+      method: 'GET',
+    })
+
+    return {
+      ...order,
+      orderDate: dayjs(order.orderDate),
+      deliveryDate: order.deliveryDate ? dayjs(order.deliveryDate) : undefined,
+    }
   },
 
   async getOrders(searchDates: IRangeDates): Promise<IOrder[]> {

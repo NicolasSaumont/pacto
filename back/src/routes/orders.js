@@ -89,7 +89,7 @@ router.get('/', async (req, res) => {
         ? { id: order.customer.id, name: order.customer.name }
         : null,
 
-      products: (order.items ?? []).map((item) => ({
+      items: (order.items ?? []).map((item) => ({
         id: item.id,
         quantity: item.quantity,
         product: item.product
@@ -106,36 +106,45 @@ router.get('/', async (req, res) => {
   }
 })
 
-// // GET /customers/:id => renvoie un client selon l'id passé en paramètre
-// router.get('/:id', async (req, res) => {
-//   try {
-//     const { id } = req.params
-//     const customer = await Customer.findByPk(id, {
-//       attributes: ['id', 'name'],
-//       include: [
-//         {
-//           model: Product,
-//           as: 'products', // renomme la relation
-//           attributes: ['id', 'name'],
-//           through: { attributes: [] }, // ignore les colonnes de la table de liaison
-//         },
-//       ],
-//     })
+// GET /orders/:id => renvoie une commande selon l'id passé en paramètre
+router.get('/:id', async (req, res) => {
+  try {
+    const { id } = req.params
 
-//     if (!customer) {
-//       return res.status(404).json({ code: 'api.code.not-found.customer' })
-//     }
+    const order = await Order.findByPk(id, {
+      attributes: ['id', 'comment', 'orderDate', 'deliveryDate'],
+      include: [
+        {
+          model: Customer,
+          as: 'customer',
+          attributes: ['id', 'name'],
+        },
+        // On passe par "items" pour avoir l'id de la ligne + quantity + product
+        {
+          model: OrderProduct,
+          as: 'items',
+          attributes: ['id', 'quantity'],
+          include: [
+            {
+              model: Product,
+              as: 'product',
+              attributes: ['id', 'name'],
+            },
+          ],
+        },
+      ],
+    })
 
-//     res.json({
-//       id: customer.id,
-//       name: customer.name,
-//       products: customer.products,
-//     })
-//   } catch (err) {
-//     console.error(err)
-//     res.status(500).json({ code: 'api.code.get-error-message.customer' })
-//   }
-// })
+    if (!order) {
+      return res.status(404).json({ code: 'api.code.not-found.order' })
+    }
+
+    res.json(order)
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ code: 'api.code.get-error-message.order' })
+  }
+})
 
 // // PATCH /customers/:id => modifie un client existant selon l'id passé en paramètre
 // router.patch('/:id', async (req, res) => {

@@ -71,8 +71,6 @@ const handleSearchClick = () => {
   loadOrders(searchDates.value)
 }
 
-watchEffect(() => console.log(searchDates.value))
-
 onMounted(() => loadOrders(searchDates.value))
 </script>
 
@@ -111,8 +109,8 @@ onMounted(() => loadOrders(searchDates.value))
         <span>{{ row.customer.name }}</span>
       </template>
 
-      <template #products="{ row }">
-        <span>{{ row.products.length }}</span>
+      <template #items="{ row }">
+        <span>{{ row.items.length }}</span>
       </template>
 
       <template #actions="{ row }">

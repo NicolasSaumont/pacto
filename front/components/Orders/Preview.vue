@@ -14,10 +14,10 @@ const {
   <div class="flex-1">
     <Table 
       :columns="orderProductsColumns"
-      :data="order.products"
+      :data="order.items"
       :is-clickable="false"
     >
-      <template #products="{ row }">
+      <template #items="{ row }">
         <span>{{ row.product.name }}</span>
       </template>
 

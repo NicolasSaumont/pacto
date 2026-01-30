@@ -40,10 +40,10 @@ export function useOrders() {
     },
     {
       header: t('common.products', 2),
-      slot: 'products',
+      slot: 'items',
       title: (row) =>
-        row.products
-          .map(orderProduct => `${orderProduct.product.name} × ${orderProduct.quantity}`)
+        row.items
+          .map(item => `${item.product.name} × ${item.quantity}`)
           .join('\n')
     },
     {
@@ -58,10 +58,10 @@ export function useOrders() {
     }
   ]
 
-  const orderProductsColumns: IColumn<IOrderProduct>[] = [
+  const orderProductsColumns: IColumn<IItem>[] = [
     {
       header: t('common.products', 1),
-      slot: 'products',
+      slot: 'items',
       sortable: true,
       sortByDefault: sortOrderEnum.ASC,
       title: (row) => row.product.name
