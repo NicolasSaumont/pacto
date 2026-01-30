@@ -71,6 +71,8 @@ const handleSearchClick = () => {
   loadOrders(searchDates.value)
 }
 
+watchEffect(() => console.log(searchDates.value))
+
 onMounted(() => loadOrders(searchDates.value))
 </script>
 

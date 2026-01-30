@@ -7,7 +7,7 @@ export const useOrdersStore = defineStore('orders', () => {
   const order = ref<IOrder>(structuredClone(DEFAULT_ORDER))
   const orders = ref<IOrder[]>([])
   const originalOrder = ref<IOrder>(structuredClone(DEFAULT_ORDER))
-  const searchDates = reactive<IRangeDates>({
+  const searchDates = ref<IRangeDates>({
     start: dayjs(DEFAULT_SEARCH_DATES.start),
     end: dayjs(DEFAULT_SEARCH_DATES.end),
   })
