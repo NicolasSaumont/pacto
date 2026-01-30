@@ -9,6 +9,7 @@ const props = withDefaults(
     loading?: boolean
   }>(),
   { 
+    data: () => [],
     filter: false, 
     isClickable: true, 
     loading: false 

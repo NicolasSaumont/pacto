@@ -7,7 +7,7 @@ const { t } = useI18n()
 const { notify } = useNotify()
 
 const orderStore = useOrdersStore()
-const { order } = storeToRefs(orderStore)
+const { isOrderGettingFetch, order } = storeToRefs(orderStore)
 
 const { loadCustomers } = useCustomers()
 const customerStore = useCustomersStore()
@@ -44,6 +44,7 @@ onMounted(() => {
       :disabled="mode === ModeEnum.EDITION"
       :label="t('common.customers', 1)"
       label-key="name"
+      :loading="isOrderGettingFetch"
       :options="customers"
       valueKey="id"
     />
@@ -51,11 +52,13 @@ onMounted(() => {
       v-model="order.orderDate"
       :disabled="mode === ModeEnum.EDITION"
       :label="t('order.date')"
+      :loading="isOrderGettingFetch"
       :min="order.orderDate"
     />
     <DatePicker 
       v-model="order.deliveryDate"
       :label="t('order.delivery-date')"
+      :loading="isOrderGettingFetch"
       :min="order.orderDate"
     />
     <div class="flex gap-4 items-end">
@@ -64,12 +67,14 @@ onMounted(() => {
         filter
         :label="t('common.products', 2)"
         label-key="name"
+        :loading="isOrderGettingFetch"
         multiple
         :options="getAvailableProducts(customer)"
         valueKey="id"
       />
       <Button
         icon="plus"
+        :disabled="isOrderGettingFetch"
         @click="handleAddProductClick"
       />
     </div>
@@ -77,6 +82,7 @@ onMounted(() => {
       <TextArea 
         v-model="order.comment"
         :label="t('common.comments', 2)" 
+        :loading="isOrderGettingFetch"
         class="h-full" 
       />
     </div>

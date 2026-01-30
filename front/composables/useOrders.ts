@@ -94,7 +94,7 @@ export function useOrders() {
     } catch {
       await navigateTo(ORDERS_URL)
     } finally {
-      isOrderGettingFetch.value = false
+      // isOrderGettingFetch.value = false
     }
   }
 

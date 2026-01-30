@@ -6,6 +6,7 @@ const {
 const orderStore = useOrdersStore()
 
 const {
+  isOrderGettingFetch,
   order,
 } = storeToRefs(orderStore)
 </script>
@@ -16,6 +17,7 @@ const {
       :columns="orderProductsColumns"
       :data="order.items"
       :is-clickable="false"
+      :loading="isOrderGettingFetch"
     >
       <template #items="{ row }">
         <span>{{ row.product.name }}</span>
