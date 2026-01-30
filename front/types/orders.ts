@@ -9,8 +9,8 @@ export interface IOrderProduct {
 export interface IOrder {
   id: number
   comment?: string
-  customerName: string
-  deliveryDate?: Dayjs
   orderDate: Dayjs
+  deliveryDate?: Dayjs
+  customer: ICustomerOnly
   products: IOrderProduct[]
 }

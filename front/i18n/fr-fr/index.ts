@@ -7,6 +7,8 @@ export default {
   'api.code.get-error-message.product': 'Erreur lors de la récupération du produit',
   'api.code.invalid-field.name': 'Champ "nom" invalide',
   'api.code.invalid-field.product-ids': 'Champ "produits" invalide',
+  'api.code.invalid-field.start-date': 'Champ "date de début" invalide',
+  'api.code.invalid-field.end-date': 'Champ "date de fin" invalide',
   'api.code.missing-required-field': 'Champ requis manquant',
   'api.code.not-found.customer': 'Client non trouvé',
   'api.code.not-found.product': 'Produit non trouvé',
@@ -71,6 +73,7 @@ export default {
   'order.new': 'Créer une nouvelle commande',
 
   'orders.add-order': '+ Nouvelle commande',
+  'orders.api.code.get-error-message': 'Erreur lors de la récupération des commandes',
   'orders.api.get.error-message': 'Les commandes n\'ont pas pu être chargées',
 
   'product.add': 'Créer un nouveau produit',

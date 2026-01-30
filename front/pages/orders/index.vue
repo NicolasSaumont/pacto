@@ -97,6 +97,10 @@ onMounted(() => loadOrders(searchDates.value))
       :loading="isOrderGettingFetch"
       @row-click="handleRowClick"
     >
+      <template #customers="{ row }">
+        <span>{{ row.customer.name }}</span>
+      </template>
+
       <template #products="{ row }">
         <span>{{ row.products.length }}</span>
       </template>

@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import { defineStore } from 'pinia'
 
 export const useOrdersStore = defineStore('orders', () => {
@@ -6,7 +7,10 @@ export const useOrdersStore = defineStore('orders', () => {
   const order = ref<IOrder>(structuredClone(DEFAULT_ORDER))
   const orders = ref<IOrder[]>([])
   const originalOrder = ref<IOrder>(structuredClone(DEFAULT_ORDER))
-  const searchDates = reactive<IRangeDates>(structuredClone(DEFAULT_SEARCH_DATES))
+  const searchDates = reactive<IRangeDates>({
+    start: dayjs(DEFAULT_SEARCH_DATES.start),
+    end: dayjs(DEFAULT_SEARCH_DATES.end),
+  })
 
   // const isConfirmButtonDisabled = computed(() => !customer.value.name)
   

@@ -1,18 +1,18 @@
 const { DataTypes } = require('sequelize')
 const { sequelize } = require('../config/db')
 
-const CustomerProduct = sequelize.define('CustomerProduct', {
+const OrderProduct = sequelize.define('OrderProduct', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true,
   },
 
-  customerId: {
+  order_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'customers',
+      model: 'orders',
       key: 'id',
     },
     onDelete: 'CASCADE',
@@ -21,6 +21,7 @@ const CustomerProduct = sequelize.define('CustomerProduct', {
   product_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
+    primaryKey: true,
     references: {
       model: 'products',
       key: 'id',
@@ -28,12 +29,15 @@ const CustomerProduct = sequelize.define('CustomerProduct', {
     onDelete: 'CASCADE',
   },
 
+  quantity: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 1,
+    validate: { min: 1 },
+  },
 }, {
-  tableName: 'customer_products',
-  timestamps: true,
-  indexes: [
-    { unique: true, fields: ['customerId', 'product_id'] },
-  ],
+  tableName: 'order_product',
+  timestamps: true,             
 })
 
-module.exports = CustomerProduct
+module.exports = OrderProduct

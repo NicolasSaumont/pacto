@@ -1,3 +1,5 @@
+import dayjs from "dayjs"
+
 const { fetcher } = apiFactory()
 
 export const orderRepository = {
@@ -15,14 +17,19 @@ export const orderRepository = {
   },
 
   async getOrders(searchDates: IRangeDates): Promise<IOrder[]> {
-    // return fetcher<IOrder[]>('/orders', {
-    //   method: 'GET',
-    //   params: {
-    //     startDate: searchDates.start, 
-    //     endDate: searchDates.end 
-    //   }
-    // })
-    return MOCKED_ORDERS
+    const orders = await fetcher<IOrder[]>('/orders', {
+      method: 'GET',
+      params: {
+        startDate: dayjs(searchDates.start).format(DATE_API_FORMAT), 
+        endDate: dayjs(searchDates.end).format(DATE_API_FORMAT) 
+      }
+    })
+
+    return orders.map(order => ({
+      ...order,
+      orderDate: dayjs(order.orderDate),
+      deliveryDate: order.deliveryDate ? dayjs(order.deliveryDate) : undefined,
+    }))
   },
 
   // async patchCustomer(id: number, body: Record<string, unknown>): Promise<void> {

@@ -21,9 +21,9 @@ export function useOrders() {
   const ordersColumns: IColumn<IOrder>[] = [
     {
       header: t('common.customers', 1),
-      key: 'customerName',
+      slot: 'customers',
       sortable: true,
-      title: (row) => row.customerName
+      title: (row) => row.customer.name
     },
     {
       header: t('common.dates', 1),

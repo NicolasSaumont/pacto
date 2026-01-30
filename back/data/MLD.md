@@ -1,4 +1,4 @@
-CLIENT(id, nom)
-PRODUIT(id, nom)
-COMMANDE(id, date_commande, date_livraison, commentaire, client_id)
-COMMANDE_PRODUIT(commande_id, produit_id, quantité)
+CUSTOMER(id, name)
+PRODUCT(id, name)
+ORDER(id, orderDate, deliveryDate, comment, customerId)
+ORDER_PRODUCT(order_id, product_id, quantity)
