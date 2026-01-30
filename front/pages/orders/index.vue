@@ -67,6 +67,10 @@ const handleRowClick = (row: IOrder) => {
   navigateTo(`/orders/${row.id}`)
 }
 
+const handleSearchClick = () => {
+  loadOrders(searchDates.value)
+}
+
 onMounted(() => loadOrders(searchDates.value))
 </script>
 
@@ -81,12 +85,16 @@ onMounted(() => loadOrders(searchDates.value))
       </template>
     </Header>
 
-    <div class="flex gap-6 items-end">
+    <div class="flex gap-4 items-end">
       <DatePicker
         v-model="searchDates"
         :label="t('common.dates', 2)"
         range
         theme="light"
+      />
+      <Button 
+        icon="magnifying-glass"
+        @click="handleSearchClick"
       />
     </div>
 

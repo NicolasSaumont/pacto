@@ -85,6 +85,17 @@ const handleRowClick = (row: T) => {
         </thead>
 
         <tbody>
+          <!-- Empty state -->
+          <tr v-if="!loading && displayRows.length === 0">
+            <td
+              :colspan="columns.length"
+              class="py-6 px-3 text-center text-gray-400 italic"
+            >
+              {{ t('common.no-data') }}
+            </td>
+          </tr>
+
+          <!-- Rows -->
           <tr
             v-for="row in displayRows"
             :key="row.id"
