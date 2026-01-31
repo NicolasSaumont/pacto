@@ -4,7 +4,10 @@ const { t } = useI18n()
 const customersStore = useCustomersStore()
 const { customer } = storeToRefs(customersStore)
 
-const { getAvailableProducts } = useProducts()
+const { 
+  getAvailableProducts, 
+  sortProductsByName 
+} = useProducts()
 
 const assignProduct = (product: IProduct) => {
   if (!customer.value) return
@@ -14,6 +17,7 @@ const assignProduct = (product: IProduct) => {
   if (customer.value.products.some(customerProduct => customerProduct.id === product.id)) return
 
   customer.value.products.push(product)
+  sortProductsByName(customer.value.products)
 }
 </script>
 
