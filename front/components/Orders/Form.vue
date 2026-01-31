@@ -15,9 +15,17 @@ const { setCustomer } = customerStore
 const { customer, customers } = storeToRefs(customerStore)
 
 const { loadProducts } = useProducts()
+const productStore = useProductsStore()
+const { products } = storeToRefs(productStore)
+
 
 const selectedCustomerId = ref<number | null>(null)
 const selectedProducts = ref<number[]>([])
+
+const productsList = computed(() => {
+  if (props.mode === ModeEnum.EDITION) return customer.value.products
+  return products.value
+})
 
 const fillSelects = () => {
   selectedCustomerId.value = order.value.customer.id 
@@ -36,6 +44,8 @@ const handleAddProductClick = () => {
 
 const resetForm = () => {
   order.value = structuredClone(DEFAULT_ORDER)
+  selectedCustomerId.value = null
+  selectedProducts.value = []
 }
 
 // Surveille le changement de client sélectionné, pour mettre à jour la variable customer, et ainsi récupére la liste des produits disponibles
@@ -47,8 +57,6 @@ watch(selectedCustomerId, async (id) => {
 onMounted(async () => {
   await loadCustomers()
   await loadProducts()
-
-  console.log(order.value)
 
   if (props.mode === ModeEnum.EDITION) fillSelects()
 })
@@ -88,7 +96,7 @@ onUnmounted(resetForm)
         label-key="name"
         :loading="isOrderGettingFetch"
         multiple
-        :options="customer.products"
+        :options="productsList"
         valueKey="id"
       />
       <Button
