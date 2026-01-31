@@ -47,11 +47,15 @@ export const DEFAULT_SEARCH_DATES = {
   start: dayjs().subtract(2, 'weeks')
 }
 
-export const DEFAULT_ORDER = {
+export const DEFAULT_ORDER = 
+{
   id: 0,
   comment: undefined,
-  customerName: '',
+  customer: {
+    id: 0,
+    name: 'name',
+  },
   deliveryDate: undefined,
+  items: [],
   orderDate: dayjs(),
-  products: []
 }

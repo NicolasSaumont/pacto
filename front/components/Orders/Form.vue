@@ -16,14 +16,27 @@ const { customer, customers } = storeToRefs(customerStore)
 
 const { loadProducts } = useProducts()
 
+const selectedCustomerId = ref<number | null>(null)
+const selectedProducts = ref<number[]>([])
+
+const fillSelects = () => {
+  selectedCustomerId.value = order.value.customer.id 
+
+  selectedProducts.value = order.value.items.map(
+    item => item.product.id
+  )
+}
+ 
 const handleAddProductClick = () => {
   notify({
     state: 'info',
     content: t('common.unavailable-feature'),
   })
 }
-const selectedCustomerId = ref<number | null>(null)
-const selectedProducts = ref<number[]>([])
+
+const resetForm = () => {
+  order.value = structuredClone(DEFAULT_ORDER)
+}
 
 // Surveille le changement de client sélectionné, pour mettre à jour la variable customer, et ainsi récupére la liste des produits disponibles
 watch(selectedCustomerId, async (id) => {
@@ -34,14 +47,13 @@ watch(selectedCustomerId, async (id) => {
 onMounted(async () => {
   await loadCustomers()
   await loadProducts()
+
   console.log(order.value)
-  if (props.mode === ModeEnum.EDITION) { 
-    selectedCustomerId.value = order.value.customer.id 
-    selectedProducts.value = order.value.items.map(
-      item => item.product.id
-    )
-  }
+
+  if (props.mode === ModeEnum.EDITION) fillSelects()
 })
+
+onUnmounted(resetForm)
 </script>
 
 <template>
