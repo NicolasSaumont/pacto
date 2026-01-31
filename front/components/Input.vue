@@ -108,6 +108,7 @@ const onKeyDown = (e: KeyboardEvent) => {
         @input="onInput"
       />
 
+      <!-- CLEAR ICON -->
       <FontAwesomeIcon
         v-if="modelValue && clearable && !disabled && !loading"
         icon="circle-xmark"
@@ -118,7 +119,7 @@ const onKeyDown = (e: KeyboardEvent) => {
 
       <!-- LOADING -->
       <span
-        v-if="loading && !disabled"
+        v-if="loading"
         class="absolute top-1/2 -translate-y-1/2"
         :class="clearRightClass"
         aria-label="loading"
