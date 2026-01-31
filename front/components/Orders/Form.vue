@@ -6,24 +6,25 @@ const props = defineProps<{
 const { t } = useI18n()
 const { notify } = useNotify()
 
-const orderStore = useOrdersStore()
-const { isOrderGettingFetch, order } = storeToRefs(orderStore)
-
 const { loadCustomers } = useCustomers()
+const { loadProducts } = useProducts()
+
 const customerStore = useCustomersStore()
+const orderStore = useOrdersStore()
+const productStore = useProductsStore()
+
 const { setCustomer } = customerStore
 const { customer, customers } = storeToRefs(customerStore)
 
-const { loadProducts } = useProducts()
-const productStore = useProductsStore()
-const { products } = storeToRefs(productStore)
+const { isOrderGettingFetch, order } = storeToRefs(orderStore)
 
+const { products } = storeToRefs(productStore)
 
 const selectedCustomerId = ref<number | null>(null)
 const selectedProducts = ref<number[]>([])
 
 const productsList = computed(() => {
-  if (props.mode === ModeEnum.EDITION) return customer.value.products
+  if (customer.value.id) return customer.value.products
   return products.value
 })
 
@@ -43,6 +44,7 @@ const handleAddProductClick = () => {
 }
 
 const resetForm = () => {
+  customer.value = structuredClone(DEFAULT_CUSTOMER)
   order.value = structuredClone(DEFAULT_ORDER)
   selectedCustomerId.value = null
   selectedProducts.value = []
@@ -50,9 +52,18 @@ const resetForm = () => {
 
 // Surveille le changement de client sélectionné, pour mettre à jour la variable customer, et ainsi récupére la liste des produits disponibles
 watch(selectedCustomerId, async (id) => {
-  if (!id) return
+  if (!id) {
+    customer.value = structuredClone(DEFAULT_CUSTOMER)
+    return
+  }
   await setCustomer(id.toString())
 }, { immediate: true })
+
+// Surveille le changement de client sélectionné, pour vider la liste des produits sélectionnés
+watch(selectedCustomerId, (id) => {
+  if (props.mode === ModeEnum.EDITION) return
+  selectedProducts.value = []
+})
 
 onMounted(async () => {
   await loadCustomers()
