@@ -16,26 +16,22 @@ const productStore = useProductsStore()
 const { setCustomer } = customerStore
 const { customer, customers } = storeToRefs(customerStore)
 
-const { isOrderGettingFetch, order } = storeToRefs(orderStore)
+const { fillSelects } = orderStore
+
+const { 
+  isOrderGettingFetch, 
+  order,
+  selectedCustomerId,
+  selectedProducts, 
+} = storeToRefs(orderStore)
 
 const { products } = storeToRefs(productStore)
-
-const selectedCustomerId = ref<number | null>(null)
-const selectedProducts = ref<number[]>([])
 
 const productsList = computed(() => {
   if (customer.value.id) return customer.value.products
   return products.value
 })
 
-const fillSelects = () => {
-  selectedCustomerId.value = order.value.customer.id 
-
-  selectedProducts.value = order.value.items.map(
-    item => item.product.id
-  )
-}
- 
 const handleAddProductClick = () => {
   notify({
     state: 'info',

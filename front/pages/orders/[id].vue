@@ -19,6 +19,6 @@ onMounted(async () => {
       <OrdersForm :mode="ModeEnum.EDITION" />
       <OrdersPreview />
     </div>
-    <OrdersFooter />
+    <OrdersFooter :mode="ModeEnum.EDITION" />
   </div>
 </template>

@@ -11,6 +11,8 @@ export const useOrdersStore = defineStore('orders', () => {
     start: dayjs(DEFAULT_SEARCH_DATES.start),
     end: dayjs(DEFAULT_SEARCH_DATES.end),
   })
+  const selectedCustomerId = ref<number | null>(null)
+  const selectedProducts = ref<number[]>([])
 
   // const isConfirmButtonDisabled = computed(() => !customer.value.name)
   
@@ -50,6 +52,14 @@ export const useOrdersStore = defineStore('orders', () => {
   //   }
   // }
 
+  const fillSelects = () => {
+    selectedCustomerId.value = order.value.customer.id 
+
+    selectedProducts.value = order.value.items.map(
+      item => item.product.id
+    )
+  }
+
   // const postNewCustomer = async (customer: ICustomer) => {
   //   try {
   //     await customerRepository.postCustomer(customer)
@@ -78,12 +88,15 @@ export const useOrdersStore = defineStore('orders', () => {
     // isConfirmButtonDisabled,
     isOrderGettingFetch,
     // isCustomerSaving,
+    fillSelects,
     order,
     orders,
     originalOrder,
     // postNewCustomer,
     // resetForm,
     searchDates,
+    selectedCustomerId,
+    selectedProducts,
     setOrder,
     setOrders,
   }

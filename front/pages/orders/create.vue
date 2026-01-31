@@ -13,6 +13,6 @@ const { t } = useI18n()
       <OrdersForm :mode="ModeEnum.CREATION" />
       <OrdersPreview />
     </div>
-    <OrdersFooter />
+    <OrdersFooter :mode="ModeEnum.CREATION" />
   </div>
 </template>
