@@ -72,7 +72,11 @@ export default {
 
   'order.api.delete.error-message': 'La commande n\'a pas pu être supprimée',
   'order.api.delete.success-message': 'La commande a bien été supprimée',
+  'order.api.edit.error-message': 'La commande n\'a pas pu être modifiée',
+  'order.api.edit.success-message': 'La commande client a bien été modifiée',
   'order.api.get.error-message': 'La commande n\'a pas pu être chargée',
+  'order.api.post.error-message': 'La commande n\'a pas pu être créée',
+  'order.api.post.success-message': 'La commande a bien été créée',
   'order.date': 'Date de la commande',
   'order.delete': 'Supprimer une commande',
   'order.delete.confirmation': 'Voulez-vous vraiment supprimer cette commande ?',

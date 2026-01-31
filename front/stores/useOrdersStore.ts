@@ -19,33 +19,33 @@ export const useOrdersStore = defineStore('orders', () => {
 
   // const isConfirmButtonDisabled = computed(() => !customer.value.name)
   
-  // const editCustomer = async (customer: ICustomer) => {
-  //   try {
-  //     const body: Record<string, unknown> = {}
+  const editOrder = async (order: IOrder) => {
+    try {
+      const body: Record<string, unknown> = {}
 
-  //     // name
-  //     if (customer.name !== originalCustomer.value.name) {
-  //       body.name = customer.name
-  //     }
+      // name
+      if (order.name !== originalOrder.value.name) {
+        body.name = order.name
+      }
 
-  //     // products
-  //     const currentIds = (customer.products ?? []).map(p => p.id).sort()
-  //     const originalIds = (originalCustomer.value.products ?? []).map(p => p.id).sort()
+      // products
+      const currentIds = (order.products ?? []).map(p => p.id).sort()
+      const originalIds = (originalOrder.value.products ?? []).map(p => p.id).sort()
 
-  //     if (currentIds.join(',') !== originalIds.join(',')) {
-  //       body.productIds = currentIds
-  //     }
+      if (currentIds.join(',') !== originalIds.join(',')) {
+        body.productIds = currentIds
+      }
 
-  //     if (Object.keys(body).length === 0) return
+      if (Object.keys(body).length === 0) return
 
-  //     await customerRepository.patchCustomer(customer.id, body)
+      await orderRepository.patchOrder(order.id, body)
 
-  //     // resync snapshot
-  //     originalCustomer.value = structuredClone(toRaw(customer))
-  //   } catch (error) {
-  //     throw error
-  //   }
-  // }
+      // resync snapshot
+      originalOrder.value = structuredClone(toRaw(order))
+    } catch (error) {
+      throw error
+    }
+  }
 
   const deleteOrder = async (orderId: string) => {
     try {
@@ -63,13 +63,13 @@ export const useOrdersStore = defineStore('orders', () => {
     )
   }
 
-  // const postNewCustomer = async (customer: ICustomer) => {
-  //   try {
-  //     await customerRepository.postCustomer(customer)
-  //   } catch (error) {
-  //     throw error
-  //   }
-  // }
+  const postNewOrder = async (order: IOrder) => {
+    try {
+      await orderRepository.postOrder(order)
+    } catch (error) {
+      throw error
+    }
+  }
 
   // const resetForm = () => {
   //   customer.value = structuredClone(DEFAULT_CUSTOMER)
@@ -125,7 +125,7 @@ export const useOrdersStore = defineStore('orders', () => {
 
   return {
     deleteOrder,
-    // editCustomer,
+    editOrder,
     // isConfirmButtonDisabled,
     isOrderGettingFetch,
     // isCustomerSaving,
@@ -133,7 +133,7 @@ export const useOrdersStore = defineStore('orders', () => {
     order,
     orders,
     originalOrder,
-    // postNewCustomer,
+    postNewOrder,
     // resetForm,
     searchDates,
     selectedCustomerId,

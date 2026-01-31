@@ -113,31 +113,31 @@ export function useOrders() {
     isOrderGettingFetch.value = false
   }
 
-  // const sendCustomerToCreate = async (customer: ICustomer) => {
-  //   await withNotify(
-  //     async () => {
-  //       await postNewCustomer(customer)
-  //     },
-  //     {
-  //       successContent: t('customer.api.post.success-message'),
-  //       errorContent: t('customer.api.post.error-message'),
-  //       rethrow: true,
-  //     }
-  //   )
-  // }
+  const sendOrderToCreate = async (order: IOrder) => {
+    await withNotify(
+      async () => {
+        await postNewOrder(order)
+      },
+      {
+        successContent: t('order.api.post.success-message'),
+        errorContent: t('customer.api.post.error-message'),
+        rethrow: true,
+      }
+    )
+  }
 
-  // const sendCustomerToEdit = async (customer: ICustomer) => {
-  //   await withNotify(
-  //     async () => {
-  //       await editCustomer(customer)
-  //     },
-  //     {
-  //       successContent: t('customer.api.edit.success-message'),
-  //       errorContent: t('customer.api.edit.error-message'),
-  //       rethrow: true,
-  //     }
-  //   )
-  // }
+  const sendOrderToEdit = async (order: IOrder) => {
+    await withNotify(
+      async () => {
+        await editOrder(order)
+      },
+      {
+        successContent: t('order.api.edit.success-message'),
+        errorContent: t('order.api.edit.error-message'),
+        rethrow: true,
+      }
+    )
+  }
   
   return { 
     isDeleteOrderConfirmationModalVisible,
@@ -145,7 +145,7 @@ export function useOrders() {
     loadOrders,
     ordersColumns,
     orderProductsColumns,
-    // sendCustomerToCreate,
-    // sendCustomerToEdit,
+    sendOrderToCreate,
+    sendOrderToEdit,
   }
 }

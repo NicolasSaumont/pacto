@@ -6,11 +6,17 @@ const props = defineProps<{
 const { t } = useI18n()
 const { notify } = useNotify()
 
+const {
+  sendOrderToCreate,
+  sendOrderToEdit,
+} = useOrders()
+
 const orderStore = useOrdersStore()
 
 const { fillSelects } = orderStore
 
 const {
+  isOrderSaving,
   originalOrder,
   order,
   selectedCustomerId,
@@ -49,12 +55,23 @@ const handleResetClick = () => {
   }
 }
 
-const handleSaveClick = () => {
-  notify({
-    state: 'info',
-    title: t('common.save'),
-    content: t('common.unavailable-feature'),
-  })
+const handleSaveClick = async () => {
+  if (!order.value) return
+
+  isOrderSaving.value = true
+
+  try {
+    if (props.mode === ModeEnum.CREATION) await sendOrderToCreate(order.value)
+    else if (props.mode === ModeEnum.EDITION) await sendOrderToEdit(order.value)
+
+    await navigateTo(CUSTOMERS_URL)
+  } catch {
+    // IMPORTANT: on consomme l'erreur pour éviter le warning Vue
+    // la notif est déjà affichée dans withNotify
+    return
+  } finally {
+    isOrderSaving.value = false
+  }
 }
 </script>
 
