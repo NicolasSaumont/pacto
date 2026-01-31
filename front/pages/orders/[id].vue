@@ -3,7 +3,9 @@ const { t } = useI18n()
 
 const { loadOrder } = useOrders()
 
-onMounted(loadOrder)
+onMounted(async () => { 
+  await loadOrder()
+})
 </script>
 
 <template>

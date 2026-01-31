@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useDebounce } from '@vueuse/core'
 import type { ISelectProps } from '../types/select'
 
 const props = withDefaults(defineProps<ISelectProps<any, any>>(), {
@@ -178,10 +179,11 @@ const reset = () => {
 
 // --- filter ---
 const normalizedQuery = computed(() => filterQuery.value.trim().toLowerCase())
+const debouncedQuery = useDebounce(normalizedQuery, INPUT_DEBOUNCE)
 
 const filteredOptions = computed(() => {
   if (!props.filter) return props.options
-  const query = normalizedQuery.value
+  const query = debouncedQuery.value
   if (!query) return props.options
 
   // si l’utilisateur fournit sa logique de filtre
@@ -199,7 +201,7 @@ const filteredOptions = computed(() => {
 // Quand la liste filtrée change, l’option actuellement active
 // peut ne plus exister : on recalcule donc l’index actif
 // en pointant vers la première option sélectionnable 
-watch([() => props.filter, normalizedQuery], () => {
+watch([() => props.filter, debouncedQuery], () => {
   if (!isDropdownOpen.value) return
   const index = filteredOptions.value.findIndex(option => !isOptionDisabled(option))
   activeIndex.value = index

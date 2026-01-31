@@ -14,7 +14,7 @@ const customerStore = useCustomersStore()
 const { setCustomer } = customerStore
 const { customer, customers } = storeToRefs(customerStore)
 
-const { getAvailableProducts, loadProducts } = useProducts()
+const { loadProducts } = useProducts()
 
 const handleAddProductClick = () => {
   notify({
@@ -23,7 +23,7 @@ const handleAddProductClick = () => {
   })
 }
 const selectedCustomerId = ref<number | null>(null)
-const selectedProducts = ref([])
+const selectedProducts = ref<number[]>([])
 
 // Surveille le changement de client sélectionné, pour mettre à jour la variable customer, et ainsi récupére la liste des produits disponibles
 watch(selectedCustomerId, async (id) => {
@@ -31,9 +31,16 @@ watch(selectedCustomerId, async (id) => {
   await setCustomer(id.toString())
 }, { immediate: true })
 
-onMounted(() => {
-  loadCustomers()
-  loadProducts()
+onMounted(async () => {
+  await loadCustomers()
+  await loadProducts()
+  console.log(order.value)
+  if (props.mode === ModeEnum.EDITION) { 
+    selectedCustomerId.value = order.value.customer.id 
+    selectedProducts.value = order.value.items.map(
+      item => item.product.id
+    )
+  }
 })
 </script>
 
@@ -69,7 +76,7 @@ onMounted(() => {
         label-key="name"
         :loading="isOrderGettingFetch"
         multiple
-        :options="getAvailableProducts(customer)"
+        :options="customer.products"
         valueKey="id"
       />
       <Button
