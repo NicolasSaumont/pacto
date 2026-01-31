@@ -33,7 +33,7 @@ const triggerRef = ref<HTMLButtonElement | null>(null)
 const isDropdownOpen = ref(false)
 const activeIndex = ref<number>(-1)
 const filterQuery = ref('')
-const filterInputRef = ref<HTMLInputElement | null>(null)
+const filterInputRef = ref<{ focus: () => void } | null>(null)
 
 // --- extractors (label/value/disabled) ---
 const getLabel = (option: OptionT): string => {

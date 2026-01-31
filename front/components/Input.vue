@@ -22,6 +22,12 @@ const {
   rightPaddingClass,
 } = useInput(props)
 
+const inputRef = ref<HTMLInputElement | null>(null)
+
+const focus = () => {
+  inputRef.value?.focus()
+}
+
 const handleResetClick = () => {
   emit('update:modelValue', '')
 }
@@ -76,6 +82,8 @@ const onKeyDown = (e: KeyboardEvent) => {
     if (!value.includes('.')) return
   }
 }
+
+defineExpose({ focus })
 </script>
 
 <template>
@@ -91,6 +99,7 @@ const onKeyDown = (e: KeyboardEvent) => {
     <!-- Input wrapper -->
     <div class="relative">
       <input
+        ref="inputRef"
         v-bind="attrs"
         type="text"
         :inputmode="isNumberInput ? 'decimal' : undefined"
