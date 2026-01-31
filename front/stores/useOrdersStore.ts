@@ -2,6 +2,9 @@ import dayjs from 'dayjs'
 import { defineStore } from 'pinia'
 
 export const useOrdersStore = defineStore('orders', () => {
+  const productsStore = useProductsStore()
+  const { products } = storeToRefs(productsStore)
+
   // const isCustomerSaving = ref(false)
   const isOrderGettingFetch = ref(false)
   const order = ref<IOrder>(structuredClone(DEFAULT_ORDER))
@@ -81,6 +84,44 @@ export const useOrdersStore = defineStore('orders', () => {
   const setOrders = async (searchDates: IRangeDates) => {
     orders.value = await orderRepository.getOrders(searchDates) 
   }
+
+  // Aligne les lignes de commande avec les produits sélectionnés par l’utilisateur
+  watch(selectedProducts, (ids) => {
+    const currentItems = order.value.items ?? []
+
+    const kept = currentItems.filter(item =>
+      ids.includes(item.product.id)
+    )
+
+    const added = ids
+      .filter(id => !kept.some(item => item.product.id === id))
+      .map(id => {
+        const product = products.value.find(product => product.id === id)
+        if (!product) return null
+
+        return {
+          id: 0,           
+          product,
+          quantity: 0,
+        }
+      })
+      .filter(
+        (item): item is {
+          id: number
+          product: { id: number; name: string }
+          quantity: number
+        } => item !== null
+      )
+
+    // Tri des produits dans l'ordre alphabétique
+    order.value.items = [...kept, ...added]
+      .sort((a, b) =>
+        a.product.name.localeCompare(b.product.name, 'fr', {
+          sensitivity: 'base',
+        })
+      )
+  })
+
 
   return {
     // deleteCustomer,
