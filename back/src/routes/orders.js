@@ -3,24 +3,24 @@ const router = express.Router()
 const { Op } = require('sequelize')
 const { Order, OrderProduct, Customer, Product } = require('../models')
 
-// // DELETE /customers/:id => supprime un client existant selon l'id passé en paramètre
-// router.delete('/:id', async (req, res) => {
-//   const { id } = req.params
+// DELETE /orders/:id => supprime une commande existante selon l'id passé en paramètre
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params
 
-//   try {
-//     const customer = await Customer.findByPk(id)
+  try {
+    const order = await Order.findByPk(id)
 
-//     if (!customer) {
-//       return res.status(404).json({ code: 'api.code.not-found.customer' })
-//     }
+    if (!order) {
+      return res.status(404).json({ code: 'api.code.not-found.order' })
+    }
 
-//     await customer.destroy() // avec paranoid: true → soft delete
-//     return res.status(200).json({ code: 'api.code.deleted.customer' })
-//   } catch (err) {
-//     console.error(err)
-//     res.status(500).json({ code: 'api.code.server-error' })
-//   }
-// })
+    await order.destroy() // avec paranoid: true → soft delete
+    return res.status(200).json({ code: 'api.code.deleted.order' })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ code: 'api.code.server-error' })
+  }
+})
 
 // GET /orders?startDate=2026-01-01&endDate=2026-01-31 => renvoie toutes les commandes, éventuellement filtrées par date
 router.get('/', async (req, res) => {

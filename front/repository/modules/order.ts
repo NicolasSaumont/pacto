@@ -3,11 +3,11 @@ import dayjs from "dayjs"
 const { fetcher } = apiFactory()
 
 export const orderRepository = {
-  // async deleteCustomer(id: string): Promise<void> {
-  //   return fetcher<void>(`/customers/${id}`, {
-  //     method: 'DELETE',
-  //   })
-  // },
+  async deleteOrder(id: string): Promise<void> {
+    return fetcher<void>(`/orders/${id}`, {
+      method: 'DELETE',
+    })
+  },
 
   async getOrder(id: string): Promise<IOrder> {
     const order = await fetcher<IOrder>(`/orders/${id}`, {

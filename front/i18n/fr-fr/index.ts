@@ -1,5 +1,6 @@
 export default {
   'api.code.deleted.customer': 'Client supprimé (soft delete)',
+  'api.code.deleted.order': 'Commande supprimée (soft delete)',
   'api.code.deleted.product': 'Produit supprimé (soft delete)',
   'api.code.duplicate-name.customer': 'Un client avec ce nom existe déjà',
   'api.code.duplicate-name.product': 'Un produit avec ce nom existe déjà',
@@ -11,6 +12,7 @@ export default {
   'api.code.invalid-field.start-date': 'Champ "date de début" invalide',
   'api.code.missing-required-field': 'Champ requis manquant',
   'api.code.not-found.customer': 'Client non trouvé',
+  'api.code.not-found.order': 'Commande non trouvée',
   'api.code.not-found.product': 'Produit non trouvé',
   'api.code.server-error': 'Erreur serveur',
 
@@ -47,6 +49,8 @@ export default {
   'common.weekdays.shortcut.wednesday': 'Me',
 
   'customer.add': 'Créer un nouveau client',
+  'customer.api.delete.error-message': 'Le client n\'a pas pu être supprimé',
+  'customer.api.delete.success-message': 'Le client a bien été supprimé',
   'customer.api.edit.error-message': 'Le client n\'a pas pu être modifié',
   'customer.api.edit.success-message': 'Le client a bien été modifié',
   'customer.api.get.error-message': 'Le client n\'a pas pu être chargé',
@@ -66,8 +70,12 @@ export default {
   'error.title.404': '404 — Page introuvable',
   'error.title.500': 'Erreur inattendue',
 
+  'order.api.delete.error-message': 'La commande n\'a pas pu être supprimée',
+  'order.api.delete.success-message': 'La commande a bien été supprimée',
   'order.api.get.error-message': 'La commande n\'a pas pu être chargée',
   'order.date': 'Date de la commande',
+  'order.delete': 'Supprimer une commande',
+  'order.delete.confirmation': 'Voulez-vous vraiment supprimer cette commande ?',
   'order.delivery-date': 'Date de livraison',
   'order.edit': 'Modifier une commande',
   'order.new': 'Créer une nouvelle commande',

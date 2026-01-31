@@ -73,7 +73,7 @@ export function useOrders() {
     }
   ]
 
-  // const isDeleteCustomerConfirmationModalVisible = ref(false)
+  const isDeleteOrderConfirmationModalVisible = ref(false)
 
   const loadOrder = async () => {
     isOrderGettingFetch.value = true
@@ -140,7 +140,7 @@ export function useOrders() {
   // }
   
   return { 
-    // isDeleteCustomerConfirmationModalVisible,
+    isDeleteOrderConfirmationModalVisible,
     loadOrder,
     loadOrders,
     ordersColumns,

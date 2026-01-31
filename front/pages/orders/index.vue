@@ -1,21 +1,21 @@
 <script setup lang='ts'>
 const { t } = useI18n()
 
-// const { withNotify } = useNotifyAction()
+const { withNotify } = useNotifyAction()
 const { notify } = useNotify()
 
 const {
-  // isDeleteCustomerConfirmationModalVisible,
+  isDeleteOrderConfirmationModalVisible,
   loadOrders,
   ordersColumns,
 } = useOrders()
 
 const ordersStore = useOrdersStore()
 
-// const {
-//   deleteCustomer,
-//   setCustomers,
-// } = ordersStore
+const {
+  deleteOrder,
+  setOrders,
+} = ordersStore
 
 const { 
   isOrderGettingFetch,
@@ -23,44 +23,40 @@ const {
   searchDates,
 } = storeToRefs(ordersStore)
 
-// const customerToDelete = ref<ICustomer | null>(null)
+const orderToDelete = ref<IOrder | null>(null)
 
-// const handleDeleteCustomerClick = async () => {
-//   if (!customerToDelete.value) return
+const handleDeleteOrderClick = async () => {
+  if (!orderToDelete.value) return
 
-//   const customerId = customerToDelete.value.id.toString()
+  const orderId = orderToDelete.value.id.toString()
 
-//   await withNotify(
-//     async () => {
-//       await deleteCustomer(customerId)
-//       await setCustomers()
-//     },
-//     {
-//       successContent: t('product.api.delete.success-message'),
-//       errorContent: t('product.api.delete.error-message'),
-//     }
-//   )
+  await withNotify(
+    async () => {
+      await deleteOrder(orderId)
+      await setOrders(searchDates.value)
+    },
+    {
+      successContent: t('order.api.delete.success-message'),
+      errorContent: t('order.api.delete.error-message'),
+    }
+  )
   
-//   customerToDelete.value = null
-//   isDeleteCustomerConfirmationModalVisible.value = false
-// }
+  orderToDelete.value = null
+  isDeleteOrderConfirmationModalVisible.value = false
+}
 
 const handleDuplicateOrderClick = (row: IOrder) => {
   notify({
     state: 'info',
     content: t('common.unavailable-feature'),
   })
-  // customerToDelete.value = row
-  // isDeleteCustomerConfirmationModalVisible.value = true
+  // orderToDuplicate.value = row
+  // isDuplicateOrderConfirmationModalVisible.value = true
 }
 
 const handleOpenDeleteOrderConfirmationModalClick = (row: IOrder) => {
-  notify({
-    state: 'info',
-    content: t('common.unavailable-feature'),
-  })
-  // customerToDelete.value = row
-  // isDeleteCustomerConfirmationModalVisible.value = true
+  orderToDelete.value = row
+  isDeleteOrderConfirmationModalVisible.value = true
 }
 
 const handleRowClick = (row: IOrder) => {
@@ -131,5 +127,13 @@ onMounted(() => loadOrders(searchDates.value))
         </div>
       </template>
     </Table>
+
+    <Modal 
+      v-model="isDeleteOrderConfirmationModalVisible"
+      :description="t('order.delete.confirmation')"
+      is-confirmation-modal
+      :title="t('order.delete')"
+      @confirm="handleDeleteOrderClick"
+    />
   </div>
 </template>

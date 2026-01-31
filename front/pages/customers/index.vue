@@ -34,8 +34,8 @@ const handleDeleteCustomerClick = async () => {
       await setCustomers()
     },
     {
-      successContent: t('product.api.delete.success-message'),
-      errorContent: t('product.api.delete.error-message'),
+      successContent: t('customer.api.delete.success-message'),
+      errorContent: t('customer.api.delete.error-message'),
     }
   )
   

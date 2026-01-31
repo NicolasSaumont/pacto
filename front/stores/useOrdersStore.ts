@@ -47,13 +47,13 @@ export const useOrdersStore = defineStore('orders', () => {
   //   }
   // }
 
-  // const deleteCustomer = async (customerId: string) => {
-  //   try {
-  //     await customerRepository.deleteCustomer(customerId)
-  //   } catch (error) {
-  //     throw error
-  //   }
-  // }
+  const deleteOrder = async (orderId: string) => {
+    try {
+      await orderRepository.deleteOrder(orderId)
+    } catch (error) {
+      throw error
+    }
+  }
 
   const fillSelects = () => {
     selectedCustomerId.value = order.value.customer.id 
@@ -124,7 +124,7 @@ export const useOrdersStore = defineStore('orders', () => {
 
 
   return {
-    // deleteCustomer,
+    deleteOrder,
     // editCustomer,
     // isConfirmButtonDisabled,
     isOrderGettingFetch,
