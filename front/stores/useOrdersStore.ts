@@ -118,15 +118,21 @@ export const useOrdersStore = defineStore('orders', () => {
     )
   )
 
-  const editOrder = async () => {
+  const editOrder = async (order: IOrder) => {
     try {
       const body = orderPatch.value
 
-      if (!Object.keys(body).length) return
+      // if (!Object.keys(body).length) return
+      if (!Object.keys(body).length) {
+        console.log('editOrder: rien à modifier')
+        return true // <-- IMPORTANT pour withNotify
+      }
+      console.log('editOrder before fetch')
+      await orderRepository.patchOrder(order.id, body)
+      console.log('editOrder after fetch')
 
-      await orderRepository.patchOrder(order.value.id, body)
-
-      originalOrder.value = structuredClone(toRaw(order.value))
+      originalOrder.value = structuredClone(order)
+      console.log('editOrder success')
     } catch (error) {
       throw error
     }
