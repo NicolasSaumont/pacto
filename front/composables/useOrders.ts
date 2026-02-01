@@ -8,8 +8,8 @@ export function useOrders() {
   const ordersStore = useOrdersStore()
 
   const { 
-  //   editCustomer,
-  //   postNewCustomer,
+    editOrder,
+    postNewOrder,
     setOrder,
     setOrders,
   } = ordersStore

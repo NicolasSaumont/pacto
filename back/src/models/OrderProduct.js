@@ -21,7 +21,6 @@ const OrderProduct = sequelize.define('OrderProduct', {
   product_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    primaryKey: true,
     references: {
       model: 'products',
       key: 'id',

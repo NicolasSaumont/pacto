@@ -53,6 +53,7 @@ watch(selectedCustomerId, async (id) => {
     return
   }
   await setCustomer(id.toString())
+  order.value.customer.id = id
 }, { immediate: true })
 
 // Surveille le changement de client sélectionné, pour vider la liste des produits sélectionnés

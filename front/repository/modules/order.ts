@@ -1,6 +1,7 @@
 import dayjs from "dayjs"
 
 const { fetcher } = apiFactory()
+const { convertToDayjs } = useDatePicker()
 
 export const orderRepository = {
   async deleteOrder(id: string): Promise<void> {
@@ -44,13 +45,22 @@ export const orderRepository = {
   //   })
   // },
 
-  // async postCustomer(newCustomer: ICustomer): Promise<ICustomer> {
-  //   return fetcher<ICustomer>('/customers', {
-  //     method: 'POST',
-  //     body: { 
-  //       name: newCustomer.name,
-  //       productIds: (newCustomer.products ?? []).map(product => product.id),
-  //     },
-  //   })
-  // },
+  async postOrder(newOrder: IOrder): Promise<IOrder> {
+    const orderDate = convertToDayjs(newOrder.orderDate)
+    const deliveryDate = convertToDayjs(newOrder.deliveryDate)
+
+    return fetcher<IOrder>('/orders', {
+      method: 'POST',
+      body: {
+        customerId: newOrder.customer.id,
+        orderDate: orderDate?.format(DATE_API_FORMAT),
+        deliveryDate: deliveryDate?.format(DATE_API_FORMAT),
+        comment: newOrder.comment,
+        items: newOrder.items.map(item => ({
+          productId: item.product.id,
+          quantity: item.quantity
+        }))
+      },
+    })
+  },
 }

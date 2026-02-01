@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const { Op } = require('sequelize')
-const { Order, OrderProduct, Customer, Product } = require('../models')
+const { Order, OrderProduct, Customer, Product, sequelize } = require('../models')
 
 // DELETE /orders/:id => supprime une commande existante selon l'id passé en paramètre
 router.delete('/:id', async (req, res) => {
@@ -195,38 +195,57 @@ router.get('/:id', async (req, res) => {
 //   }
 // })
 
-// // POST /customers => crée un nouveau client
-// router.post('/', async (req, res) => {
-//   const { name, productIds } = req.body
+// POST /orders => crée une nouvelle commande
+router.post('/', async (req, res) => {
+  console.log('api post order')
+  const {
+    customerId,
+    orderDate,
+    deliveryDate,
+    comment,
+    items,
+  } = req.body
 
-//   if (!name?.trim()) {
-//     return res.status(400).json({ code: 'api.code.missing-required-field' })
-//   }
+  if (!customerId || !orderDate) {
+    return res.status(400).json({ code: 'api.code.missing-required-field' })
+  }
 
-//   // productIds optionnel
-//   if (productIds !== undefined && !Array.isArray(productIds)) {
-//     return res.status(400).json({ code: 'api.code.invalid-field.product-ids' })
-//   }
+  if (items && !Array.isArray(items)) {
+    return res.status(400).json({ code: 'api.code.invalid-field.items' })
+  }
 
-//   try {
-//     const customer = await Customer.create({ name })
+  const transaction = await sequelize.transaction()
 
-//     // Si produits fournis, on crée les associations
-//     if (productIds?.length) {
-//       const uniqueIds = [...new Set(productIds)]
-//       await customer.setProducts(uniqueIds)
-//     }
+  try {
+    // 1️⃣ Création de la commande
+    const order = await Order.create({
+      customerId,
+      orderDate,
+      deliveryDate,
+      comment,
+    }, { transaction })
 
-//     return res.status(201).json(customer)
-//   } catch (error) {
-//     // Nom déjà existant
-//     if (error.name === 'SequelizeUniqueConstraintError') {
-//       return res.status(409).json({ code: 'api.code.duplicate-name.customer' })
-//     }
+    // 2️⃣ Création des lignes de commande
+    if (items?.length) {
+      await OrderProduct.bulkCreate(
+        items.map(item => ({
+          order_id: order.id,
+          product_id: item.productId,
+          quantity: item.quantity ?? 1,
+        })),
+        { transaction }
+      )
+    }
 
-//     console.error(error)
-//     return res.status(500).json({ code: 'api.code.server-error' })
-//   }
-// })
+    await transaction.commit()
+
+    return res.status(201).json(order)
+  } catch (error) {
+    await transaction.rollback()
+    console.error(error)
+    return res.status(500).json({ code: 'api.code.server-error' })
+  }
+})
+
 
 module.exports = router

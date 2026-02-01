@@ -5,7 +5,7 @@ export const useOrdersStore = defineStore('orders', () => {
   const productsStore = useProductsStore()
   const { products } = storeToRefs(productsStore)
 
-  // const isCustomerSaving = ref(false)
+  const isOrderSaving = ref(false)
   const isOrderGettingFetch = ref(false)
   const order = ref<IOrder>(structuredClone(DEFAULT_ORDER))
   const orders = ref<IOrder[]>([])
@@ -20,34 +20,35 @@ export const useOrdersStore = defineStore('orders', () => {
   // const isConfirmButtonDisabled = computed(() => !customer.value.name)
   
   const editOrder = async (order: IOrder) => {
-    try {
-      const body: Record<string, unknown> = {}
+    // try {
+    //   const body: Record<string, unknown> = {}
 
-      // name
-      if (order.name !== originalOrder.value.name) {
-        body.name = order.name
-      }
+    //   // name
+    //   if (order.name !== originalOrder.value.name) {
+    //     body.name = order.name
+    //   }
 
-      // products
-      const currentIds = (order.products ?? []).map(p => p.id).sort()
-      const originalIds = (originalOrder.value.products ?? []).map(p => p.id).sort()
+    //   // products
+    //   const currentIds = (order.products ?? []).map(p => p.id).sort()
+    //   const originalIds = (originalOrder.value.products ?? []).map(p => p.id).sort()
 
-      if (currentIds.join(',') !== originalIds.join(',')) {
-        body.productIds = currentIds
-      }
+    //   if (currentIds.join(',') !== originalIds.join(',')) {
+    //     body.productIds = currentIds
+    //   }
 
-      if (Object.keys(body).length === 0) return
+    //   if (Object.keys(body).length === 0) return
 
-      await orderRepository.patchOrder(order.id, body)
+    //   await orderRepository.patchOrder(order.id, body)
 
-      // resync snapshot
-      originalOrder.value = structuredClone(toRaw(order))
-    } catch (error) {
-      throw error
-    }
+    //   // resync snapshot
+    //   originalOrder.value = structuredClone(toRaw(order))
+    // } catch (error) {
+    //   throw error
+    // }
   }
 
   const deleteOrder = async (orderId: string) => {
+    console.log('deleteOrder')
     try {
       await orderRepository.deleteOrder(orderId)
     } catch (error) {
@@ -128,7 +129,7 @@ export const useOrdersStore = defineStore('orders', () => {
     editOrder,
     // isConfirmButtonDisabled,
     isOrderGettingFetch,
-    // isCustomerSaving,
+    isOrderSaving,
     fillSelects,
     order,
     orders,

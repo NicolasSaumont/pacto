@@ -1,3 +1,4 @@
+const { sequelize } = require('../config/db')
 const Customer = require('./Customer')
 const Product = require('./Product')
 const CustomerProduct = require('./CustomerProduct')
@@ -51,4 +52,5 @@ module.exports = {
   Order,
   OrderProduct,
   Product,
+  sequelize,
 }

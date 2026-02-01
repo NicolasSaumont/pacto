@@ -64,7 +64,7 @@ const handleSaveClick = async () => {
     if (props.mode === ModeEnum.CREATION) await sendOrderToCreate(order.value)
     else if (props.mode === ModeEnum.EDITION) await sendOrderToEdit(order.value)
 
-    await navigateTo(CUSTOMERS_URL)
+    await navigateTo(ORDERS_URL)
   } catch {
     // IMPORTANT: on consomme l'erreur pour éviter le warning Vue
     // la notif est déjà affichée dans withNotify
