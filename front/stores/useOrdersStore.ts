@@ -2,6 +2,8 @@ import dayjs from 'dayjs'
 import { defineStore } from 'pinia'
 
 export const useOrdersStore = defineStore('orders', () => {
+  const { convertToDayjs } = useDatePicker()
+
   const productsStore = useProductsStore()
   const { products } = storeToRefs(productsStore)
 
@@ -17,38 +19,120 @@ export const useOrdersStore = defineStore('orders', () => {
   const selectedCustomerId = ref<number | null>(null)
   const selectedProducts = ref<number[]>([])
 
-  const isConfirmButtonDisabled = computed(() => !selectedCustomerId.value || !order.value.orderDate)
+  const isConfirmButtonDisabled = computed(() => 
+    !selectedCustomerId.value || 
+    !order.value.orderDate ||
+    Object.keys(orderPatch.value).length === 0
+  )
 
-  const editOrder = async (order: IOrder) => {
-    // try {
-    //   const body: Record<string, unknown> = {}
+  const buildItemsPatch = (
+    current: IOrder['items'],
+    original: IOrder['items']
+  ) => {
+    const patch: {
+      add?: { productId: number; quantity: number }[]
+      update?: { id: number; quantity: number }[]
+      remove?: number[]
+    } = {}
 
-    //   // name
-    //   if (order.name !== originalOrder.value.name) {
-    //     body.name = order.name
-    //   }
+    // MAPS pour comparaison rapide
+    const originalMap = new Map(
+      original.map(item => [item.product.id, item])
+    )
 
-    //   // products
-    //   const currentIds = (order.products ?? []).map(p => p.id).sort()
-    //   const originalIds = (originalOrder.value.products ?? []).map(p => p.id).sort()
+    const currentMap = new Map(
+      current.map(item => [item.product.id, item])
+    )
 
-    //   if (currentIds.join(',') !== originalIds.join(',')) {
-    //     body.productIds = currentIds
-    //   }
+    // ADD / UPDATE
+    for (const item of current) {
+      const originalItem = originalMap.get(item.product.id)
 
-    //   if (Object.keys(body).length === 0) return
+      if (!originalItem) {
+        patch.add ??= []
+        patch.add.push({
+          productId: item.product.id,
+          quantity: item.quantity,
+        })
+      } else if (item.quantity !== originalItem.quantity) {
+        patch.update ??= []
+        patch.update.push({
+          id: originalItem.id,
+          quantity: item.quantity,
+        })
+      }
+    }
 
-    //   await orderRepository.patchOrder(order.id, body)
+    // REMOVE
+    for (const item of original) {
+      if (!currentMap.has(item.product.id)) {
+        patch.remove ??= []
+        patch.remove.push(item.id)
+      }
+    }
 
-    //   // resync snapshot
-    //   originalOrder.value = structuredClone(toRaw(order))
-    // } catch (error) {
-    //   throw error
-    // }
+    return Object.keys(patch).length ? patch : null
+  }
+
+  const buildOrderPatch = (
+    order: IOrder,
+    original: IOrder,
+    selectedCustomerId: number | null
+  ) => {
+    const body: Record<string, unknown> = {}
+
+    // CUSTOMER
+    if (selectedCustomerId !== original.customer?.id) {
+      body.customerId = selectedCustomerId
+    }
+
+    // ORDER DATE
+    if (!dayjs(order.orderDate).isSame(convertToDayjs(original.orderDate), 'day')) {
+      body.orderDate = dayjs(order.orderDate).format(DATE_API_FORMAT)
+    }
+
+    // DELIVERY DATE
+    if (!dayjs(order.deliveryDate).isSame(convertToDayjs(original.deliveryDate), 'day')) {
+      body.deliveryDate = dayjs(order.deliveryDate).format(DATE_API_FORMAT)
+    }
+
+    // COMMENT
+    if (order.comment !== original.comment) {
+      body.comment = order.comment || null
+    }
+
+    // ITEMS
+    const itemsPatch = buildItemsPatch(order.items, original.items)
+    if (itemsPatch) {
+      body.items = itemsPatch
+    }
+
+    return body
+  }
+
+  const orderPatch = computed(() =>
+    buildOrderPatch(
+      order.value,
+      originalOrder.value,
+      selectedCustomerId.value
+    )
+  )
+
+  const editOrder = async () => {
+    try {
+      const body = orderPatch.value
+
+      if (!Object.keys(body).length) return
+
+      await orderRepository.patchOrder(order.value.id, body)
+
+      originalOrder.value = structuredClone(toRaw(order.value))
+    } catch (error) {
+      throw error
+    }
   }
 
   const deleteOrder = async (orderId: string) => {
-    console.log('deleteOrder')
     try {
       await orderRepository.deleteOrder(orderId)
     } catch (error) {

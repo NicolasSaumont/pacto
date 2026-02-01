@@ -7,6 +7,7 @@ export default {
   'api.code.get-error-message.customer': 'Erreur lors de la récupération du client',
   'api.code.get-error-message.product': 'Erreur lors de la récupération du produit',
   'api.code.invalid-field.end-date': 'Champ "date de fin" invalide',
+  'api.code.invalid-field.items': 'Champ "items" invalide',
   'api.code.invalid-field.name': 'Champ "nom" invalide',
   'api.code.invalid-field.product-ids': 'Champ "produits" invalide',
   'api.code.invalid-field.start-date': 'Champ "date de début" invalide',

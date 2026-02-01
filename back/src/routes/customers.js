@@ -87,12 +87,12 @@ router.patch('/:id', async (req, res) => {
       return res.status(404).json({ code: 'api.code.not-found.customer' })
     }
 
-    // 1) update du client (si fourni)
+    // 1️⃣ update du client (si fourni)
     if (name !== undefined) {
       await customer.update({ name })
     }
 
-    // 2) update des associations produits (si fourni)
+    // 2️⃣ update des associations produits (si fourni)
     if (productIds !== undefined) {
       // Optionnel: sécuriser en filtrant ids uniques
       const uniqueIds = [...new Set(productIds)]

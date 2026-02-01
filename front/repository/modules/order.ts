@@ -38,12 +38,12 @@ export const orderRepository = {
     }))
   },
 
-  // async patchCustomer(id: number, body: Record<string, unknown>): Promise<void> {
-  //   return fetcher<void>(`/customers/${id}`, {
-  //     method: 'PATCH',
-  //     body,
-  //   })
-  // },
+  async patchOrder(id: number, body: Record<string, unknown>): Promise<void> {
+    return fetcher<void>(`/orders/${id}`, {
+      method: 'PATCH',
+      body,
+    })
+  },
 
   async postOrder(newOrder: IOrder): Promise<IOrder> {
     const orderDate = convertToDayjs(newOrder.orderDate)

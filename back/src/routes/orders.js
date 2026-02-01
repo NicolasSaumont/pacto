@@ -146,54 +146,79 @@ router.get('/:id', async (req, res) => {
   }
 })
 
-// // PATCH /customers/:id => modifie un client existant selon l'id passé en paramètre
-// router.patch('/:id', async (req, res) => {
-//   const { id } = req.params
-//   const { name, productIds } = req.body
+// PATCH /orders/:id => modifie une commande existante selon l'id passé en paramètre
+router.patch('/:id', async (req, res) => {
+  const { id } = req.params
+  const {
+    customerId,
+    orderDate,
+    deliveryDate,
+    comment,
+    items,
+  } = req.body
 
-//   // name optionnel en PATCH (sinon impossible de patch uniquement les produits)
-//   if (name !== undefined && !String(name).trim()) {
-//     return res.status(400).json({ code: 'api.code.invalid-field.name' })
-//   }
+  try {
+    const order = await Order.findByPk(id)
 
-//   // productIds optionnel
-//   if (productIds !== undefined && !Array.isArray(productIds)) {
-//     return res.status(400).json({ code: 'api.code.invalid-field.product-ids' })
-//   }
+    if (!order) {
+      return res.status(404).json({ code: 'api.code.not-found.order' })
+    }
 
-//   try {
-//     const customer = await Customer.findByPk(id)
+    // 1️⃣ PATCH DES CHAMPS SIMPLES
+    const fieldsToUpdate = {}
 
-//     if (!customer) {
-//       return res.status(404).json({ code: 'api.code.not-found.customer' })
-//     }
+    if (customerId !== undefined) fieldsToUpdate.customerId = customerId
+    if (orderDate !== undefined) fieldsToUpdate.orderDate = orderDate
+    if (deliveryDate !== undefined) fieldsToUpdate.deliveryDate = deliveryDate
+    if (comment !== undefined) fieldsToUpdate.comment = comment
 
-//     // 1) update du client (si fourni)
-//     if (name !== undefined) {
-//       await customer.update({ name })
-//     }
+    if (Object.keys(fieldsToUpdate).length) {
+      await order.update(fieldsToUpdate)
+    }
 
-//     // 2) update des associations produits (si fourni)
-//     if (productIds !== undefined) {
-//       // Optionnel: sécuriser en filtrant ids uniques
-//       const uniqueIds = [...new Set(productIds)]
+    // 2️⃣ PATCH DES ITEMS (produits + quantités)
+    if (items !== undefined) {
+      if (!Array.isArray(items)) {
+        return res.status(400).json({ code: 'api.code.invalid-field.items' })
+      }
 
-//       // Remplace totalement les associations
-//       await customer.setProducts(uniqueIds)
-//     }
+      // Format attendu :
+      // [{ productId, quantity }]
 
-//     res.json(customer)
-//   } catch (error) {
-//     // Si le nom existe déjà
-//     if (error.name === 'SequelizeUniqueConstraintError') {
-//       return res.status(409).json({ code: 'api.code.duplicate-name.customer' })
-//     }
+      // Supprime toutes les lignes existantes
+      await OrderProduct.destroy({
+        where: { order_id: order.id },
+      })
 
-//     // Autres erreurs
-//     console.error(error)
-//     res.status(500).json({ code: 'api.code.server-error' })
-//   }
-// })
+      // Recrée les lignes
+      const rows = items.map(item => ({
+        order_id: order.id,
+        product_id: item.productId,
+        quantity: item.quantity,
+      }))
+
+      if (rows.length) {
+        await OrderProduct.bulkCreate(rows)
+      }
+    }
+
+    // 3️⃣ Retourne la commande mise à jour
+    const updatedOrder = await Order.findByPk(id, {
+      include: [
+        { association: 'customer' },
+        {
+          association: 'items',
+          include: [{ association: 'product' }],
+        },
+      ],
+    })
+
+    res.json(updatedOrder)
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ code: 'api.code.server-error' })
+  }
+})
 
 // POST /orders => crée une nouvelle commande
 router.post('/', async (req, res) => {

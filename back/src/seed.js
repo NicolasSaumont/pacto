@@ -203,7 +203,7 @@ const seedDB = async () => {
         )
       }
 
-      // 1) Crée la commande
+      // 1️⃣ Crée la commande
       const order = await Order.create({
         customerId: customer.id,
         orderDate: o.orderDate,
@@ -211,7 +211,7 @@ const seedDB = async () => {
         comment: o.comment ?? null,
       })
 
-      // 2) Crée les lignes (table pivot) avec quantité
+      // 2️⃣ Crée les lignes (table pivot) avec quantité
       const lines = o.items.map((item) => {
         const product = productInstances[item.productName]
         if (!product) throw new Error(`Product not found in seed: ${item.productName}`)
