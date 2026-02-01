@@ -17,8 +17,8 @@ export const useOrdersStore = defineStore('orders', () => {
   const selectedCustomerId = ref<number | null>(null)
   const selectedProducts = ref<number[]>([])
 
-  // const isConfirmButtonDisabled = computed(() => !customer.value.name)
-  
+  const isConfirmButtonDisabled = computed(() => !selectedCustomerId.value || !order.value.orderDate)
+
   const editOrder = async (order: IOrder) => {
     // try {
     //   const body: Record<string, unknown> = {}
@@ -127,7 +127,7 @@ export const useOrdersStore = defineStore('orders', () => {
   return {
     deleteOrder,
     editOrder,
-    // isConfirmButtonDisabled,
+    isConfirmButtonDisabled,
     isOrderGettingFetch,
     isOrderSaving,
     fillSelects,

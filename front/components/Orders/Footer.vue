@@ -16,6 +16,7 @@ const orderStore = useOrdersStore()
 const { fillSelects } = orderStore
 
 const {
+  isConfirmButtonDisabled,
   isOrderSaving,
   originalOrder,
   order,
@@ -101,6 +102,7 @@ const handleSaveClick = async () => {
       @click="handleCancelClick"
     />
     <Button
+      :disabled="isConfirmButtonDisabled"
       icon="floppy-disk"
       :label="t('common.save')"
       @click="handleSaveClick"
