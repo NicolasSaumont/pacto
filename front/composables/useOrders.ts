@@ -41,9 +41,10 @@ export function useOrders() {
     {
       header: t('common.products', 2),
       slot: 'items',
-      title: (row) =>
-        row.items
-          .map(item => `${item.product.name} × ${item.quantity}`)
+      title: row =>
+        [...row.items]
+          .sort((a, b) => a.product.name.localeCompare(b.product.name, 'fr'))
+          .map(i => `${i.product.name} × ${i.quantity}`)
           .join('\n')
     },
     {
