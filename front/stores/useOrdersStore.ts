@@ -36,37 +36,36 @@ export const useOrdersStore = defineStore('orders', () => {
       remove?: number[]
     } = {}
 
-    // MAPS pour comparaison rapide
-    const originalMap = new Map(
-      original.map(item => [item.product.id, item])
-    )
+    const originalByProductId = new Map(original.map(i => [i.product.id, i]))
+    const currentByProductId = new Map(current.map(i => [i.product.id, i]))
 
-    const currentMap = new Map(
-      current.map(item => [item.product.id, item])
-    )
-
-    // ADD / UPDATE
+    // ADD / UPDATE / REMOVE-by-zero
     for (const item of current) {
-      const originalItem = originalMap.get(item.product.id)
+      const originalItem = originalByProductId.get(item.product.id)
+      const qty = item.quantity ?? 0
 
+      // Si qty = 0 => supprimer si existait, sinon ignorer (pas d'add)
+      if (qty === 0) {
+        if (originalItem) {
+          patch.remove ??= []
+          patch.remove.push(originalItem.id)
+        }
+        continue
+      }
+
+      // qty > 0
       if (!originalItem) {
         patch.add ??= []
-        patch.add.push({
-          productId: item.product.id,
-          quantity: item.quantity,
-        })
-      } else if (item.quantity !== originalItem.quantity) {
+        patch.add.push({ productId: item.product.id, quantity: qty })
+      } else if (qty !== originalItem.quantity) {
         patch.update ??= []
-        patch.update.push({
-          id: originalItem.id,
-          quantity: item.quantity,
-        })
+        patch.update.push({ id: originalItem.id, quantity: qty })
       }
     }
 
-    // REMOVE
+    // REMOVE (produit désélectionné)
     for (const item of original) {
-      if (!currentMap.has(item.product.id)) {
+      if (!currentByProductId.has(item.product.id)) {
         patch.remove ??= []
         patch.remove.push(item.id)
       }
@@ -74,6 +73,7 @@ export const useOrdersStore = defineStore('orders', () => {
 
     return Object.keys(patch).length ? patch : null
   }
+
 
   const buildOrderPatch = (
     order: IOrder,
@@ -130,15 +130,13 @@ export const useOrdersStore = defineStore('orders', () => {
 
       // if (!Object.keys(body).length) return
       if (!Object.keys(body).length) {
-        console.log('editOrder: rien à modifier')
-        return true // <-- IMPORTANT pour withNotify
+        return true
       }
-      console.log('editOrder before fetch')
+
       await orderRepository.patchOrder(order.id, body)
-      console.log('editOrder after fetch')
 
       originalOrder.value = structuredClone(order)
-      console.log('editOrder success')
+      return true
     } catch (error) {
       throw error
     }

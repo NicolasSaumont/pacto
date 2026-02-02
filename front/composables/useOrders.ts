@@ -127,7 +127,6 @@ export function useOrders() {
   }
 
   const sendOrderToEdit = async (order: IOrder) => {
-    console.log('sendOrderToEdit')
     await withNotify(
       async () => {
         await editOrder(order)

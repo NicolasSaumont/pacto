@@ -38,10 +38,10 @@ router.get('/', async (req, res) => {
 
       // validation simple
       if (startDate && Number.isNaN(start.getTime())) {
-        return res.status(400).json({ code: 'api.code.invalid-field.start-date' })
+        return res.status(400).json({ code: 'api.code.invalid-field' })
       }
       if (endDate && Number.isNaN(end.getTime())) {
-        return res.status(400).json({ code: 'api.code.invalid-field.end-date' })
+        return res.status(400).json({ code: 'api.code.invalid-field' })
       }
 
       // si endDate est une date "YYYY-MM-DD", on veut inclure toute la journée
@@ -157,66 +157,139 @@ router.patch('/:id', async (req, res) => {
     items,
   } = req.body
 
+  const t = await sequelize.transaction()
+
   try {
-    const order = await Order.findByPk(id)
+    const order = await Order.findByPk(id, { transaction: t })
 
     if (!order) {
+      await t.rollback()
       return res.status(404).json({ code: 'api.code.not-found.order' })
     }
 
-    // 1️⃣ PATCH DES CHAMPS SIMPLES
+    // 1️⃣ Patch champs simples
     const fieldsToUpdate = {}
-
     if (customerId !== undefined) fieldsToUpdate.customerId = customerId
     if (orderDate !== undefined) fieldsToUpdate.orderDate = orderDate
     if (deliveryDate !== undefined) fieldsToUpdate.deliveryDate = deliveryDate
     if (comment !== undefined) fieldsToUpdate.comment = comment
 
     if (Object.keys(fieldsToUpdate).length) {
-      await order.update(fieldsToUpdate)
+      await order.update(fieldsToUpdate, { transaction: t })
     }
 
-    // 2️⃣ PATCH DES ITEMS (produits + quantités)
+    // 2️⃣ Patch items diff (add/update/remove)
     if (items !== undefined) {
-      if (!Array.isArray(items)) {
-        return res.status(400).json({ code: 'api.code.invalid-field.items' })
+      if (items === null || typeof items !== 'object' || Array.isArray(items)) {
+        await t.rollback()
+        return res.status(400).json({ code: 'api.code.invalid-field' })
       }
 
-      // Format attendu :
-      // [{ productId, quantity }]
+      const { add, update, remove } = items
 
-      // Supprime toutes les lignes existantes
-      await OrderProduct.destroy({
-        where: { order_id: order.id },
-      })
+      // --- VALIDATION BASIQUE ---
+      if (add !== undefined && !Array.isArray(add)) {
+        await t.rollback()
+        return res.status(400).json({ code: 'api.code.invalid-field' })
+      }
+      if (update !== undefined && !Array.isArray(update)) {
+        await t.rollback()
+        return res.status(400).json({ code: 'api.code.invalid-field' })
+      }
+      if (remove !== undefined && !Array.isArray(remove)) {
+        await t.rollback()
+        return res.status(400).json({ code: 'api.code.invalid-field' })
+      }
 
-      // Recrée les lignes
-      const rows = items.map(item => ({
-        order_id: order.id,
-        product_id: item.productId,
-        quantity: item.quantity,
-      }))
+      // --- REMOVE ---
+      if (remove?.length) {
+        // sécurité: on supprime uniquement des lignes de CETTE commande
+        await OrderProduct.destroy({
+          where: {
+            id: { [Op.in]: remove },
+            order_id: order.id,
+          },
+          transaction: t,
+        })
+      }
 
-      if (rows.length) {
-        await OrderProduct.bulkCreate(rows)
+      // --- UPDATE ---
+      if (update?.length) {
+        // on met à jour une par une (simple + safe)
+        for (const u of update) {
+          const rowId = u?.id
+          const qty = u?.quantity
+
+          if (typeof rowId !== 'number' || typeof qty !== 'number') {
+            await t.rollback()
+            return res.status(400).json({ code: 'api.code.invalid-field.row' })
+          }
+
+          // sécurité: update uniquement si la ligne appartient à la commande
+          const [count] = await OrderProduct.update(
+            { quantity: qty },
+            {
+              where: { id: rowId, order_id: order.id },
+              transaction: t,
+            }
+          )
+
+          // si tu veux être strict : si ligne non trouvée -> 400
+          if (count === 0) {
+            await t.rollback()
+            return res.status(400).json({ code: 'api.code.invalid-field.not-found' })
+          }
+        }
+      }
+
+      // --- ADD ---
+      if (add?.length) {
+        const rows = add.map(a => {
+          const productId = a?.productId
+          const qty = a?.quantity
+
+          if (typeof productId !== 'number' || typeof qty !== 'number') {
+            throw Object.assign(new Error('invalid add row'), {
+              status: 400,
+              code: 'api.code.invalid-field.row',
+            })
+          }
+
+          return {
+            order_id: order.id,
+            product_id: productId,
+            quantity: qty,
+          }
+        })
+
+        if (rows.length) {
+          await OrderProduct.bulkCreate(rows, { transaction: t })
+        }
       }
     }
 
-    // 3️⃣ Retourne la commande mise à jour
-    const updatedOrder = await Order.findByPk(id, {
+    await t.commit()
+
+    // 3️⃣ Retourne la commande à jour
+    const updatedOrder = await Order.findByPk(order.id, {
       include: [
         { association: 'customer' },
-        {
-          association: 'items',
-          include: [{ association: 'product' }],
-        },
+        { association: 'items', include: [{ association: 'product' }] },
       ],
     })
 
-    res.json(updatedOrder)
+    return res.json(updatedOrder)
   } catch (error) {
     console.error(error)
-    res.status(500).json({ code: 'api.code.server-error' })
+
+    if (t && !t.finished) await t.rollback()
+
+    // si tu as throw un objet custom avec status/code
+    if (error?.status) {
+      return res.status(error.status).json({ code: error.code || 'api.code.bad-request' })
+    }
+
+    return res.status(500).json({ code: 'api.code.server-error' })
   }
 })
 
@@ -236,7 +309,7 @@ router.post('/', async (req, res) => {
   }
 
   if (items && !Array.isArray(items)) {
-    return res.status(400).json({ code: 'api.code.invalid-field.items' })
+    return res.status(400).json({ code: 'api.code.invalid-field' })
   }
 
   const transaction = await sequelize.transaction()

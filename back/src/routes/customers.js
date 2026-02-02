@@ -72,12 +72,12 @@ router.patch('/:id', async (req, res) => {
 
   // name optionnel en PATCH (sinon impossible de patch uniquement les produits)
   if (name !== undefined && !String(name).trim()) {
-    return res.status(400).json({ code: 'api.code.invalid-field.name' })
+    return res.status(400).json({ code: 'api.code.invalid-field' })
   }
 
   // productIds optionnel
   if (productIds !== undefined && !Array.isArray(productIds)) {
-    return res.status(400).json({ code: 'api.code.invalid-field.product-ids' })
+    return res.status(400).json({ code: 'api.code.invalid-field' })
   }
 
   try {
@@ -124,7 +124,7 @@ router.post('/', async (req, res) => {
 
   // productIds optionnel
   if (productIds !== undefined && !Array.isArray(productIds)) {
-    return res.status(400).json({ code: 'api.code.invalid-field.product-ids' })
+    return res.status(400).json({ code: 'api.code.invalid-field' })
   }
 
   try {
