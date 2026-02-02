@@ -38,8 +38,8 @@ export const orderRepository = {
     }))
   },
 
-  async patchOrder(id: number, body: Record<string, unknown>): Promise<void> {
-    return fetcher<void>(`/orders/${id}`, {
+  async patchOrder(id: number, body: Record<string, unknown>): Promise<IOrder> {
+    return fetcher<IOrder>(`/orders/${id}`, {
       method: 'PATCH',
       body,
     })

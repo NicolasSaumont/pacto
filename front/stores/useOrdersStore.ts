@@ -42,10 +42,10 @@ export const useOrdersStore = defineStore('orders', () => {
     // ADD / UPDATE / REMOVE-by-zero
     for (const item of current) {
       const originalItem = originalByProductId.get(item.product.id)
-      const qty = item.quantity ?? 0
+      const quantity = item.quantity ?? 0
 
-      // Si qty = 0 => supprimer si existait, sinon ignorer (pas d'add)
-      if (qty === 0) {
+      // Si quantity = 0 => supprimer si existait, sinon ignorer (pas d'add)
+      if (quantity === 0) {
         if (originalItem) {
           patch.remove ??= []
           patch.remove.push(originalItem.id)
@@ -53,13 +53,13 @@ export const useOrdersStore = defineStore('orders', () => {
         continue
       }
 
-      // qty > 0
+      // quantity > 0
       if (!originalItem) {
         patch.add ??= []
-        patch.add.push({ productId: item.product.id, quantity: qty })
-      } else if (qty !== originalItem.quantity) {
+        patch.add.push({ productId: item.product.id, quantity: quantity })
+      } else if (quantity !== originalItem.quantity) {
         patch.update ??= []
-        patch.update.push({ id: originalItem.id, quantity: qty })
+        patch.update.push({ id: originalItem.id, quantity: quantity })
       }
     }
 
@@ -73,7 +73,6 @@ export const useOrdersStore = defineStore('orders', () => {
 
     return Object.keys(patch).length ? patch : null
   }
-
 
   const buildOrderPatch = (
     order: IOrder,
@@ -128,15 +127,12 @@ export const useOrdersStore = defineStore('orders', () => {
     try {
       const body = orderPatch.value
 
-      // if (!Object.keys(body).length) return
-      if (!Object.keys(body).length) {
-        return true
-      }
+      if (!Object.keys(body).length) return
 
-      await orderRepository.patchOrder(order.id, body)
+      const updatedOrder = await orderRepository.patchOrder(order.id, body)
 
-      originalOrder.value = structuredClone(order)
-      return true
+      // resync snapshot
+      originalOrder.value = structuredClone(toRaw(updatedOrder))
     } catch (error) {
       throw error
     }
@@ -165,11 +161,6 @@ export const useOrdersStore = defineStore('orders', () => {
       throw error
     }
   }
-
-  // const resetForm = () => {
-  //   customer.value = structuredClone(DEFAULT_CUSTOMER)
-  //   console.log(customer.value)
-  // }
 
   const setOrder = async (orderId: string) => {
     order.value = await orderRepository.getOrder(orderId)
@@ -216,7 +207,6 @@ export const useOrdersStore = defineStore('orders', () => {
         })
       )
   })
-
 
   return {
     deleteOrder,
