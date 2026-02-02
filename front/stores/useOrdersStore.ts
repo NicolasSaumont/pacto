@@ -82,39 +82,24 @@ export const useOrdersStore = defineStore('orders', () => {
   ) => {
     const body: Record<string, unknown> = {}
 
-    const rawOriginal = toRaw(original)
-
     // CUSTOMER
     if (selectedCustomerId !== original.customer?.id) {
       body.customerId = selectedCustomerId
     }
 
-    // // ORDER DATE
-    // if (!dayjs(order.orderDate).isSame(convertToDayjs(original.orderDate), 'day')) {
-    //   body.orderDate = dayjs(order.orderDate).format(DATE_API_FORMAT)
-    // }
-
-    // // DELIVERY DATE
-    // if (!dayjs(order.deliveryDate).isSame(convertToDayjs(original.deliveryDate), 'day')) {
-    //   body.deliveryDate = dayjs(order.deliveryDate).format(DATE_API_FORMAT)
-    // }
-
     // ORDER DATE
-    const rawOrderDate = order.orderDate ? toRaw(order.orderDate) : null
-    const rawOriginalOrderDate = original.orderDate ? toRaw(original.orderDate) : null
+    const orderDate = convertToDayjs(order.orderDate)
+    const originalOrderDate = convertToDayjs(original.orderDate)
 
-    const orderDate = rawOrderDate instanceof Date ? dayjs(rawOrderDate) : dayjs(rawOrderDate?.$d)
-    const originalOrderDate = rawOriginalOrderDate instanceof Date ? dayjs(rawOriginalOrderDate) : dayjs(rawOriginalOrderDate?.$d)
-
-    if (!orderDate.isSame(originalOrderDate, 'day')) {
+    if (orderDate && !orderDate.isSame(originalOrderDate, 'day')) {
       body.orderDate = orderDate.format(DATE_API_FORMAT)
     }
 
     // DELIVERY DATE
-    const deliveryDate = order.deliveryDate ? dayjs(order.deliveryDate) : null
-    const originalDeliveryDate = rawOriginal.deliveryDate ? dayjs(rawOriginal.deliveryDate) : null
-    if (!deliveryDate?.isSame(originalDeliveryDate, 'day')) {
-      body.deliveryDate = deliveryDate?.format(DATE_API_FORMAT)
+    const deliveryDate = convertToDayjs(order.deliveryDate)
+    const originalDeliveryDate = convertToDayjs(original.deliveryDate)
+    if (deliveryDate && !deliveryDate.isSame(originalDeliveryDate, 'day')) {
+      body.deliveryDate = deliveryDate.format(DATE_API_FORMAT)
     }
 
     // COMMENT
