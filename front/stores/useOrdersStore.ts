@@ -153,6 +153,7 @@ export const useOrdersStore = defineStore('orders', () => {
     selectedProducts.value = order.value.items.map(
       item => item.product.id
     )
+    console.log('selectedProducts', selectedProducts.value)
   }
 
   const postNewOrder = async (order: IOrder) => {
@@ -163,9 +164,13 @@ export const useOrdersStore = defineStore('orders', () => {
     }
   }
 
+  const isHydratingOrder = ref(false)
+
   const setOrder = async (orderId: string) => {
+    isHydratingOrder.value = true
     order.value = await orderRepository.getOrder(orderId)
     originalOrder.value = structuredClone(toRaw(order.value))
+    isHydratingOrder.value = false
   }
 
   const setOrders = async (searchDates: IRangeDates) => {
@@ -174,6 +179,8 @@ export const useOrdersStore = defineStore('orders', () => {
 
   // Aligne les lignes de commande avec les produits sélectionnés par l’utilisateur
   watch(selectedProducts, (ids) => {
+    if (isHydratingOrder.value) return
+    
     const currentItems = order.value.items ?? []
 
     const kept = currentItems.filter(item =>

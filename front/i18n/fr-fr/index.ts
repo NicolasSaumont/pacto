@@ -79,6 +79,8 @@ export default {
   'order.delete': 'Supprimer une commande',
   'order.delete.confirmation': 'Voulez-vous vraiment supprimer cette commande ?',
   'order.delivery-date': 'Date de livraison',
+  'order.duplicate': 'Dupliquer une commande',
+  'order.duplicate.confirmation': 'Voulez-vous vraiment dupliquer cette commande ?',
   'order.edit': 'Modifier une commande',
   'order.new': 'Créer une nouvelle commande',
 

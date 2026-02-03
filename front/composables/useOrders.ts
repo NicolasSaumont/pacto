@@ -81,11 +81,13 @@ export function useOrders() {
   ]
 
   const isDeleteOrderConfirmationModalVisible = ref(false)
+  const isDuplicateOrderConfirmationModalVisible = ref(false)
 
-  const loadOrder = async () => {
+  const loadOrder = async (orderToDuplicateId?: string) => {
+    console.log('load order')
     isOrderGettingFetch.value = true
     try {
-      const orderId = getRouteParam(route.params.id)
+      const orderId = orderToDuplicateId ?? getRouteParam(route.params.id)
       if (!orderId) {
         await navigateTo(ORDERS_URL)
         return
@@ -155,6 +157,7 @@ export function useOrders() {
   
   return { 
     isDeleteOrderConfirmationModalVisible,
+    isDuplicateOrderConfirmationModalVisible,
     loadOrder,
     loadOrders,
     ordersColumns,

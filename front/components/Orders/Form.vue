@@ -61,7 +61,12 @@ onMounted(async () => {
   await loadCustomers()
   await loadProducts()
 
-  if (props.mode === ModeEnum.EDITION) fillSelects()
+  console.log('selectedCustomerId before fill', selectedCustomerId.value)
+  console.log('productsList before fill', productsList.value)
+  fillSelects()
+  console.log('selectedCustomerId after fill', selectedCustomerId.value)
+  console.log('productsList after fill', productsList.value)
+
 
   // Reset de la duplication
   isDuplicationWanted.value = false

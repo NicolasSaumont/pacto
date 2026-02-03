@@ -6,6 +6,8 @@ const { notify } = useNotify()
 
 const {
   isDeleteOrderConfirmationModalVisible,
+  isDuplicateOrderConfirmationModalVisible,
+  loadOrder,
   loadOrders,
   ordersColumns,
 } = useOrders()
@@ -14,6 +16,7 @@ const ordersStore = useOrdersStore()
 
 const {
   deleteOrder,
+  setOrder,
   setOrders,
 } = ordersStore
 
@@ -24,6 +27,7 @@ const {
 } = storeToRefs(ordersStore)
 
 const orderToDelete = ref<IOrder | null>(null)
+  const orderToDuplicate = ref<IOrder | null>(null)
 
 const handleDeleteOrderClick = async () => {
   if (!orderToDelete.value) return
@@ -45,13 +49,20 @@ const handleDeleteOrderClick = async () => {
   isDeleteOrderConfirmationModalVisible.value = false
 }
 
-const handleDuplicateOrderClick = (row: IOrder) => {
-  notify({
-    state: 'info',
-    content: t('common.unavailable-feature'),
-  })
-  // orderToDuplicate.value = row
-  // isDuplicateOrderConfirmationModalVisible.value = true
+const handleDuplicateOrderClick = async () => {
+  if (!orderToDuplicate.value) return
+
+  const orderId = orderToDuplicate.value.id.toString()
+
+  await setOrder(orderId)
+  await loadOrder(orderId)
+
+  navigateTo(ORDERS_CREATE_URL)
+}
+
+const handleOpenDuplicateOrderConfirmationModalClick = (row: IOrder) => {
+  orderToDuplicate.value = row
+  isDuplicateOrderConfirmationModalVisible.value = true
 }
 
 const handleOpenDeleteOrderConfirmationModalClick = (row: IOrder) => {
@@ -115,7 +126,7 @@ onMounted(() => loadOrders(searchDates.value))
             flat
             icon="copy" 
             :title="t('common.duplicate')"
-            @click.stop="handleDuplicateOrderClick(row)"
+            @click.stop="handleOpenDuplicateOrderConfirmationModalClick(row)"
           />
           <Button 
             :color="ButtonColorEnum.RED"
@@ -128,6 +139,16 @@ onMounted(() => loadOrders(searchDates.value))
       </template>
     </Table>
 
+    <!-- Modale de duplication -->
+    <Modal 
+      v-model="isDuplicateOrderConfirmationModalVisible"
+      :description="t('order.duplicate.confirmation')"
+      is-confirmation-modal
+      :title="t('order.duplicate')"
+      @confirm="handleDuplicateOrderClick"
+    />
+
+    <!-- Modale de suppression -->
     <Modal 
       v-model="isDeleteOrderConfirmationModalVisible"
       :description="t('order.delete.confirmation')"
