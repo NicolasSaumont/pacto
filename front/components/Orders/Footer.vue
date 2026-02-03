@@ -81,7 +81,7 @@ const handleSaveClick = async () => {
     <Button
       :color="ButtonColorEnum.SECONDARY"
       icon="copy"
-      :label="t('common.duplicate')"
+      :label="t('common.save-duplicate')"
       @click="handleDuplicateClick"
     />
     <Button

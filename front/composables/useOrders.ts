@@ -5,7 +5,10 @@ export function useOrders() {
   const { t } = useI18n()
   const { withNotify } = useNotifyAction()
 
+  const customerStore = useCustomersStore()
   const ordersStore = useOrdersStore()
+
+  const { customer } = storeToRefs(customerStore)
 
   const { 
     editOrder,
@@ -15,7 +18,10 @@ export function useOrders() {
   } = ordersStore
 
   const { 
-    isOrderGettingFetch,
+    isOrderGettingFetch, 
+    order,
+    selectedCustomerId,
+    selectedProducts, 
   } = storeToRefs(ordersStore)
 
   const ordersColumns: IColumn<IOrder>[] = [
@@ -139,6 +145,13 @@ export function useOrders() {
       }
     )
   }
+
+  const resetForm = () => {
+    customer.value = structuredClone(DEFAULT_CUSTOMER)
+    order.value = structuredClone(DEFAULT_ORDER)
+    selectedCustomerId.value = null
+    selectedProducts.value = []
+  }
   
   return { 
     isDeleteOrderConfirmationModalVisible,
@@ -146,6 +159,7 @@ export function useOrders() {
     loadOrders,
     ordersColumns,
     orderProductsColumns,
+    resetForm,
     sendOrderToCreate,
     sendOrderToEdit,
   }

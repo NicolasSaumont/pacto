@@ -7,6 +7,7 @@ const { t } = useI18n()
 const { notify } = useNotify()
 
 const { loadCustomers } = useCustomers()
+const { resetForm } = useOrders()
 const { loadProducts } = useProducts()
 
 const customerStore = useCustomersStore()
@@ -37,13 +38,6 @@ const handleAddProductClick = () => {
     state: 'info',
     content: t('common.unavailable-feature'),
   })
-}
-
-const resetForm = () => {
-  customer.value = structuredClone(DEFAULT_CUSTOMER)
-  order.value = structuredClone(DEFAULT_ORDER)
-  selectedCustomerId.value = null
-  selectedProducts.value = []
 }
 
 // Surveille le changement de client sélectionné, pour mettre à jour la variable customer, et ainsi récupére la liste des produits disponibles

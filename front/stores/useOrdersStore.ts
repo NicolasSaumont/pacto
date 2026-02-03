@@ -219,7 +219,6 @@ export const useOrdersStore = defineStore('orders', () => {
     orders,
     originalOrder,
     postNewOrder,
-    // resetForm,
     searchDates,
     selectedCustomerId,
     selectedProducts,
