@@ -17,6 +17,7 @@ const { fillSelects } = orderStore
 
 const {
   isConfirmButtonDisabled,
+  isDuplicationWanted,
   isOrderSaving,
   originalOrder,
   order,
@@ -26,14 +27,6 @@ const {
 
 const handleCancelClick = () => {
   navigateTo(ORDERS_URL)
-}
-
-const handleDuplicateClick = () => {
-  notify({
-    state: 'info',
-    title: t('common.duplicate'),
-    content: t('common.unavailable-feature'),
-  })
 }
 
 const handlePrintClick = () => {
@@ -56,16 +49,32 @@ const handleResetClick = () => {
   }
 }
 
-const handleSaveClick = async () => {
+const handleSaveClick = () => saveOrder()
+const handleSaveDuplicateClick = () => saveOrder(true)
+
+const saveByMode = async () => {
+  if (props.mode === ModeEnum.CREATION) {
+    return sendOrderToCreate(order.value)
+  }
+
+  if (props.mode === ModeEnum.EDITION) {
+    return sendOrderToEdit(order.value)
+  }
+}
+
+const saveOrder = async (duplication = false) => {
   if (!order.value) return
 
   isOrderSaving.value = true
 
   try {
-    if (props.mode === ModeEnum.CREATION) await sendOrderToCreate(order.value)
-    else if (props.mode === ModeEnum.EDITION) await sendOrderToEdit(order.value)
+    if (!isConfirmButtonDisabled.value) {
+      await saveByMode()
+    }
 
-    await navigateTo(ORDERS_URL)
+    if (duplication) isDuplicationWanted.value = true
+
+    navigateTo(duplication ? ORDERS_CREATE_URL : ORDERS_URL)
   } catch {
     // IMPORTANT: on consomme l'erreur pour éviter le warning Vue
     // la notif est déjà affichée dans withNotify
@@ -82,7 +91,7 @@ const handleSaveClick = async () => {
       :color="ButtonColorEnum.SECONDARY"
       icon="copy"
       :label="t('common.save-duplicate')"
-      @click="handleDuplicateClick"
+      @click="handleSaveDuplicateClick"
     />
     <Button
       :color="ButtonColorEnum.SECONDARY"

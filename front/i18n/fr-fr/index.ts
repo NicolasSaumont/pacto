@@ -22,6 +22,7 @@ export default {
   'common.customers': 'Client | Clients',
   'common.dashboard': 'Tableau de bord',
   'common.dates': 'Date | Dates',
+  'common.duplicate': 'Dupliquer',
   'common.delete': 'Supprimer',
   'common.go-back': 'Revenir en arrière',
   'common.go-back-to-home': 'Revenir en à l\'accueil',

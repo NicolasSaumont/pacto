@@ -20,6 +20,7 @@ const { customer, customers } = storeToRefs(customerStore)
 const { fillSelects } = orderStore
 
 const { 
+  isDuplicationWanted,
   isOrderGettingFetch, 
   order,
   selectedCustomerId,
@@ -61,9 +62,15 @@ onMounted(async () => {
   await loadProducts()
 
   if (props.mode === ModeEnum.EDITION) fillSelects()
+
+  // Reset de la duplication
+  isDuplicationWanted.value = false
 })
 
-onUnmounted(resetForm)
+onUnmounted(() => {
+  if (isDuplicationWanted.value) return
+  resetForm()
+})
 </script>
 
 <template>

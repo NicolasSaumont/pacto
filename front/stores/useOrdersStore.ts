@@ -8,6 +8,7 @@ export const useOrdersStore = defineStore('orders', () => {
   const productsStore = useProductsStore()
   const { products } = storeToRefs(productsStore)
 
+  const isDuplicationWanted = ref(false)
   const isOrderSaving = ref(false)
   const isOrderGettingFetch = ref(false)
   const order = ref<IOrder>(structuredClone(DEFAULT_ORDER))
@@ -212,6 +213,7 @@ export const useOrdersStore = defineStore('orders', () => {
     deleteOrder,
     editOrder,
     isConfirmButtonDisabled,
+    isDuplicationWanted,
     isOrderGettingFetch,
     isOrderSaving,
     fillSelects,
