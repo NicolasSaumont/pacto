@@ -8,7 +8,7 @@ const CustomerProduct = sequelize.define('CustomerProduct', {
     primaryKey: true,
   },
 
-  customer_id: {
+  customerId: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
@@ -31,6 +31,9 @@ const CustomerProduct = sequelize.define('CustomerProduct', {
 }, {
   tableName: 'customer_products',
   timestamps: true,
+  indexes: [
+    { unique: true, fields: ['customerId', 'product_id'] },
+  ],
 })
 
 module.exports = CustomerProduct

@@ -26,7 +26,7 @@ const isProductNameInputDisabled = computed(() => isProductSaving.value || isPro
 
 
 const handleResetClick = () => {
-  navigateTo(PRODUCTS)
+  navigateTo(PRODUCTS_URL)
 }
 
 const handleSubmitClick = async () => {
@@ -35,7 +35,7 @@ const handleSubmitClick = async () => {
     if (props.mode === ModeEnum.CREATION) await sendProductToCreate(product.value)
     else if (props.mode === ModeEnum.EDITION) await sendProductToEdit(product.value)
 
-    await navigateTo(PRODUCTS)
+    await navigateTo(PRODUCTS_URL)
   } catch {
     // IMPORTANT: on consomme l'erreur pour éviter le warning Vue
     // la notif est déjà affichée dans withNotify

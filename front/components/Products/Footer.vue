@@ -10,7 +10,7 @@ const {
 </script>
 
 <template>
-  <div class="flex gap-2 mt-6">
+  <div class="flex gap-2 mt-12">
     <Button 
       type="reset"
       :label="t('common.cancel')" 

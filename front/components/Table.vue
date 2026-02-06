@@ -5,10 +5,13 @@ const props = withDefaults(
     columns: IColumn<T>[]
     data: T[]
     filter?: boolean
+    isClickable?: boolean
     loading?: boolean
   }>(),
   { 
+    data: () => [],
     filter: false, 
+    isClickable: true, 
     loading: false 
   }
 )
@@ -21,8 +24,11 @@ const { t } = useI18n()
 
 const {
   displayRows,
+  getCellTitle,
   getCellValue,
+  getColumnClass,
   getColumnStyle,
+  isColumnClickable,
   search,
   sortColumn,
   sortOrder,
@@ -80,6 +86,17 @@ const handleRowClick = (row: T) => {
         </thead>
 
         <tbody>
+          <!-- Empty state -->
+          <tr v-if="!loading && displayRows.length === 0">
+            <td
+              :colspan="columns.length"
+              class="py-6 px-3 text-center text-gray-400 italic"
+            >
+              {{ t('common.no-data') }}
+            </td>
+          </tr>
+
+          <!-- Rows -->
           <tr
             v-for="row in displayRows"
             :key="row.id"
@@ -89,8 +106,10 @@ const handleRowClick = (row: T) => {
               v-for="(column, colIndex) in columns"
               :key="isDataColumn(column) ? String(column.key) : `slot-${column.slot}-${colIndex}`"
               :style="getColumnStyle(column)"
+              :title="!loading ? getCellTitle(row, column) : undefined"
               class="py-4 px-3"
-              @click="isDataColumn(column) && handleRowClick(row)"
+              :class="[getColumnClass(column), isClickable && isColumnClickable(column) ? 'cursor-pointer' : 'cursor-default']"
+              @click="isClickable && isColumnClickable(column) ? handleRowClick(row) : undefined"
             >
               <template v-if="loading">
                 <div class="animate-pulse">
@@ -105,9 +124,7 @@ const handleRowClick = (row: T) => {
               
                 <!-- colonne slot -->
                 <template v-else>
-                  <div @click.stop>
-                    <slot :name="column.slot" :row="row" />
-                  </div>
+                  <slot :name="column.slot" :row="row" />
                 </template>
               </template>
             </td>

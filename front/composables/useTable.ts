@@ -1,4 +1,5 @@
 import { useDebounce } from '@vueuse/core'
+import dayjs from 'dayjs'
 
 export function useTable<T extends { id: string | number }>(props: ITableProps<T>) {
   const SKELETON_ROWS = 8
@@ -22,14 +23,30 @@ export function useTable<T extends { id: string | number }>(props: ITableProps<T
     const query = debouncedSearch.value.toLowerCase()
 
     return props.data.filter((row) =>
-      dataColumns.value.some((column) => {
+      props.columns.some((column) => {
         if (column.searchable === false) return false
-        const value = row[column.key]
+
+        let value: unknown
+
+        if (isDataColumn(column)) {
+          value = row[column.key]
+        } else {
+          // ✅ slot column searchable via searchValue
+          value = column.searchValue ? column.searchValue(row) : undefined
+        }
+
         if (value == null) return false
+
+        // Si c’est un Dayjs, on cherche sur la valeur affichée
+        if (dayjs.isDayjs(value)) {
+          return value.format(DATE_FORMAT).toLowerCase().includes(query)
+        }
+
         return String(value).toLowerCase().includes(query)
       })
     )
   })
+
 
   const sortedData = computed(() => {
     const data = [...filteredData.value]
@@ -43,10 +60,18 @@ export function useTable<T extends { id: string | number }>(props: ITableProps<T
         if (valA == null) return 1
         if (valB == null) return -1
 
+        // Dayjs → timestamp
+        if (dayjs.isDayjs(valA) && dayjs.isDayjs(valB)) {
+          const diff = valA.valueOf() - valB.valueOf()
+          return sortOrder.value === sortOrderEnum.ASC ? diff : -diff
+        }
+
+        // Number
         if (typeof valA === 'number' && typeof valB === 'number') {
           return sortOrder.value === sortOrderEnum.ASC ? valA - valB : valB - valA
         }
 
+        // Fallback string
         const strA = String(valA).toLowerCase()
         const strB = String(valB).toLowerCase()
         return sortOrder.value === sortOrderEnum.ASC
@@ -66,13 +91,55 @@ export function useTable<T extends { id: string | number }>(props: ITableProps<T
     )
   })
 
-  const getCellValue = (row: T, key: keyof T) => row[key]
+  const getCellTitle = (row: T, column: IColumn<T>) => {
+    if (!column.title) return undefined
+
+    // --- DATA COLUMN ---
+    if (isDataColumn(column)) {
+      const rawValue = row[column.key]
+
+      if (column.title === true) {
+        const displayed = getCellValue(row, column.key)
+        return displayed != null ? String(displayed) : undefined
+      }
+
+      if (typeof column.title === 'string') {
+        return column.title
+      }
+
+      return column.title(row, rawValue)
+    }
+
+    // --- SLOT COLUMN ---
+    if (column.title === true) return undefined
+    if (typeof column.title === 'string') return column.title
+    return column.title(row, undefined)
+  }
+
+  const getCellValue = (row: T, key: keyof T) => {
+    const value = row[key]
+
+    if (dayjs.isDayjs(value)) {
+      return value.format(DATE_FORMAT)
+    }
+
+    return value
+  }
+
+  const getColumnClass = (column: IColumn<T>) => {
+    return 'customClasses' in column ? column.customClasses : undefined
+  }
 
   const getColumnStyle = (column: IColumn<T>) => {
     if (!('size' in column) || !column.size) return {}
 
     if (typeof column.size === 'number') return { width: `${column.size}px` }
     return { width: column.size }
+  }
+
+  const isColumnClickable = (column: IColumn<T> | ISlotColumn<T>) => {
+    // Par défaut true
+    return column.isClickable !== false
   }
 
   const toggleSort = (column: IColumn<T>) => {
@@ -132,11 +199,14 @@ export function useTable<T extends { id: string | number }>(props: ITableProps<T
 
   return {
     displayRows,
+    getCellTitle,
+    getCellValue,
+    getColumnClass,
+    getColumnStyle,
+    isColumnClickable,
     search,
     sortColumn,
     sortOrder,
     toggleSort,
-    getCellValue,
-    getColumnStyle,
   }
 }

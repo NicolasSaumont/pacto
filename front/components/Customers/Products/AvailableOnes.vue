@@ -1,21 +1,13 @@
 <script setup lang='ts'>
 const { t } = useI18n()
 
-const productsStore = useProductsStore()
 const customersStore = useCustomersStore()
-
-const { products } = storeToRefs(productsStore)
 const { customer } = storeToRefs(customersStore)
 
-const availableProducts = computed(() => {
-  if (!customer.value || !customer.value.products) return products.value
-
-  // Création d'un Set contenant tous les id des produits déjà associés au client
-  const customerProductIds = new Set(customer.value.products.map(product => product.id))
-
-  // On filtre la liste complète des produits pour exclure ceux déjà assignés au client
-  return products.value.filter(product => !customerProductIds.has(product.id))
-})
+const { 
+  getAvailableProducts, 
+  sortProductsByName 
+} = useProducts()
 
 const assignProduct = (product: IProduct) => {
   if (!customer.value) return
@@ -25,6 +17,7 @@ const assignProduct = (product: IProduct) => {
   if (customer.value.products.some(customerProduct => customerProduct.id === product.id)) return
 
   customer.value.products.push(product)
+  sortProductsByName(customer.value.products)
 }
 </script>
 
@@ -35,7 +28,7 @@ const assignProduct = (product: IProduct) => {
     <div class="flex-1 overflow-y-auto min-h-0 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
       <div v-auto-animate>
         <div
-          v-for="product in availableProducts"
+          v-for="product in getAvailableProducts(customer)"
           :key="product.id"
           class="flex gap-2 items-center bg-gray-800 my-4 mx-6 py-2 px-3 rounded-lg border border-gray-600"
         >

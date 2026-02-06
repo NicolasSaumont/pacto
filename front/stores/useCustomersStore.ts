@@ -3,9 +3,9 @@ import { defineStore } from 'pinia'
 export const useCustomersStore = defineStore('customers', () => {
   const isCustomerSaving = ref(false)
   const isCustomerGettingFetch = ref(false)
-  const customer = ref<ICustomer>({ ...DEFAULT_CUSTOMER })
+  const customer = ref<ICustomer>(structuredClone(DEFAULT_CUSTOMER))
   const customers = ref<ICustomer[]>([])
-  const originalCustomer = ref<ICustomer>({ ...DEFAULT_CUSTOMER })
+  const originalCustomer = ref<ICustomer>(structuredClone(DEFAULT_CUSTOMER))
 
   const isConfirmButtonDisabled = computed(() => !customer.value.name)
   
@@ -54,7 +54,7 @@ export const useCustomersStore = defineStore('customers', () => {
   }
 
   const resetForm = () => {
-    customer.value = { ...DEFAULT_CUSTOMER }
+    customer.value = structuredClone(DEFAULT_CUSTOMER)
   }
 
   const setCustomer = async (customerId: string) => {

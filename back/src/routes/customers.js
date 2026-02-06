@@ -72,12 +72,12 @@ router.patch('/:id', async (req, res) => {
 
   // name optionnel en PATCH (sinon impossible de patch uniquement les produits)
   if (name !== undefined && !String(name).trim()) {
-    return res.status(400).json({ code: 'api.code.invalid-field.name' })
+    return res.status(400).json({ code: 'api.code.invalid-field' })
   }
 
   // productIds optionnel
   if (productIds !== undefined && !Array.isArray(productIds)) {
-    return res.status(400).json({ code: 'api.code.invalid-field.product-ids' })
+    return res.status(400).json({ code: 'api.code.invalid-field' })
   }
 
   try {
@@ -87,12 +87,12 @@ router.patch('/:id', async (req, res) => {
       return res.status(404).json({ code: 'api.code.not-found.customer' })
     }
 
-    // 1) update du client (si fourni)
+    // 1️⃣ update du client (si fourni)
     if (name !== undefined) {
       await customer.update({ name })
     }
 
-    // 2) update des associations produits (si fourni)
+    // 2️⃣ update des associations produits (si fourni)
     if (productIds !== undefined) {
       // Optionnel: sécuriser en filtrant ids uniques
       const uniqueIds = [...new Set(productIds)]
@@ -124,7 +124,7 @@ router.post('/', async (req, res) => {
 
   // productIds optionnel
   if (productIds !== undefined && !Array.isArray(productIds)) {
-    return res.status(400).json({ code: 'api.code.invalid-field.product-ids' })
+    return res.status(400).json({ code: 'api.code.invalid-field' })
   }
 
   try {

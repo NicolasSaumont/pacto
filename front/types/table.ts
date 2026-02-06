@@ -12,30 +12,46 @@ export type TColumnSize =
   | `${number}%`
   | 'auto'
 
+export type TColumnTitle<T> =
+  | boolean
+  | string
+  | ((row: T, value: unknown) => string)
+
 export enum sortOrderEnum {
   ASC = 'ascending',
   DESC = 'descending'
 }
 
-export interface IDataColumn<T> {
+type TColumnValue = string | number | null | undefined
+
+interface IColumnBase<T> {
+  customClasses?: string
   header: string
-  key: keyof T
+  isClickable?: boolean
   searchable?: boolean
   size?: TColumnSize
+  title?: TColumnTitle<T>
+}
+
+export interface IDataColumn<T> extends IColumnBase<T> {
+  key: keyof T
   sortable?: boolean
   sortByDefault?: sortOrderEnum | null
 }
 
-export interface ISlotColumn {
-  header: string
-  slot: string // ex: "actions"
-  size?: TColumnSize
+export interface ISlotColumn<T> extends IColumnBase<T> {
+  key?: never
+  searchValue?: (row: T) => TColumnValue
+  slot: string          // ex: "actions"
+  sortable?: boolean
+  sortByDefault?: sortOrderEnum | null
+  sortValue?: (row: T) => TColumnValue
 }
 
-export type IColumn<T> = IDataColumn<T> | ISlotColumn
+export type IColumn<T> = IDataColumn<T> | ISlotColumn<T>
 
 export const isDataColumn = <T>(column: IColumn<T>): column is IDataColumn<T> =>
   'key' in column
 
-export const isSlotColumn = <T>(column: IColumn<T>): column is ISlotColumn =>
+export const isSlotColumn = <T>(column: IColumn<T>): column is ISlotColumn<T> =>
   'slot' in column

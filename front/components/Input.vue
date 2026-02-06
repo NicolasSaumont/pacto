@@ -1,19 +1,19 @@
 <script setup lang='ts'>
-const props = withDefaults(defineProps<{
-  disabled?: boolean
-  icon?: string
-  modelValue?: string
-  label?: string
-  loading?: boolean
-  placeholder?: string
-  theme?: TInputTheme
-}>(), {
+import type { IInputProps } from '../types/input'
+
+const props = withDefaults(defineProps<IInputProps>(), {
+  clearable: true,
   theme: 'dark',
 })
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: string): void
+  (e: 'icon-click'): void
+  (e: 'update:modelValue', value: string | number): void
 }>()
+
+defineOptions({ inheritAttrs: false })
+
+const attrs = useAttrs()
 
 const { 
   clearRightClass,
@@ -22,9 +22,68 @@ const {
   rightPaddingClass,
 } = useInput(props)
 
+const inputRef = ref<HTMLInputElement | null>(null)
+
+const focus = () => {
+  inputRef.value?.focus()
+}
+
 const handleResetClick = () => {
   emit('update:modelValue', '')
 }
+
+const onInput = (e: Event) => {
+  const el = e.target as HTMLInputElement
+  let value = el.value
+
+  if (!props.isNumberInput) {
+    emit('update:modelValue', value)
+    return
+  }
+
+  // enlève tout sauf chiffres et .
+  value = value.replace(/[^\d.]/g, '')
+
+  // empêche plusieurs points
+  const parts = value.split('.')
+  if (parts.length > 2) {
+    value = parts[0] + '.' + parts.slice(1).join('')
+  }
+
+  el.value = value
+
+  emit(
+    'update:modelValue',
+    value === '' || value === '.'
+      ? ''
+      : Number(value)
+  )
+}
+
+const onKeyDown = (e: KeyboardEvent) => {
+  if (!props.isNumberInput) return
+
+  const allowedKeys = [
+    'Backspace',
+    'Delete',
+    'ArrowLeft',
+    'ArrowRight',
+    'Tab',
+  ]
+
+  if (allowedKeys.includes(e.key)) return
+
+  // chiffre
+  if (/^\d$/.test(e.key)) return
+
+  // point décimal (1 seul)
+  if (e.key === '.') {
+    const value = String(props.modelValue ?? '')
+    if (!value.includes('.')) return
+  }
+}
+
+defineExpose({ focus })
 </script>
 
 <template>
@@ -40,21 +99,27 @@ const handleResetClick = () => {
     <!-- Input wrapper -->
     <div class="relative">
       <input
+        ref="inputRef"
+        v-bind="attrs"
         type="text"
+        :inputmode="isNumberInput ? 'decimal' : undefined"
+        :pattern="isNumberInput ? '[0-9]*' : undefined"
         :value="modelValue"
         :disabled="disabled"
-        :placeholder="placeholder ? `${placeholder}...` : undefined"
+        :readonly="readonly"
         class="w-full"
         :class="[
           inputClasses,
           rightPaddingClass,
-          (disabled || loading) && 'cursor-not-allowed opacity-80',
+          (disabled || loading) && 'cursor-not-allowed opacity-50',
         ]"
-        @input="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
+        @keydown="onKeyDown"
+        @input="onInput"
       />
 
+      <!-- CLEAR ICON -->
       <FontAwesomeIcon
-        v-if="modelValue && !disabled && !loading"
+        v-if="modelValue && clearable && !disabled && !loading"
         icon="circle-xmark"
         class="absolute top-1/2 -translate-y-1/2 cursor-pointer"
         :class="[iconColorClass, clearRightClass]"
@@ -74,14 +139,17 @@ const handleResetClick = () => {
         />
       </span>
 
+      <!-- TRAILING ICON -->
       <FontAwesomeIcon
         v-if="icon"
         :icon="icon"
-        class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"
+        class="absolute right-3 top-1/2 -translate-y-1/2"
         :class="[
           iconColorClass,
           (disabled || loading) && 'opacity-50',
+          iconClickable ? 'cursor-pointer' : 'pointer-events-none',
         ]"
+        @click="iconClickable ? emit('icon-click') : undefined"
       />
     </div>
   </div>

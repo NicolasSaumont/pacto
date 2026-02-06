@@ -19,6 +19,11 @@ export function useButton(props: IButtonProps) {
       flat: ['enabled:hover:bg-blue-900/75'],
       outline: ['border border-blue-500', 'enabled:hover:bg-blue-900/20'],
     },
+    secondary: {
+      normal: ['bg-gray-600 text-white', 'enabled:hover:bg-gray-700'],
+      flat: ['enabled:hover:bg-gray-700'],
+      outline: ['border border-gray-600', 'enabled:hover:bg-gray-700/15'],
+    },
     red: {
       normal: ['bg-red-500 text-white', 'enabled:hover:bg-red-700'],
       flat: ['text-red-500', 'enabled:hover:bg-red-900/40'],
@@ -41,7 +46,7 @@ export function useButton(props: IButtonProps) {
   const buttonStyle = computed(() => [
     ...basicClasses.value,
     buttonPadding.value,
-    props.label && 'w-48',
+    props.label && 'w-50',
     ...colorStylesClasses.value,
   ])
 

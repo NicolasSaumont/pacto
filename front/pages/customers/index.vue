@@ -34,8 +34,8 @@ const handleDeleteCustomerClick = async () => {
       await setCustomers()
     },
     {
-      successContent: t('product.api.delete.success-message'),
-      errorContent: t('product.api.delete.error-message'),
+      successContent: t('customer.api.delete.success-message'),
+      errorContent: t('customer.api.delete.error-message'),
     }
   )
   
@@ -56,12 +56,12 @@ onMounted(loadCustomers)
 </script>
 
 <template>
-  <div class="w-full max-h-full flex flex-col gap-6">
+  <div class="w-full max-h-full flex flex-col gap-12">
     <Header>
       <template #header-right>
         <Button 
           :label="t('customers.add-customer')" 
-          @click="navigateTo(CUSTOMERS_CREATE)"
+          @click="navigateTo(CUSTOMERS_CREATE_URL)"
         />
       </template>
     </Header>
@@ -76,9 +76,10 @@ onMounted(loadCustomers)
       <template #actions="{ row }">
         <div class="text-center">
           <Button 
-            color="red"
+            :color="ButtonColorEnum.RED"
             flat
             icon="trash" 
+            :title="t('common.delete')"
             @click.stop="handleOpenDeleteCustomerConfirmationModalClick(row)"
           />
         </div>

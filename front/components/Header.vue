@@ -5,7 +5,7 @@ const { currentMenuItem } = useMenu()
 </script>
 
 <template>
-  <div class="flex gap-2 justify-between mb-6">
+  <div class="flex gap-2 justify-between">
     <div class="text-2xl">
       <slot name="title">
         {{ currentMenuItem?.description }}

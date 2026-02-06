@@ -3,3 +3,5 @@ export interface ICustomer {
   name: string
   products: IProduct[]
 }
+
+export type ICustomerOnly = Omit<ICustomer, 'products'>

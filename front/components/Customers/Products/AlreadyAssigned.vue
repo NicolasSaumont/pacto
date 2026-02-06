@@ -4,10 +4,13 @@ const { t } = useI18n()
 const customersStore = useCustomersStore()
 const { customer } = storeToRefs(customersStore)
 
+const { sortProductsByName } = useProducts()
+
 const unassignProduct = (product: IProduct) => {
   if (!customer.value?.products) return
   const index = customer.value.products.findIndex(customerProduct => customerProduct.id === product.id)
   if (index >= 0) customer.value.products.splice(index, 1)
+  sortProductsByName(customer.value.products)
 }
 </script>
 

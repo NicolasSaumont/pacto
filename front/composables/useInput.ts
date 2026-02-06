@@ -24,7 +24,12 @@ export function useInput(props: IInputProps) {
   )
 
   const hasTrailingIcon = computed(() => Boolean(props.icon))           // icône à droite (loupe/users)
-  const hasClear = computed(() => Boolean(props.modelValue?.length))    // bouton clear visible
+  
+  // bouton clear visible
+  const hasClear = computed(() => {
+    const value = props.modelValue
+    return value !== undefined && value !== null && value !== ''
+  })
 
   // padding droite de l'input selon ce qu'on affiche à droite
   const rightPaddingClass = computed(() => {

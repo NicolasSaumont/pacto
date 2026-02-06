@@ -56,12 +56,12 @@ onMounted(loadProducts)
 </script>
 
 <template>
-  <div class="w-full max-h-full flex flex-col gap-6">
+  <div class="w-full max-h-full flex flex-col gap-12">
     <Header>
       <template #header-right>
         <Button 
           :label="t('products.add-product')" 
-          @click="navigateTo(PRODUCTS_CREATE)"
+          @click="navigateTo(PRODUCTS_CREATE_URL)"
         />
       </template>
     </Header>
@@ -76,9 +76,10 @@ onMounted(loadProducts)
       <template #actions="{ row }">
         <div class="text-center">
           <Button 
-            color="red"
+            :color="ButtonColorEnum.RED"
             flat
             icon="trash" 
+            :title="t('common.delete')"
             @click.stop="handleOpenDeleteProductConfirmationModalClick(row)"
           />
         </div>
