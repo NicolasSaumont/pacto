@@ -153,7 +153,6 @@ export const useOrdersStore = defineStore('orders', () => {
     selectedProducts.value = order.value.items.map(
       item => item.product.id
     )
-    console.log('selectedProducts', selectedProducts.value)
   }
 
   const postNewOrder = async (order: IOrder) => {

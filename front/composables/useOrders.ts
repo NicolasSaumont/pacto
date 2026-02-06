@@ -84,7 +84,6 @@ export function useOrders() {
   const isDuplicateOrderConfirmationModalVisible = ref(false)
 
   const loadOrder = async (orderToDuplicateId?: string) => {
-    console.log('load order')
     isOrderGettingFetch.value = true
     try {
       const orderId = orderToDuplicateId ?? getRouteParam(route.params.id)

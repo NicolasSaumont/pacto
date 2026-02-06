@@ -52,8 +52,12 @@ watch(selectedCustomerId, async (id) => {
 }, { immediate: true })
 
 // Surveille le changement de client sélectionné, pour vider la liste des produits sélectionnés
-watch(selectedCustomerId, (id) => {
+watch(selectedCustomerId, (id, oldId) => {
   if (props.mode === ModeEnum.EDITION) return
+
+  // Ne pas vider au "premier remplissage" (duplication/hydratation)
+  if (oldId == null) return
+
   selectedProducts.value = []
 })
 
@@ -61,12 +65,7 @@ onMounted(async () => {
   await loadCustomers()
   await loadProducts()
 
-  console.log('selectedCustomerId before fill', selectedCustomerId.value)
-  console.log('productsList before fill', productsList.value)
   fillSelects()
-  console.log('selectedCustomerId after fill', selectedCustomerId.value)
-  console.log('productsList after fill', productsList.value)
-
 
   // Reset de la duplication
   isDuplicationWanted.value = false

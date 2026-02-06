@@ -24,7 +24,6 @@ router.delete('/:id', async (req, res) => {
 
 // GET /orders?startDate=2026-01-01&endDate=2026-01-31 => renvoie toutes les commandes, éventuellement filtrées par date
 router.get('/', async (req, res) => {
-  console.log('GET /orders called with query:', req.query)
   try {
     const { startDate, endDate } = req.query
 
@@ -295,7 +294,6 @@ router.patch('/:id', async (req, res) => {
 
 // POST /orders => crée une nouvelle commande
 router.post('/', async (req, res) => {
-  console.log('api post order')
   const {
     customerId,
     orderDate,

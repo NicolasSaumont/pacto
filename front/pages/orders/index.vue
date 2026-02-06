@@ -2,7 +2,6 @@
 const { t } = useI18n()
 
 const { withNotify } = useNotifyAction()
-const { notify } = useNotify()
 
 const {
   isDeleteOrderConfirmationModalVisible,
@@ -16,7 +15,6 @@ const ordersStore = useOrdersStore()
 
 const {
   deleteOrder,
-  setOrder,
   setOrders,
 } = ordersStore
 
@@ -54,7 +52,6 @@ const handleDuplicateOrderClick = async () => {
 
   const orderId = orderToDuplicate.value.id.toString()
 
-  await setOrder(orderId)
   await loadOrder(orderId)
 
   navigateTo(ORDERS_CREATE_URL)
