@@ -9,6 +9,7 @@ const {
   loadOrder,
   loadOrders,
   ordersColumns,
+  printOrder,
 } = useOrders()
 
 const ordersStore = useOrdersStore()
@@ -25,7 +26,8 @@ const {
 } = storeToRefs(ordersStore)
 
 const orderToDelete = ref<IOrder | null>(null)
-  const orderToDuplicate = ref<IOrder | null>(null)
+const orderToDuplicate = ref<IOrder | null>(null)
+const orderToPrint = ref<IOrder | null>(null)
 
 const handleDeleteOrderClick = async () => {
   if (!orderToDelete.value) return
@@ -65,6 +67,14 @@ const handleOpenDuplicateOrderConfirmationModalClick = (row: IOrder) => {
 const handleOpenDeleteOrderConfirmationModalClick = (row: IOrder) => {
   orderToDelete.value = row
   isDeleteOrderConfirmationModalVisible.value = true
+}
+
+const handlePrintOrderClick = (row: IOrder) => {
+  orderToPrint.value = row
+
+  if (!orderToPrint.value.id) return
+
+  printOrder(orderToPrint.value.id)
 }
 
 const handleRowClick = (row: IOrder) => {
@@ -118,12 +128,18 @@ onMounted(() => loadOrders(searchDates.value))
       </template>
 
       <template #actions="{ row }">
-        <div class="flex gap-2 justify-center">
+        <div class="flex justify-center">
           <Button 
             flat
             icon="copy" 
             :title="t('common.duplicate')"
             @click.stop="handleOpenDuplicateOrderConfirmationModalClick(row)"
+          />
+          <Button 
+            flat
+            icon="print" 
+            :title="t('common.print')"
+            @click.stop="handlePrintOrderClick(row)"
           />
           <Button 
             :color="ButtonColorEnum.RED"

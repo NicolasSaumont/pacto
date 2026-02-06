@@ -1,25 +1,6 @@
 @tailwind base;
-@tailwind component;
+@tailwind components;
 @tailwind utilities;
-
-/* @font-face  {
-  font-family: 'BloomMonday';
-  src: url('@/assets/fonts/bloom-monday.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-} */
-
-/* body {
-  @apply font-yusei-magic text-black;
-} */
-
-/* h3 {
-  @apply uppercase text-secondary
-} */
-
-/* .main-container {
-  @apply max-w-[1240px] mx-auto;
-} */
 
 .height-screen {
   height: calc(100vh - 40px)

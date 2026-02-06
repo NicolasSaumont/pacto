@@ -52,7 +52,7 @@ export const DEFAULT_ORDER = {
   comment: undefined,
   customer: {
     id: 0,
-    name: 'name',
+    name: '',
   },
   deliveryDate: undefined,
   items: [],

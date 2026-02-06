@@ -4,9 +4,9 @@ const props = defineProps<{
 }>()
 
 const { t } = useI18n()
-const { notify } = useNotify()
 
 const {
+  printOrder,
   sendOrderToCreate,
   sendOrderToEdit,
 } = useOrders()
@@ -30,11 +30,10 @@ const handleCancelClick = () => {
 }
 
 const handlePrintClick = () => {
-  notify({
-    state: 'info',
-    title: t('common.print'),
-    content: t('common.unavailable-feature'),
-  })
+  if (!order.value.id) return
+  printOrder(order.value.id)
+  // const url = `/orders/${order.value.id}/print`
+  // window.open(url, '_blank', 'noopener,noreferrer')
 }
 
 const handleResetClick = () => {
