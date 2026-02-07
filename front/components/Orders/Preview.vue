@@ -17,20 +17,26 @@ const {
   selectedCustomerId,
 } = storeToRefs(orderStore)
 
-const quantityModel = (row: { quantity: number | null }) => computed<number>({
-  get: () => {
-    return typeof row.quantity === 'number' ? row.quantity : 0
-  },
-  set: (value: any) => {
-    if (value === '' || value === null || value === undefined) {
-      row.quantity = 0
-      return
-    }
+const quantityModel = (row: { product: IProduct }) =>
+  computed<number>({
+    get: () => {
+      const item = order.value.items.find(
+        i => i.product.id === row.product.id
+      )
+      return item?.quantity ?? 0
+    },
+    set: (value) => {
+      const item = getOrCreateOrderItem(row.product)
 
-    const number = Number(value)
-    row.quantity = Number.isFinite(number) ? number : 0
-  },
-})
+      if (!Number.isFinite(value)) {
+        item.quantity = 0
+        return
+      }
+
+      const number = Number(value)
+      item.quantity = Number.isFinite(number) ? number : 0
+    },
+  })
 
 const selectedCustomerProducts = computed(() => {
   return customer.value.products.map((product: IProduct) => {
@@ -50,6 +56,22 @@ const selectedCustomerProducts = computed(() => {
     })
   )
 })
+
+const getOrCreateOrderItem = (product: IProduct) => {
+  let item = order.value.items.find(
+    i => i.product.id === product.id
+  )
+
+  if (!item) {
+    item = {
+      product,
+      quantity: 0,
+    }
+    order.value.items.push(item)
+  }
+
+  return item
+}
 
 const handleAddProductClick = () => {
   notify({
