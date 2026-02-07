@@ -32,8 +32,6 @@ const handleCancelClick = () => {
 const handlePrintClick = () => {
   if (!order.value.id) return
   printOrder(order.value.id)
-  // const url = `/orders/${order.value.id}/print`
-  // window.open(url, '_blank', 'noopener,noreferrer')
 }
 
 const handleResetClick = () => {
