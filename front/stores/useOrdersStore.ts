@@ -47,7 +47,7 @@ export const useOrdersStore = defineStore('orders', () => {
 
       // Si quantity = 0 => supprimer si existait, sinon ignorer (pas d'add)
       if (quantity === 0) {
-        if (originalItem) {
+        if (originalItem?.id !== undefined) {
           patch.remove ??= []
           patch.remove.push(originalItem.id)
         }
@@ -58,7 +58,7 @@ export const useOrdersStore = defineStore('orders', () => {
       if (!originalItem) {
         patch.add ??= []
         patch.add.push({ productId: item.product.id, quantity: quantity })
-      } else if (quantity !== originalItem.quantity) {
+      } else if (originalItem?.id !== undefined && quantity !== originalItem.quantity) {
         patch.update ??= []
         patch.update.push({ id: originalItem.id, quantity: quantity })
       }
@@ -66,7 +66,7 @@ export const useOrdersStore = defineStore('orders', () => {
 
     // REMOVE (produit désélectionné)
     for (const item of original) {
-      if (!currentByProductId.has(item.product.id)) {
+      if (item.id !== undefined && !currentByProductId.has(item.product.id)) {
         patch.remove ??= []
         patch.remove.push(item.id)
       }

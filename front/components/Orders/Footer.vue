@@ -86,18 +86,21 @@ const saveOrder = async (duplication = false) => {
   <div class="flex gap-4 justify-end">
     <Button
       :color="ButtonColorEnum.SECONDARY"
+      :disabled="isConfirmButtonDisabled"
       icon="copy"
       :label="t('common.save-duplicate')"
       @click="handleSaveDuplicateClick"
     />
     <Button
       :color="ButtonColorEnum.SECONDARY"
+      :disabled="isConfirmButtonDisabled"
       icon="print"
       :label="t('common.print')"
       @click="handlePrintClick"
     />
     <Button
       :color="ButtonColorEnum.SECONDARY"
+      :disabled="isConfirmButtonDisabled"
       icon="arrow-rotate-left"
       :label="t('common.reset')"
       @click="handleResetClick"

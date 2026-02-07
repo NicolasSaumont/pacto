@@ -1,4 +1,4 @@
-<script setup lang="ts" generic="T extends { id: string | number }">
+<script setup lang="ts" generic="T extends { id?: string | number }">
 
 const props = withDefaults(
   defineProps<{
@@ -44,13 +44,15 @@ const handleRowClick = (row: T) => {
 <template>
   <div class="bg-gray-900 p-6 rounded-2xl border border-gray-600 w-full h-full flex flex-col min-h-0">
 
-    <div v-if="filter" class="flex justify-end mb-3 pr-4">
+    <div class="flex justify-end mb-3 pr-4">
       <Input
+        v-if="filter" 
         v-model="search"
         icon="magnifying-glass"
         :placeholder="t('common.search')"
         :disabled="loading"
       />
+      <slot name="header" />
     </div>
 
     <div class="overflow-y-auto min-h-0 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
@@ -60,8 +62,8 @@ const handleRowClick = (row: T) => {
             <th
               v-for="(column, colIndex) in columns"
               :key="isDataColumn(column) ? String(column.key) : `slot-${column.slot}-${colIndex}`"
-              class="text-left py-2 px-3 select-none"
               :style="getColumnStyle(column)"
+              class="text-left py-2 px-3 select-none"
               :class="{ 'cursor-pointer': isDataColumn(column) && column.sortable && !loading }"
               @click="toggleSort(column)"
             >
@@ -98,8 +100,8 @@ const handleRowClick = (row: T) => {
 
           <!-- Rows -->
           <tr
-            v-for="row in displayRows"
-            :key="row.id"
+            v-for="(row, rowIndex) in displayRows"
+            :key="row.id ?? `tmp-${rowIndex}`"
             :class="loading ? '' : 'hover:cursor-pointer hover:bg-gray-800'"
           >
             <td

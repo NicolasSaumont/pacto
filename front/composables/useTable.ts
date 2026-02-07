@@ -1,7 +1,7 @@
 import { useDebounce } from '@vueuse/core'
 import dayjs from 'dayjs'
 
-export function useTable<T extends { id: string | number }>(props: ITableProps<T>) {
+export function useTable<T extends { id?: string | number }>(props: ITableProps<T>) {
   const SKELETON_ROWS = 8
 
   const search = ref('')

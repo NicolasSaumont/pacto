@@ -74,7 +74,7 @@ const selectedOptions = computed<OptionT[]>(() =>
 
 const hasValue = computed(() => {
   if (props.multiple) return selectedValues.value.length > 0
-  return props.modelValue !== undefined && props.modelValue !== null && props.modelValue !== ''
+  return props.modelValue !== undefined && props.modelValue !== null && props.modelValue !== '' && props.modelValue !== 0
 })
 
 // --- trigger display ---
