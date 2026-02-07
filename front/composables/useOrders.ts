@@ -60,7 +60,7 @@ export function useOrders() {
     },
     {
       header: '',
-      size: '10%',
+      size: '12%',
       slot: 'actions'
     }
   ]
@@ -121,6 +121,11 @@ export function useOrders() {
     isOrderGettingFetch.value = false
   }
 
+  const printOrder = (orderToPrintId: number) => {
+    const url = `/orders/${orderToPrintId}/print`
+    window.open(url, '_blank', 'noopener,noreferrer')
+  }
+
   const sendOrderToCreate = async (order: IOrder) => {
     await withNotify(
       async () => {
@@ -161,6 +166,7 @@ export function useOrders() {
     loadOrders,
     ordersColumns,
     orderProductsColumns,
+    printOrder,
     resetForm,
     sendOrderToCreate,
     sendOrderToEdit,

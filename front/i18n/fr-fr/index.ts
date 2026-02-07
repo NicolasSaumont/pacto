@@ -16,6 +16,7 @@ export default {
   'common.api.error-title': 'Échec',
   'common.api.success-title': 'Succès',
   'common.available-products': 'Produit disponible | Produits disponibles',
+  'common.batch-number': 'N°\u00A0Lot', // \u00A0 : espace insécable
   'common.cancel': 'Annuler',
   'common.comments': 'Remarque | Remarques',
   'common.confirm': 'Confirmer',
@@ -28,7 +29,7 @@ export default {
   'common.go-back-to-home': 'Revenir en à l\'accueil',
   'common.no-data': 'Aucune donnée',
   'common.order-taking': 'Prise de commande',
-  'common.orders': 'Commandes',
+  'common.orders': 'Commande | Commandes',
   'common.print': 'Imprimer',
   'common.products': 'Produit | Produits',
   'common.quantity': 'Quantité',
@@ -45,6 +46,7 @@ export default {
   'common.weekdays.shortcut.thursday': 'Je',
   'common.weekdays.shortcut.tuesday': 'Ma',
   'common.weekdays.shortcut.wednesday': 'Me',
+  'common.weight': 'Poids', 
 
   'customer.add': 'Créer un nouveau client',
   'customer.api.delete.error-message': 'Le client n\'a pas pu être supprimé',
@@ -87,6 +89,10 @@ export default {
   'orders.add-order': '+ Nouvelle commande',
   'orders.api.code.get-error-message': 'Erreur lors de la récupération des commandes',
   'orders.api.get.error-message': 'Les commandes n\'ont pas pu être chargées',
+
+  'print.customer': 'Client :',
+  'print.delivery-date': 'Date de livraison :',
+  'print.order-date': 'Date de la commande :',
 
   'product.add': 'Créer un nouveau produit',
   'product.api.delete.error-message': 'Le produit n\'a pas pu être supprimé',
