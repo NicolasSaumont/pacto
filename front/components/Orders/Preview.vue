@@ -11,6 +11,7 @@ const orderStore = useOrdersStore()
 const {
   isOrderGettingFetch,
   order,
+  selectedCustomerId,
 } = storeToRefs(orderStore)
 
 const quantityModel = (row: { quantity: number | null }) => computed<number>({
@@ -40,7 +41,7 @@ const handleAddProductClick = () => {
   <div class="relative flex-1">
     <Button
       icon="plus"
-      :disabled="isOrderGettingFetch"
+      :disabled="isOrderGettingFetch || !selectedCustomerId"
       class="absolute right-5 top-5 z-50"
       @click="handleAddProductClick"
     />
