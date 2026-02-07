@@ -6,7 +6,10 @@ const {
   orderProductsColumns,
 } = useOrders()
 
+const customerStore = useCustomersStore()
 const orderStore = useOrdersStore()
+
+const { customer } = storeToRefs(customerStore)
 
 const {
   isOrderGettingFetch,
@@ -29,6 +32,25 @@ const quantityModel = (row: { quantity: number | null }) => computed<number>({
   },
 })
 
+const selectedCustomerProducts = computed(() => {
+  return customer.value.products.map((product: IProduct) => {
+    const existingItem = order.value.items.find(
+      item => item.product.id === product.id
+    )
+
+    return {
+      id: existingItem?.id,
+      product,
+      quantity: existingItem?.quantity ?? 0,
+    }
+  })
+  .sort((a, b) =>
+    a.product.name.localeCompare(b.product.name, 'fr', {
+      sensitivity: 'base',
+    })
+  )
+})
+
 const handleAddProductClick = () => {
   notify({
     state: 'info',
@@ -48,7 +70,7 @@ const handleAddProductClick = () => {
     
     <Table 
       :columns="orderProductsColumns"
-      :data="order.items"
+      :data="selectedCustomerProducts"
       :is-clickable="false"
       :loading="isOrderGettingFetch"
     >

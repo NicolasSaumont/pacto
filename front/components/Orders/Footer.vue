@@ -93,12 +93,14 @@ const saveOrder = async (duplication = false) => {
     />
     <Button
       :color="ButtonColorEnum.SECONDARY"
+      :disabled="isConfirmButtonDisabled"
       icon="print"
       :label="t('common.print')"
       @click="handlePrintClick"
     />
     <Button
       :color="ButtonColorEnum.SECONDARY"
+      :disabled="isConfirmButtonDisabled"
       icon="arrow-rotate-left"
       :label="t('common.reset')"
       @click="handleResetClick"

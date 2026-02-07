@@ -1,4 +1,4 @@
-<script setup lang="ts" generic="T extends { id: string | number }">
+<script setup lang="ts" generic="T extends { id?: string | number }">
 
 const props = withDefaults(
   defineProps<{
@@ -100,8 +100,8 @@ const handleRowClick = (row: T) => {
 
           <!-- Rows -->
           <tr
-            v-for="row in displayRows"
-            :key="row.id"
+            v-for="(row, rowIndex) in displayRows"
+            :key="row.id ?? `tmp-${rowIndex}`"
             :class="loading ? '' : 'hover:cursor-pointer hover:bg-gray-800'"
           >
             <td

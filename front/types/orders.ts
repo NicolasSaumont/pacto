@@ -1,7 +1,7 @@
 import type { Dayjs } from "dayjs"
 
 export interface IItem {
-  id: number
+  id?: number
   product: IProduct
   quantity: number
 }
