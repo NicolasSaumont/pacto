@@ -4,7 +4,7 @@ const props = defineProps<{
 }>()
 
 const { t } = useI18n()
-const { notify } = useNotify()
+// const { notify } = useNotify()
 
 const { loadCustomers } = useCustomers()
 const { resetForm } = useOrders()
@@ -34,12 +34,12 @@ const productsList = computed(() => {
   return products.value
 })
 
-const handleAddProductClick = () => {
-  notify({
-    state: 'info',
-    content: t('common.unavailable-feature'),
-  })
-}
+// const handleAddProductClick = () => {
+//   notify({
+//     state: 'info',
+//     content: t('common.unavailable-feature'),
+//   })
+// }
 
 // Surveille le changement de client sélectionné, pour mettre à jour la variable customer, et ainsi récupére la liste des produits disponibles
 watch(selectedCustomerId, async (id) => {
@@ -101,7 +101,7 @@ onUnmounted(() => {
       :loading="isOrderGettingFetch"
       :min="order.orderDate"
     />
-    <div class="flex gap-4 items-end">
+    <!-- <div class="flex gap-4 items-end">
       <Select 
         v-model="selectedProducts"
         filter
@@ -117,7 +117,7 @@ onUnmounted(() => {
         :disabled="isOrderGettingFetch"
         @click="handleAddProductClick"
       />
-    </div>
+    </div> -->
     <div class="flex-1 min-h-0">
       <TextArea 
         v-model="order.comment"

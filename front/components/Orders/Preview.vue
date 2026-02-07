@@ -1,4 +1,7 @@
 <script setup lang='ts'>
+const { t } = useI18n()
+const { notify } = useNotify()
+
 const {
   orderProductsColumns,
 } = useOrders()
@@ -24,10 +27,24 @@ const quantityModel = (row: { quantity: number | null }) => computed<number>({
     row.quantity = Number.isFinite(number) ? number : 0
   },
 })
+
+const handleAddProductClick = () => {
+  notify({
+    state: 'info',
+    content: t('common.unavailable-feature'),
+  })
+}
 </script>
 
 <template>
-  <div class="flex-1">
+  <div class="relative flex-1">
+    <Button
+      icon="plus"
+      :disabled="isOrderGettingFetch"
+      class="absolute right-5 top-5 z-50"
+      @click="handleAddProductClick"
+    />
+    
     <Table 
       :columns="orderProductsColumns"
       :data="order.items"
