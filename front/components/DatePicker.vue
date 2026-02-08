@@ -1,5 +1,6 @@
 <script lang="ts" setup generic="T extends Dayjs | IRangeDates">
 import type { Dayjs } from 'dayjs'
+import type { IDatePickerProps } from '../types/datePicker'
 
 const props = withDefaults(defineProps<IDatePickerProps<T>>(), {
   displayedFormat: DATE_FORMAT,
