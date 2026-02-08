@@ -327,6 +327,7 @@ router.post('/', async (req, res) => {
         items.map(item => ({
           order_id: order.id,
           product_id: item.productId,
+          product_name: item.productName,
           quantity: item.quantity ?? 1,
         })),
         { transaction }

@@ -21,7 +21,7 @@ const quantityModel = (row: { product: IProduct }) =>
   computed<number>({
     get: () => {
       const item = order.value.items.find(
-        i => i.product.id === row.product.id
+        item => item.product && item.product.id === row.product.id
       )
       return item?.quantity ?? 0
     },
@@ -41,7 +41,7 @@ const quantityModel = (row: { product: IProduct }) =>
 const selectedCustomerProducts = computed(() => {
   return customer.value.products.map((product: IProduct) => {
     const existingItem = order.value.items.find(
-      item => item.product.id === product.id
+      item => item.product && item.product.id === product.id
     )
 
     return {
@@ -59,7 +59,7 @@ const selectedCustomerProducts = computed(() => {
 
 const getOrCreateOrderItem = (product: IProduct) => {
   let item = order.value.items.find(
-    i => i.product.id === product.id
+    item => item.product && item.product.id === product.id
   )
 
   if (!item) {

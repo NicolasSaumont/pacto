@@ -15,7 +15,7 @@ const OrderProduct = sequelize.define('OrderProduct', {
       model: 'orders',
       key: 'id',
     },
-    onDelete: 'CASCADE',
+    onDelete: 'SET NULL',
   },
 
   product_id: {
@@ -25,7 +25,12 @@ const OrderProduct = sequelize.define('OrderProduct', {
       model: 'products',
       key: 'id',
     },
-    onDelete: 'CASCADE',
+    onDelete: 'SET NULL',
+  },
+
+  product_name: {
+    type: DataTypes.STRING,
+    allowNull: false,
   },
 
   quantity: {

@@ -58,6 +58,7 @@ export const orderRepository = {
         comment: newOrder.comment,
         items: newOrder.items.map(item => ({
           productId: item.product.id,
+          productName: item.product.name,
           quantity: item.quantity
         }))
       },
