@@ -76,6 +76,7 @@ onUnmounted(resetForm)
         :disabled="isCustomerNameInputDisabled"
         :label="t('customer.name')"
         :loading="isCustomerGettingFetch"
+        required
         theme="light"
         class="shrink-0"
       />

@@ -9,7 +9,7 @@ export interface IItem {
 export interface IOrder {
   id: number
   comment?: string
-  orderDate: Dayjs
+  orderDate?: Dayjs
   deliveryDate?: Dayjs
   customer: ICustomerOnly
   items: IItem[]

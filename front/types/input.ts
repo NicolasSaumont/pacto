@@ -9,6 +9,7 @@ export interface IInputProps {
   modelValue?: string | number
   placeholder?: string
   readonly?: boolean
+  required?: boolean
   theme?: TInputTheme
 }
 

@@ -11,7 +11,6 @@ const { loadProducts } = useProducts()
 
 const customerStore = useCustomersStore()
 const orderStore = useOrdersStore()
-const productStore = useProductsStore()
 
 const { setCustomer } = customerStore
 const { customer, customers } = storeToRefs(customerStore)
@@ -23,15 +22,7 @@ const {
   isOrderGettingFetch, 
   order,
   selectedCustomerId,
-  selectedProducts, 
 } = storeToRefs(orderStore)
-
-const { products } = storeToRefs(productStore)
-
-const productsList = computed(() => {
-  if (customer.value.id) return customer.value.products
-  return products.value
-})
 
 // Surveille le changement de client sélectionné, pour mettre à jour la variable customer, et ainsi récupére la liste des produits disponibles
 watch(selectedCustomerId, async (id) => {
@@ -43,21 +34,13 @@ watch(selectedCustomerId, async (id) => {
   order.value.customer.id = id
 }, { immediate: true })
 
-// Surveille le changement de client sélectionné, pour vider la liste des produits sélectionnés
-watch(selectedCustomerId, (id, oldId) => {
-  if (props.mode === ModeEnum.EDITION) return
-
-  // Ne pas vider au "premier remplissage" (duplication/hydratation)
-  if (oldId == null) return
-
-  selectedProducts.value = []
-})
-
 onMounted(async () => {
   await loadCustomers()
   await loadProducts()
 
   fillSelects()
+
+  if (isDuplicationWanted.value) order.value.orderDate = undefined
 
   // Reset de la duplication
   isDuplicationWanted.value = false
@@ -78,6 +61,7 @@ onUnmounted(() => {
       label-key="name"
       :loading="isOrderGettingFetch"
       :options="customers"
+      required
       valueKey="id"
     />
     <DatePicker 
@@ -86,6 +70,7 @@ onUnmounted(() => {
       :label="t('order.date')"
       :loading="isOrderGettingFetch"
       :min="order.orderDate"
+      required
     />
     <DatePicker 
       v-model="order.deliveryDate"

@@ -1,11 +1,16 @@
 import { Dayjs } from 'dayjs'
 
-export interface IDatePickerProps {
+export interface IDatePickerProps<T> {
   disabled?: boolean
-  modelValue?: Dayjs
+  displayedFormat?: string
   label?: string
   loading?: boolean
+  max?: Dayjs
+  min?: Dayjs
+  modelValue?: T
   placeholder?: string
+  range?: boolean
+  required?: boolean
   theme?: TInputTheme
 }
 
