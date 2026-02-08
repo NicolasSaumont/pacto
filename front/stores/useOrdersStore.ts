@@ -37,8 +37,6 @@ export const useOrdersStore = defineStore('orders', () => {
       remove?: number[]
     } = {}
 
-    // const originalByProductId = new Map(original.map(item => item.product && [item.product.id, item]))
-    // const currentByProductId = new Map(current.map(item => item.product && [item.product.id, item]))
     const originalByProductId = new Map(
       original
         .filter(item => item.product)
