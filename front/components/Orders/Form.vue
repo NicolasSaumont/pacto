@@ -40,6 +40,8 @@ onMounted(async () => {
 
   fillSelects()
 
+  if (isDuplicationWanted.value) order.value.orderDate = undefined
+
   // Reset de la duplication
   isDuplicationWanted.value = false
 })

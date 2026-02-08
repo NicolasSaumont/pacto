@@ -20,6 +20,7 @@ const {
 } = ordersStore
 
 const { 
+  isDuplicationWanted,
   isOrderGettingFetch,
   orders,
   searchDates,
@@ -51,6 +52,8 @@ const handleDeleteOrderClick = async () => {
 
 const handleDuplicateOrderClick = async () => {
   if (!orderToDuplicate.value) return
+
+  isDuplicationWanted.value = true
 
   const orderId = orderToDuplicate.value.id.toString()
 
