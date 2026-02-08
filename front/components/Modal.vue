@@ -4,7 +4,7 @@ const isVisible = defineModel<boolean>()
 const props = withDefaults(
   defineProps<{
     title: string
-    description: string
+    description?: string
     isConfirmationModal?: boolean
   }>(),
   {
@@ -16,7 +16,12 @@ const emit = defineEmits<{
   (e: 'confirm'): void
 }>()
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 const { t } = useI18n()
+const attrs = useAttrs()
 
 const confirmButtonRef = ref<HTMLButtonElement | null>(null)
 
@@ -76,7 +81,8 @@ onUnmounted(() => {
 
       <!-- Modal -->
       <div
-        class="relative z-10 w-full max-w-md rounded-lg bg-white p-6 shadow-xl"
+        class="relative z-10 rounded-lg bg-white p-6 shadow-xl"
+        v-bind="attrs"
       >
         <!-- Close button -->
         <FontAwesomeIcon
@@ -88,24 +94,28 @@ onUnmounted(() => {
         <!-- Content -->
         <div class="flex flex-col gap-4 text-gray-800">
           <span class="text-lg font-semibold">{{ title }}</span>
-          <span>{{ description }}</span>
+          <span v-if="description">{{ description }}</span>
+          <slot v-else name="content" />
         </div>
 
         <!-- Actions -->
         <div 
-          v-if="isConfirmationModal"
-          class="mt-6 flex justify-end gap-3"
+          class="mt-6 flex justify-end"
         >
-          <Button
-            :label="t('common.cancel')"
-            outline
-            @click="onCancel"
-          />
-          <Button
-            ref="confirmButtonRef"
-            :label="t('common.confirm')"
-            @click="onConfirm"
-          />
+          <div v-if="isConfirmationModal" class="flex gap-3">
+            <Button
+              :label="t('common.cancel')"
+              outline
+              @click="onCancel"
+            />
+            <Button
+              ref="confirmButtonRef"
+              :label="t('common.confirm')"
+              @click="onConfirm"
+            />
+          </div>
+
+          <slot v-else name="footer" />
         </div>
       </div>
     </div>

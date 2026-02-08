@@ -17,6 +17,8 @@ const {
   selectedCustomerId,
 } = storeToRefs(orderStore)
 
+const isManageProductModalVisible = ref(false)
+
 const quantityModel = (row: { product: IProduct }) =>
   computed<number>({
     get: () => {
@@ -74,10 +76,7 @@ const getOrCreateOrderItem = (product: IProduct) => {
 }
 
 const handleAddProductClick = () => {
-  notify({
-    state: 'info',
-    content: t('common.unavailable-feature'),
-  })
+  isManageProductModalVisible.value = true
 }
 </script>
 
@@ -108,5 +107,22 @@ const handleAddProductClick = () => {
         />
       </template>
     </Table>
+
+    <Modal 
+      v-model="isManageProductModalVisible"
+      :title="t('order.manage-products')"
+    >
+      <template #content>
+        <CustomersProducts class="flex-1 min-h-0 text-gray-100" />
+      </template>
+
+      <template #footer>
+        <Button
+          :label="t('common.close')"
+          outline
+          @click="isManageProductModalVisible = false"
+        />
+      </template>
+    </Modal>
   </div>
 </template>

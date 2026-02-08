@@ -18,6 +18,7 @@ export default {
   'common.available-products': 'Produit disponible | Produits disponibles',
   'common.batch-number': 'N°\u00A0Lot', // \u00A0 : espace insécable
   'common.cancel': 'Annuler',
+  'common.close': 'Fermer',
   'common.comments': 'Remarque | Remarques',
   'common.confirm': 'Confirmer',
   'common.customers': 'Client | Clients',
@@ -85,6 +86,7 @@ export default {
   'order.duplicate.confirmation': 'Voulez-vous vraiment dupliquer cette commande ?',
   'order.edit': 'Modifier une commande',
   'order.new': 'Créer une nouvelle commande',
+  'order.manage-products': 'Gestion des produits',
 
   'orders.add-order': '+ Nouvelle commande',
   'orders.api.code.get-error-message': 'Erreur lors de la récupération des commandes',
