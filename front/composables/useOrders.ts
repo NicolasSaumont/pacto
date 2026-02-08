@@ -49,8 +49,17 @@ export function useOrders() {
       slot: 'items',
       title: row =>
         [...row.items]
-          .sort((a, b) => a.product.name.localeCompare(b.product.name, 'fr'))
-          .map(i => `${i.product.name} × ${i.quantity}`)
+          .sort((a, b) => {
+            if (!a.product || !b.product) return 0
+            return a.product.name.localeCompare(b.product.name, 'fr', {
+              sensitivity: 'base',
+            })
+          })
+          .map(item =>
+            item.product
+              ? `${item.product.name} × ${item.quantity}`
+              : `Produit supprimé × ${item.quantity}`
+          )
           .join('\n')
     },
     {

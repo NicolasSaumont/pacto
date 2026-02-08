@@ -37,8 +37,17 @@ export const useOrdersStore = defineStore('orders', () => {
       remove?: number[]
     } = {}
 
-    const originalByProductId = new Map(original.map(i => [i.product.id, i]))
-    const currentByProductId = new Map(current.map(i => [i.product.id, i]))
+    const originalByProductId = new Map(
+      original
+        .filter(item => item.product)
+        .map(item => [item.product!.id, item])
+    )
+
+    const currentByProductId = new Map(
+      current
+        .filter(item => item.product)
+        .map(item => [item.product!.id, item])
+    )
 
     // ADD / UPDATE / REMOVE-by-zero
     for (const item of current) {
@@ -66,7 +75,7 @@ export const useOrdersStore = defineStore('orders', () => {
 
     // REMOVE (produit désélectionné)
     for (const item of original) {
-      if (item.id !== undefined && !currentByProductId.has(item.product.id)) {
+      if (item.product && item.id !== undefined && !currentByProductId.has(item.product.id)) {
         patch.remove ??= []
         patch.remove.push(item.id)
       }
@@ -151,7 +160,7 @@ export const useOrdersStore = defineStore('orders', () => {
     selectedCustomerId.value = order.value.customer.id 
 
     selectedProducts.value = order.value.items.map(
-      item => item.product.id
+      item => item.product && item.product.id
     )
   }
 
@@ -183,7 +192,7 @@ export const useOrdersStore = defineStore('orders', () => {
     const currentItems = order.value.items ?? []
 
     const kept = currentItems.filter(item =>
-      ids.includes(item.product.id)
+      item.product && ids.includes(item.product.id)
     )
 
     const added = ids

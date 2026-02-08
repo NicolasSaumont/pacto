@@ -219,6 +219,7 @@ const seedDB = async () => {
         return {
           order_id: order.id,
           product_id: product.id,
+          product_name: product.name,
           quantity: item.quantity,
         }
       })

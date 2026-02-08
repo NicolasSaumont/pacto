@@ -15,7 +15,7 @@ const CustomerProduct = sequelize.define('CustomerProduct', {
       model: 'customers',
       key: 'id',
     },
-    onDelete: 'CASCADE',
+    onDelete: 'SET NULL',
   },
 
   product_id: {
@@ -25,7 +25,7 @@ const CustomerProduct = sequelize.define('CustomerProduct', {
       model: 'products',
       key: 'id',
     },
-    onDelete: 'CASCADE',
+    onDelete: 'SET NULL',
   },
 
 }, {
