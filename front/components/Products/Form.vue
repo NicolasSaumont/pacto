@@ -58,6 +58,7 @@ onUnmounted(resetForm)
       :disabled="isProductNameInputDisabled"
       :label="t('product.name')"
       :loading="isProductGettingFetch"
+      required
       theme="light"
     />
     <ProductsFooter />

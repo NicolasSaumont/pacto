@@ -91,9 +91,10 @@ defineExpose({ focus })
     <!-- Label -->
     <label
       v-if="label"
-      class="block mb-1 text-sm font-medium text-gray-400"
+      class="flex gap-1 mb-1 text-sm font-medium text-gray-400"
     >
-      {{ label }}
+      <span>{{ label }}</span>
+      <span v-if="required" class="text-red-600">*</span>
     </label>
 
     <!-- Input wrapper -->

@@ -1,19 +1,7 @@
 <script lang="ts" setup generic="T extends Dayjs | IRangeDates">
 import type { Dayjs } from 'dayjs'
 
-const props = withDefaults(
-  defineProps<{
-    disabled?: boolean
-    displayedFormat?: string
-    label?: string
-    loading?: boolean
-    max?: Dayjs
-    min?: Dayjs
-    modelValue?: T
-    placeholder?: string
-    range?: boolean
-    theme?: TInputTheme
-}>(), {
+const props = withDefaults(defineProps<IDatePickerProps<T>>(), {
   displayedFormat: DATE_FORMAT,
   range: false,
   theme: 'dark',
@@ -98,6 +86,7 @@ onBeforeUnmount(() => {
       :loading
       :placeholder
       readonly
+      :required
       :theme
       :class="{'cursor-pointer' : !disabled && !loading}"
       @click="toggleCalendar"

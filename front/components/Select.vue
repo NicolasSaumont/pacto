@@ -214,8 +214,9 @@ onUnmounted(() => document.removeEventListener('mousedown', onClick))
 
 <template>
   <div ref="rootRef" class="w-full max-w-72" v-bind="attrs">
-    <label v-if="label" class="block mb-1 text-sm font-medium text-gray-400">
-      {{ label }}
+    <label v-if="label" class="flex gap-1 mb-1 text-sm font-medium text-gray-400">
+      <span>{{ label }}</span>
+      <span v-if="required" class="text-red-600">*</span>
     </label>
 
     <div class="relative">

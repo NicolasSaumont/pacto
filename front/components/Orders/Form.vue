@@ -61,6 +61,7 @@ onUnmounted(() => {
       label-key="name"
       :loading="isOrderGettingFetch"
       :options="customers"
+      required
       valueKey="id"
     />
     <DatePicker 
@@ -69,6 +70,7 @@ onUnmounted(() => {
       :label="t('order.date')"
       :loading="isOrderGettingFetch"
       :min="order.orderDate"
+      required
     />
     <DatePicker 
       v-model="order.deliveryDate"

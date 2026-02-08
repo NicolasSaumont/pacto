@@ -17,6 +17,7 @@ export interface ISelectProps<TOption = any, TValue = Primitive> {
   multiple?: boolean
   options: TOption[]
   placeholder?: string
+  required?: boolean
   theme?: TInputTheme
   valueKey?: KeyOf<TOption>
 }
