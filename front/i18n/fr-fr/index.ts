@@ -33,6 +33,7 @@ export default {
   'common.orders': 'Commande | Commandes',
   'common.print': 'Imprimer',
   'common.products': 'Produit | Produits',
+  'common.products-management': 'Gestion des produits',
   'common.quantity': 'Quantité',
   'common.reset': 'Réinitialiser',
   'common.save': 'Enregistrer',
@@ -86,7 +87,6 @@ export default {
   'order.duplicate.confirmation': 'Voulez-vous vraiment dupliquer cette commande ?',
   'order.edit': 'Modifier une commande',
   'order.new': 'Créer une nouvelle commande',
-  'order.manage-products': 'Gestion des produits',
 
   'orders.add-order': '+ Nouvelle commande',
   'orders.api.code.get-error-message': 'Erreur lors de la récupération des commandes',
@@ -112,5 +112,4 @@ export default {
   'products.add-product': '+ Nouveau produit',
   'products.api.code.get-error-message': 'Erreur lors de la récupération des produits',
   'products.api.get.error-message': 'Les produits n\'ont pas pu être chargés',
-  'products.management': 'Gestion des produits',
 }

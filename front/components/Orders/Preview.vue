@@ -110,7 +110,7 @@ const handleAddProductClick = () => {
 
     <Modal 
       v-model="isManageProductModalVisible"
-      :title="t('order.manage-products')"
+      :title="t('common.products-management')"
     >
       <template #content>
         <CustomersProducts class="flex-1 min-h-0 text-gray-100" />

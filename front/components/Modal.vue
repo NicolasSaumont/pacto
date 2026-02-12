@@ -81,34 +81,28 @@ onUnmounted(() => {
 
       <!-- Modal -->
       <div
-        class="relative z-10 flex max-h-[80vh] flex-col rounded-lg bg-white p-6 shadow-xl"
+        class="relative z-10 flex max-h-[80vh] flex-col rounded-lg bg-gray-800 p-6 shadow-xl"
         v-bind="attrs"
       >
-        <!-- Close button -->
-        <FontAwesomeIcon
-          icon="xmark"
-          class="absolute right-3 top-3 cursor-pointer text-gray-500 hover:text-black"
-          @click="onCancel"
-        />
-
         <!-- Header -->
         <div class="shrink-0 pb-4">
+          <!-- Close button -->
           <FontAwesomeIcon
             icon="xmark"
-            class="absolute right-3 top-3 cursor-pointer text-gray-500 hover:text-black"
+            class="absolute right-3 top-3 cursor-pointer text-gray-500 hover:text-white"
             @click="onCancel"
           />
 
-          <span class="text-lg font-semibold text-gray-800">
+          <span class="text-lg font-semibold text-gray-100">
             {{ title }}
           </span>
         </div>
 
         <!-- Content -->
-        <div class="flex-1 overflow-y-auto py-4 text-gray-800">
+        <div class="flex-1 overflow-y-auto py-4 text-gray-100 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
            <span
               v-if="description"
-              class="mt-1 block text-sm text-gray-600"
+              class="mt-1 block text-sm"
             >
               {{ description }}
             </span>
