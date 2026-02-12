@@ -81,7 +81,7 @@ onUnmounted(() => {
 
       <!-- Modal -->
       <div
-        class="relative z-10 rounded-lg bg-white p-6 shadow-xl"
+        class="relative z-10 flex max-h-[80vh] flex-col rounded-lg bg-white p-6 shadow-xl"
         v-bind="attrs"
       >
         <!-- Close button -->
@@ -91,17 +91,32 @@ onUnmounted(() => {
           @click="onCancel"
         />
 
+        <!-- Header -->
+        <div class="shrink-0 pb-4">
+          <FontAwesomeIcon
+            icon="xmark"
+            class="absolute right-3 top-3 cursor-pointer text-gray-500 hover:text-black"
+            @click="onCancel"
+          />
+
+          <span class="text-lg font-semibold text-gray-800">
+            {{ title }}
+          </span>
+        </div>
+
         <!-- Content -->
-        <div class="flex flex-col gap-4 text-gray-800">
-          <span class="text-lg font-semibold">{{ title }}</span>
-          <span v-if="description">{{ description }}</span>
+        <div class="flex-1 overflow-y-auto py-4 text-gray-800">
+           <span
+              v-if="description"
+              class="mt-1 block text-sm text-gray-600"
+            >
+              {{ description }}
+            </span>
           <slot v-else name="content" />
         </div>
 
         <!-- Actions -->
-        <div 
-          class="mt-6 flex justify-end"
-        >
+        <div class="shrink-0 pt-4 flex justify-end">
           <div v-if="isConfirmationModal" class="flex gap-3">
             <Button
               :label="t('common.cancel')"
