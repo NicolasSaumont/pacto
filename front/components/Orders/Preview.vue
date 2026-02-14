@@ -110,18 +110,12 @@ const handleAddProductClick = () => {
 
     <Modal 
       v-model="isManageProductModalVisible"
+      is-confirmation-modal
       :title="t('common.products-management')"
+      class="w-[80%]"
     >
       <template #content>
         <CustomersProducts class="flex-1 min-h-0 text-gray-100" />
-      </template>
-
-      <template #footer>
-        <Button
-          :label="t('common.close')"
-          outline
-          @click="isManageProductModalVisible = false"
-        />
       </template>
     </Modal>
   </div>
