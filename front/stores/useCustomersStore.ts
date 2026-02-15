@@ -22,23 +22,15 @@ export const useCustomersStore = defineStore('customers', () => {
       const currentIds = (editedCustomer.products ?? []).map(p => p.id).sort()
       const originalIds = (originalCustomer.value.products ?? []).map(p => p.id).sort() 
 
-      console.log('currentIds', currentIds)
-      console.log('originalIds', originalIds)
-
       if (currentIds.join(',') !== originalIds.join(',')) {
         body.productIds = currentIds
       }
 
-      // if (Object.keys(body).length === 0) return
-      if (Object.keys(body).length === 0) {
-        console.log('NO CHANGES')
-        return
-      }
+      if (Object.keys(body).length === 0) return
 
       await customerRepository.patchCustomer(editedCustomer.id, body)
 
       // resync snapshot
-      // originalCustomer.value = structuredClone(toRaw(customer))
       const refreshed = await customerRepository.getCustomer(editedCustomer.id.toString())
 
       customer.value = structuredClone(refreshed)
@@ -70,8 +62,6 @@ export const useCustomersStore = defineStore('customers', () => {
   }
 
   const setCustomer = async (customerId: string) => {
-    // customer.value = structuredClone(await customerRepository.getCustomer(customerId))
-    // originalCustomer.value = structuredClone(toRaw(customer.value))
     const data = await customerRepository.getCustomer(customerId)
     const cloned = structuredClone(data)
 

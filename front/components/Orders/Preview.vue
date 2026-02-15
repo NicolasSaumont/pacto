@@ -85,7 +85,6 @@ const handleAddProductClick = () => {
 
 const handleConfirmUpdateCustomerProductsClick = () => {
   customer.value.products = editableProducts.value.map(product => ({ ...product }))
-  // TODO : enregistrer le client pour ajouter son produit en base avant d'neregistrer la commande
   sendCustomerToEdit(customer.value)
 }
 

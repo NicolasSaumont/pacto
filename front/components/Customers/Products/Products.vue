@@ -12,14 +12,12 @@ const { customer } = storeToRefs(customersStore)
 
 const products = computed<IProduct[]>({
   get() {
-    // return props.products ?? customer.value.products
     return props.products ?? [...(customer.value.products ?? [])]
   },
   set(value) {
     if (props.products) {
       emit('update:products', value)
     } else {
-      // customer.value.products = value
       customer.value.products = [...value]
     }
   },
