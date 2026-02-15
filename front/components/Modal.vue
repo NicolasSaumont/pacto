@@ -13,6 +13,7 @@ const props = withDefaults(
 )
 
 const emit = defineEmits<{
+  (e: 'cancel'): void
   (e: 'confirm'): void
 }>()
 
@@ -31,6 +32,7 @@ const onConfirm = () => {
 }
 
 const onCancel = () => {
+  emit('cancel')
   isVisible.value = false
 }
 

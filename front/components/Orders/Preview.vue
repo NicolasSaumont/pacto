@@ -1,10 +1,13 @@
 <script setup lang='ts'>
 const { t } = useI18n()
-const { notify } = useNotify()
 
 const {
   orderProductsColumns,
 } = useOrders()
+
+const {
+  sendCustomerToEdit,
+} = useCustomers()
 
 const customerStore = useCustomersStore()
 const orderStore = useOrdersStore()
@@ -18,6 +21,7 @@ const {
 } = storeToRefs(orderStore)
 
 const isManageProductModalVisible = ref(false)
+const editableProducts = ref<IProduct[]>([])
 
 const quantityModel = (row: { product: IProduct }) =>
   computed<number>({
@@ -40,7 +44,7 @@ const quantityModel = (row: { product: IProduct }) =>
     },
   })
 
-const selectedCustomerProducts = computed(() => {
+const customerProducts = computed<IItem[]>(() => {
   return customer.value.products.map((product: IProduct) => {
     const existingItem = order.value.items.find(
       item => item.product && item.product.id === product.id
@@ -78,6 +82,18 @@ const getOrCreateOrderItem = (product: IProduct) => {
 const handleAddProductClick = () => {
   isManageProductModalVisible.value = true
 }
+
+const handleConfirmUpdateCustomerProductsClick = () => {
+  customer.value.products = editableProducts.value.map(product => ({ ...product }))
+  // TODO : enregistrer le client pour ajouter son produit en base avant d'neregistrer la commande
+  sendCustomerToEdit(customer.value)
+}
+
+watch(isManageProductModalVisible, (visible) => {
+  if (visible) {
+    editableProducts.value = customer.value.products.map(product => ({ ...product }))
+  }
+})
 </script>
 
 <template>
@@ -91,7 +107,7 @@ const handleAddProductClick = () => {
     
     <Table 
       :columns="orderProductsColumns"
-      :data="selectedCustomerProducts"
+      :data="customerProducts"
       :is-clickable="false"
       :loading="isOrderGettingFetch"
     >
@@ -113,9 +129,13 @@ const handleAddProductClick = () => {
       is-confirmation-modal
       :title="t('common.products-management')"
       class="w-[80%]"
+      @confirm="handleConfirmUpdateCustomerProductsClick"
     >
       <template #content>
-        <CustomersProducts class="flex-1 min-h-0 text-gray-100" />
+        <CustomersProducts 
+          v-model:products="editableProducts"
+          class="flex-1 min-h-0 text-gray-100" 
+        />
       </template>
     </Modal>
   </div>

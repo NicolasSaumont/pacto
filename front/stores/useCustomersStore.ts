@@ -1,37 +1,48 @@
 import { defineStore } from 'pinia'
 
 export const useCustomersStore = defineStore('customers', () => {
-  const isCustomerSaving = ref(false)
-  const isCustomerGettingFetch = ref(false)
   const customer = ref<ICustomer>(structuredClone(DEFAULT_CUSTOMER))
   const customers = ref<ICustomer[]>([])
+  const isCustomerSaving = ref(false)
+  const isCustomerGettingFetch = ref(false)
   const originalCustomer = ref<ICustomer>(structuredClone(DEFAULT_CUSTOMER))
 
   const isConfirmButtonDisabled = computed(() => !customer.value.name)
   
-  const editCustomer = async (customer: ICustomer) => {
+  const editCustomer = async (editedCustomer: ICustomer) => {
     try {
       const body: Record<string, unknown> = {}
 
       // name
-      if (customer.name !== originalCustomer.value.name) {
-        body.name = customer.name
+      if (editedCustomer.name !== originalCustomer.value.name) {
+        body.name = editedCustomer.name
       }
 
       // products
-      const currentIds = (customer.products ?? []).map(p => p.id).sort()
-      const originalIds = (originalCustomer.value.products ?? []).map(p => p.id).sort()
+      const currentIds = (editedCustomer.products ?? []).map(p => p.id).sort()
+      const originalIds = (originalCustomer.value.products ?? []).map(p => p.id).sort() 
+
+      console.log('currentIds', currentIds)
+      console.log('originalIds', originalIds)
 
       if (currentIds.join(',') !== originalIds.join(',')) {
         body.productIds = currentIds
       }
 
-      if (Object.keys(body).length === 0) return
+      // if (Object.keys(body).length === 0) return
+      if (Object.keys(body).length === 0) {
+        console.log('NO CHANGES')
+        return
+      }
 
-      await customerRepository.patchCustomer(customer.id, body)
+      await customerRepository.patchCustomer(editedCustomer.id, body)
 
       // resync snapshot
-      originalCustomer.value = structuredClone(toRaw(customer))
+      // originalCustomer.value = structuredClone(toRaw(customer))
+      const refreshed = await customerRepository.getCustomer(editedCustomer.id.toString())
+
+      customer.value = structuredClone(refreshed)
+      originalCustomer.value = structuredClone(refreshed)
     } catch (error) {
       throw error
     }
@@ -55,11 +66,17 @@ export const useCustomersStore = defineStore('customers', () => {
 
   const resetForm = () => {
     customer.value = structuredClone(DEFAULT_CUSTOMER)
+    originalCustomer.value = structuredClone(DEFAULT_CUSTOMER)
   }
 
   const setCustomer = async (customerId: string) => {
-    customer.value = await customerRepository.getCustomer(customerId)
-    originalCustomer.value = structuredClone(toRaw(customer.value))
+    // customer.value = structuredClone(await customerRepository.getCustomer(customerId))
+    // originalCustomer.value = structuredClone(toRaw(customer.value))
+    const data = await customerRepository.getCustomer(customerId)
+    const cloned = structuredClone(data)
+
+    customer.value = cloned
+    originalCustomer.value = structuredClone(cloned)
   }
 
   const setCustomers = async () => {

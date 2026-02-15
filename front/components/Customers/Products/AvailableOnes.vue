@@ -1,4 +1,6 @@
 <script setup lang='ts'>
+const products = defineModel<IProduct[]>('products')
+
 const { t } = useI18n()
 
 const customersStore = useCustomersStore()
@@ -10,15 +12,25 @@ const {
 } = useProducts()
 
 const assignProduct = (product: IProduct) => {
-  if (!customer.value) return
-  if (!customer.value.products) customer.value.products = []
+  if (!products.value) return
 
-  // Évite doublon
-  if (customer.value.products.some(customerProduct => customerProduct.id === product.id)) return
+  if (products.value.some(p => p.id === product.id)) return
 
-  customer.value.products.push(product)
-  sortProductsByName(customer.value.products)
+  products.value = [...products.value, product]
+
+  sortProductsByName(products.value)
 }
+
+// const assignProduct = (product: IProduct) => {
+//   if (!customer.value) return
+//   if (!customer.value.products) customer.value.products = []
+
+//   // Évite doublon
+//   if (customer.value.products.some(customerProduct => customerProduct.id === product.id)) return
+
+//   customer.value.products.push(product)
+//   sortProductsByName(customer.value.products)
+// }
 </script>
 
 <template>
