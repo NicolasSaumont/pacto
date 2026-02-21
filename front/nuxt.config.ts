@@ -25,6 +25,7 @@ export default defineNuxtConfig({
     '@formkit/auto-animate/nuxt',
     '@nuxtjs/i18n',
     '@nuxtjs/tailwindcss',
+    '@nuxt/image',
     '@pinia/nuxt',
   ],
 

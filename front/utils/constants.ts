@@ -25,6 +25,11 @@ export const ORDERS_CREATE_URL = '/orders/create'
 export const PRODUCTS_URL = '/products'
 export const PRODUCTS_CREATE_URL = '/products/create'
 
+/* LOGO */
+
+export const BLUE_TRANSPARENT_LOGO_SOURCE = '/logo/blue-transparent-logo.png'
+export const LIGHT_TRANSPARENT_LOGO_SOURCE = '/logo/light-transparent-logo.png'
+
 /* PRODUCTS */
 
 export const DEFAULT_PRODUCT = {

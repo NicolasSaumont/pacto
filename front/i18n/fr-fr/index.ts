@@ -15,6 +15,7 @@ export default {
 
   'common.api.error-title': 'Échec',
   'common.api.success-title': 'Succès',
+  'common.application-logo': 'Logo de l\'application',
   'common.available-products': 'Produit disponible | Produits disponibles',
   'common.batch-number': 'N°\u00A0Lot', // \u00A0 : espace insécable
   'common.cancel': 'Annuler',
