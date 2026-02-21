@@ -111,7 +111,9 @@ export function useProducts() {
   }
 
   const sortProductsByName = (products: IProduct[]) => {
-    products.sort((a, b) => a.name.localeCompare(b.name, 'fr'))
+    console.log('sortProductsByName')
+    return [...products].sort((a, b) => a.name.localeCompare(b.name, 'fr'))
+    // products.sort((a, b) => a.name.localeCompare(b.name, 'fr'))
   }
   
   return { 
