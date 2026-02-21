@@ -242,30 +242,6 @@ router.patch('/:id', async (req, res) => {
       }
 
       // --- ADD ---
-      // if (add?.length) {
-      //   const rows = add.map(a => {
-      //     const productId = a?.productId
-      //     const qty = a?.quantity
-
-      //     if (typeof productId !== 'number' || typeof qty !== 'number') {
-      //       throw Object.assign(new Error('invalid add row'), {
-      //         status: 400,
-      //         code: 'api.code.invalid-field.row',
-      //       })
-      //     }
-
-      //     return {
-      //       order_id: order.id,
-      //       product_id: productId,
-      //       product_name: item.productName,
-      //       quantity: qty,
-      //     }
-      //   })
-
-      //   if (rows.length) {
-      //     await OrderProduct.bulkCreate(rows, { transaction: t })
-      //   }
-      // }
       if (add?.length) {
         const rows = []
 
