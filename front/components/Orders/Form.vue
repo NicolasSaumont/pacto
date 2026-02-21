@@ -46,6 +46,8 @@ onMounted(async () => {
   isDuplicationWanted.value = false
 })
 
+// watchEffect(() => console.log('selectedCustomerId', selectedCustomerId.value))
+
 onUnmounted(() => {
   if (isDuplicationWanted.value) return
   resetForm()

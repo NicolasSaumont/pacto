@@ -157,6 +157,7 @@ export const useOrdersStore = defineStore('orders', () => {
   }
 
   const fillSelects = () => {
+    // console.log('fillSelects order.value.customer.id', order.value.customer.id)
     selectedCustomerId.value = order.value.customer.id 
 
     selectedProducts.value = order.value.items.map(
@@ -177,6 +178,7 @@ export const useOrdersStore = defineStore('orders', () => {
   const setOrder = async (orderId: string) => {
     isHydratingOrder.value = true
     order.value = await orderRepository.getOrder(orderId)
+    // console.log('setOrder order.value', order.value.customer.id)
     originalOrder.value = structuredClone(toRaw(order.value))
     isHydratingOrder.value = false
   }
@@ -227,11 +229,11 @@ export const useOrdersStore = defineStore('orders', () => {
   return {
     deleteOrder,
     editOrder,
+    fillSelects,
     isConfirmButtonDisabled,
     isDuplicationWanted,
     isOrderGettingFetch,
     isOrderSaving,
-    fillSelects,
     order,
     orders,
     originalOrder,
