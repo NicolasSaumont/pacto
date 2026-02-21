@@ -1,6 +1,10 @@
 <script setup lang='ts'>
 import { useMenu } from '~/composables/useMenu'
 
+const WIDTH_LOGO = 40
+
+const { t } = useI18n()
+
 const { 
   menuItemClass,
   menuItems,
@@ -9,7 +13,14 @@ const {
 
 <template>
   <div class="bg-gray-900 w-80 p-5 flex flex-col gap-10 border-r border-gray-600 shrink-0">
-    <NuxtLink to="/" class="uppercase font-semibold text-2xl">{{ APP_NAME }}</NuxtLink>
+    <div class="flex items-center gap-2">
+      <NuxtImg 
+        :src="`${BASE_LOGO_SOURCE}${BLUE_TRANSPARENT_LOGO_SOURCE}`" 
+        :alt="t('common.application-logo')" 
+        :width="WIDTH_LOGO"
+      />
+      <NuxtLink to="/" class="uppercase font-semibold text-2xl">{{ APP_NAME }}</NuxtLink>
+    </div>
 
     <nav class="flex flex-col gap-4 ml-6">
       <NuxtLink 

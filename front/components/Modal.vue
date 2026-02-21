@@ -4,7 +4,7 @@ const isVisible = defineModel<boolean>()
 const props = withDefaults(
   defineProps<{
     title: string
-    description: string
+    description?: string
     isConfirmationModal?: boolean
   }>(),
   {
@@ -13,10 +13,16 @@ const props = withDefaults(
 )
 
 const emit = defineEmits<{
+  (e: 'cancel'): void
   (e: 'confirm'): void
 }>()
 
+defineOptions({
+  inheritAttrs: false,
+})
+
 const { t } = useI18n()
+const attrs = useAttrs()
 
 const confirmButtonRef = ref<HTMLButtonElement | null>(null)
 
@@ -26,6 +32,7 @@ const onConfirm = () => {
 }
 
 const onCancel = () => {
+  emit('cancel')
   isVisible.value = false
 }
 
@@ -76,36 +83,50 @@ onUnmounted(() => {
 
       <!-- Modal -->
       <div
-        class="relative z-10 w-full max-w-md rounded-lg bg-white p-6 shadow-xl"
+        class="relative z-10 flex max-h-[80vh] flex-col rounded-lg bg-gray-800 p-6 shadow-xl"
+        v-bind="attrs"
       >
-        <!-- Close button -->
-        <FontAwesomeIcon
-          icon="xmark"
-          class="absolute right-3 top-3 cursor-pointer text-gray-500 hover:text-black"
-          @click="onCancel"
-        />
+        <!-- Header -->
+        <div class="shrink-0 pb-4">
+          <!-- Close button -->
+          <FontAwesomeIcon
+            icon="xmark"
+            class="absolute right-3 top-3 cursor-pointer text-gray-500 hover:text-white"
+            @click="onCancel"
+          />
+
+          <span class="text-lg font-semibold text-gray-100">
+            {{ title }}
+          </span>
+        </div>
 
         <!-- Content -->
-        <div class="flex flex-col gap-4 text-gray-800">
-          <span class="text-lg font-semibold">{{ title }}</span>
-          <span>{{ description }}</span>
+        <div class="flex-1 overflow-y-auto py-4 text-gray-100 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
+           <span
+              v-if="description"
+              class="mt-1 block text-sm"
+            >
+              {{ description }}
+            </span>
+          <slot v-else name="content" />
         </div>
 
         <!-- Actions -->
-        <div 
-          v-if="isConfirmationModal"
-          class="mt-6 flex justify-end gap-3"
-        >
-          <Button
-            :label="t('common.cancel')"
-            outline
-            @click="onCancel"
-          />
-          <Button
-            ref="confirmButtonRef"
-            :label="t('common.confirm')"
-            @click="onConfirm"
-          />
+        <div class="shrink-0 pt-4 flex justify-end">
+          <div v-if="isConfirmationModal" class="flex gap-3">
+            <Button
+              :label="t('common.cancel')"
+              outline
+              @click="onCancel"
+            />
+            <Button
+              ref="confirmButtonRef"
+              :label="t('common.confirm')"
+              @click="onConfirm"
+            />
+          </div>
+
+          <slot v-else name="footer" />
         </div>
       </div>
     </div>

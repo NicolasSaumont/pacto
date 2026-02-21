@@ -243,7 +243,9 @@ router.patch('/:id', async (req, res) => {
 
       // --- ADD ---
       if (add?.length) {
-        const rows = add.map(a => {
+        const rows = []
+
+        for (const a of add) {
           const productId = a?.productId
           const qty = a?.quantity
 
@@ -254,12 +256,23 @@ router.patch('/:id', async (req, res) => {
             })
           }
 
-          return {
+          // Récupérer le produit
+          const product = await Product.findByPk(productId, { transaction: t })
+
+          if (!product) {
+            throw Object.assign(new Error('product not found'), {
+              status: 400,
+              code: 'api.code.invalid-field.product',
+            })
+          }
+
+          rows.push({
             order_id: order.id,
             product_id: productId,
+            product_name: product.name,
             quantity: qty,
-          }
-        })
+          })
+        }
 
         if (rows.length) {
           await OrderProduct.bulkCreate(rows, { transaction: t })

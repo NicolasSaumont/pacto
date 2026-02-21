@@ -227,11 +227,11 @@ export const useOrdersStore = defineStore('orders', () => {
   return {
     deleteOrder,
     editOrder,
+    fillSelects,
     isConfirmButtonDisabled,
     isDuplicationWanted,
     isOrderGettingFetch,
     isOrderSaving,
-    fillSelects,
     order,
     orders,
     originalOrder,

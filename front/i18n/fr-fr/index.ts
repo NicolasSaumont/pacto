@@ -15,9 +15,11 @@ export default {
 
   'common.api.error-title': 'Échec',
   'common.api.success-title': 'Succès',
+  'common.application-logo': 'Logo de l\'application',
   'common.available-products': 'Produit disponible | Produits disponibles',
   'common.batch-number': 'N°\u00A0Lot', // \u00A0 : espace insécable
   'common.cancel': 'Annuler',
+  'common.close': 'Fermer',
   'common.comments': 'Remarque | Remarques',
   'common.confirm': 'Confirmer',
   'common.customers': 'Client | Clients',
@@ -32,6 +34,7 @@ export default {
   'common.orders': 'Commande | Commandes',
   'common.print': 'Imprimer',
   'common.products': 'Produit | Produits',
+  'common.products-management': 'Gestion des produits',
   'common.quantity': 'Quantité',
   'common.reset': 'Réinitialiser',
   'common.save': 'Enregistrer',
@@ -110,5 +113,4 @@ export default {
   'products.add-product': '+ Nouveau produit',
   'products.api.code.get-error-message': 'Erreur lors de la récupération des produits',
   'products.api.get.error-message': 'Les produits n\'ont pas pu être chargés',
-  'products.management': 'Gestion des produits',
 }
