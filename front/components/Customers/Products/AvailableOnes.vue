@@ -13,8 +13,6 @@ const assignProduct = (productToAssign: IProduct) => {
   if (!products.value) return
   if (products.value.some(product => product.id === productToAssign.id)) return
 
-  // products.value = [...products.value, productToAssign]
-  // sortProductsByName(products.value)
   products.value = sortProductsByName([...products.value, productToAssign])
 }
 

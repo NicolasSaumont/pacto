@@ -256,7 +256,7 @@ router.patch('/:id', async (req, res) => {
             })
           }
 
-          // 🔥 Récupérer le produit
+          // Récupérer le produit
           const product = await Product.findByPk(productId, { transaction: t })
 
           if (!product) {
@@ -269,7 +269,7 @@ router.patch('/:id', async (req, res) => {
           rows.push({
             order_id: order.id,
             product_id: productId,
-            product_name: product.name, // ✅ IMPORTANT
+            product_name: product.name,
             quantity: qty,
           })
         }

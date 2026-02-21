@@ -46,15 +46,10 @@ const handleResetClick = () => {
 const handleSubmitClick = async () => {
   if (!customer.value) return
 
-  console.log('SUBMIT START')
-  console.log('customer to edit', customer.value)
-
   isCustomerSaving.value = true
   try {
     if (props.mode === ModeEnum.CREATION) await sendCustomerToCreate(customer.value)
     else if (props.mode === ModeEnum.EDITION) await sendCustomerToEdit(customer.value)
-
-    console.log('AFTER API SUCCESS')
 
     await navigateTo(CUSTOMERS_URL)
   } catch {
