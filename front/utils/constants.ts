@@ -31,7 +31,6 @@ export const PRODUCTS_CREATE_URL = '/products/create'
 
 export const BASE_LOGO_SOURCE = '/logo'
 export const BLUE_TRANSPARENT_LOGO_SOURCE = '/blue-transparent-logo.png'
-export const LIGHT_TRANSPARENT_LOGO_SOURCE = '/light-transparent-logo.png'
 
 /* PRODUCTS */
 
