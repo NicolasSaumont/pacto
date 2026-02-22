@@ -62,7 +62,13 @@ const saveByMode = async () => {
 const saveOrder = async (duplication = false) => {
   if (!order.value) return
 
-  isOrderSaving.value = true
+  let showLoader = true
+
+  const loaderTimeout = setTimeout(() => {
+    if (showLoader) {
+      isOrderSaving.value = true
+    }
+  }, LOADER_TIMEOUT_DURATION)
 
   try {
     if (!isConfirmButtonDisabled.value) {
@@ -77,6 +83,8 @@ const saveOrder = async (duplication = false) => {
     // la notif est déjà affichée dans withNotify
     return
   } finally {
+    showLoader = false
+    clearTimeout(loaderTimeout)
     isOrderSaving.value = false
   }
 }

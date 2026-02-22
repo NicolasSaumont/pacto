@@ -16,7 +16,6 @@ export function useMenu() {
     { label: t('common.orders', 2), description: t('common.order-taking'), path: ORDERS_URL, icon: 'file-pen' },
     { label: t('common.customers', 2), description: t('customers.management'), path: CUSTOMERS_URL, icon: 'users' },
     { label: t('common.products', 2), description: t('common.products-management'), path: PRODUCTS_URL, icon: 'boxes-stacked' },
-    { label: 'Model', path: '/model', description: t('model'), icon: 'users' }
   ]
 
   const currentMenuItem = computed<IMenuItem>(() => {

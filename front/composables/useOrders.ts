@@ -93,7 +93,14 @@ export function useOrders() {
   const isDuplicateOrderConfirmationModalVisible = ref(false)
 
   const loadOrder = async (orderToDuplicateId?: string) => {
-    isOrderGettingFetch.value = true
+    let showLoader = true
+
+    const loaderTimeout = setTimeout(() => {
+      if (showLoader) {
+        isOrderGettingFetch.value = true
+      }
+    }, LOADER_TIMEOUT_DURATION)
+
     try {
       const orderId = orderToDuplicateId ?? getRouteParam(route.params.id)
       if (!orderId) {
@@ -111,22 +118,31 @@ export function useOrders() {
     } catch {
       await navigateTo(ORDERS_URL)
     } finally {
+      showLoader = false
+      clearTimeout(loaderTimeout)
       isOrderGettingFetch.value = false
     }
   }
 
-  const loadOrders = async (searchDates: IRangeDates) => {
-    isOrderGettingFetch.value = true
+  const loadOrders = async (ordersSearchDates: IRangeDates) => {
+    let showLoader = true
+
+    const loaderTimeout = setTimeout(() => {
+      if (showLoader) {
+        isOrderGettingFetch.value = true
+      }
+    }, LOADER_TIMEOUT_DURATION)
 
     await withNotify(
       async () => {
-        await setOrders(searchDates)
+        await setOrders(ordersSearchDates)
       },
       {
         errorContent: t('orders.api.get.error-message'),
       }
     )
-
+    showLoader = false
+    clearTimeout(loaderTimeout)
     isOrderGettingFetch.value = false
   }
 

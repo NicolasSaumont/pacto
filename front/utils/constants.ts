@@ -7,6 +7,8 @@ export const DATE_FORMAT = 'DD/MM/YYYY'
 export const DATE_API_FORMAT = 'YYYY-MM-DD'
 export const DATE_MONTH_YEAR_ONLY_FORMAT = 'MMMM YYYY'
 export const INPUT_DEBOUNCE = 300
+export const LOADER_MIN_DURATION = 300
+export const LOADER_TIMEOUT_DURATION = 200
 export const NOTIFICATION_DEFAULT_DURATION = 5000
 export const SKELETON_ROWS = 8
 
@@ -29,7 +31,6 @@ export const PRODUCTS_CREATE_URL = '/products/create'
 
 export const BASE_LOGO_SOURCE = '/logo'
 export const BLUE_TRANSPARENT_LOGO_SOURCE = '/blue-transparent-logo.png'
-export const LIGHT_TRANSPARENT_LOGO_SOURCE = '/light-transparent-logo.png'
 
 /* PRODUCTS */
 

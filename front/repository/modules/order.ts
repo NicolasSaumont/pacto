@@ -22,12 +22,12 @@ export const orderRepository = {
     }
   },
 
-  async getOrders(searchDates: IRangeDates): Promise<IOrder[]> {
+  async getOrders(ordersSearchDates: IRangeDates): Promise<IOrder[]> {
     const orders = await fetcher<IOrder[]>('/orders', {
       method: 'GET',
       params: {
-        startDate: dayjs(searchDates.start).format(DATE_API_FORMAT), 
-        endDate: dayjs(searchDates.end).format(DATE_API_FORMAT) 
+        startDate: dayjs(ordersSearchDates.start).format(DATE_API_FORMAT), 
+        endDate: dayjs(ordersSearchDates.end).format(DATE_API_FORMAT) 
       }
     })
 

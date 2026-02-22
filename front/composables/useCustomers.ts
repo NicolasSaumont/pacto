@@ -35,7 +35,13 @@ export function useCustomers() {
   const isDeleteCustomerConfirmationModalVisible = ref(false)
 
   const loadCustomer = async () => {
-    isCustomerGettingFetch.value = true
+    let showLoader = true
+
+    const loaderTimeout = setTimeout(() => {
+      if (showLoader) {
+        isCustomerGettingFetch.value = true
+      }
+    }, LOADER_TIMEOUT_DURATION)
     try {
       const customerId = getRouteParam(route.params.id)
       if (!customerId) {
@@ -53,12 +59,20 @@ export function useCustomers() {
     } catch {
       await navigateTo(CUSTOMERS_URL)
     } finally {
+      showLoader = false
+      clearTimeout(loaderTimeout)
       isCustomerGettingFetch.value = false
     }
   }
 
   const loadCustomers = async () => {
-    isCustomerGettingFetch.value = true
+    let showLoader = true
+
+    const loaderTimeout = setTimeout(() => {
+      if (showLoader) {
+        isCustomerGettingFetch.value = true
+      }
+    }, LOADER_TIMEOUT_DURATION)
 
     await withNotify(
       async () => {
@@ -68,6 +82,9 @@ export function useCustomers() {
         errorContent: t('products.api.get.error-message'),
       }
     )
+
+    showLoader = false
+    clearTimeout(loaderTimeout)
 
     isCustomerGettingFetch.value = false
   }

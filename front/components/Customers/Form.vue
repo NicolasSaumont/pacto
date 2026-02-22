@@ -27,6 +27,8 @@ const {
   isProductGettingFetch,
 } = storeToRefs(productsStore)
 
+const showSkeleton = ref(true)
+
 const customerName = computed<string>({
   get() {
     return customer.value?.name ?? DEFAULT_CUSTOMER.name
@@ -46,7 +48,14 @@ const handleResetClick = () => {
 const handleSubmitClick = async () => {
   if (!customer.value) return
 
-  isCustomerSaving.value = true
+  let showLoader = true
+
+  const loaderTimeout = setTimeout(() => {
+    if (showLoader) {
+      isCustomerSaving.value = true
+    }
+  }, LOADER_TIMEOUT_DURATION)
+
   try {
     if (props.mode === ModeEnum.CREATION) await sendCustomerToCreate(customer.value)
     else if (props.mode === ModeEnum.EDITION) await sendCustomerToEdit(customer.value)
@@ -57,9 +66,18 @@ const handleSubmitClick = async () => {
     // la notif est déjà affichée dans withNotify
     return
   } finally {
+    showLoader = false
+    clearTimeout(loaderTimeout)
     isCustomerSaving.value = false
   }
 }
+
+onMounted(() => {
+  // Force l'affichage du squelette pour éviter un effet de flash
+  setTimeout(() => {
+    showSkeleton.value = false
+  }, LOADER_MIN_DURATION);
+})
 
 onUnmounted(resetForm)
 </script>
@@ -82,7 +100,7 @@ onUnmounted(resetForm)
       />
 
       <CustomersProductsSkeleton 
-        v-if="isCustomerGettingFetch || isProductGettingFetch" 
+        v-if="isCustomerGettingFetch || isProductGettingFetch || showSkeleton" 
         class="flex-1 min-h-0" 
       />
 

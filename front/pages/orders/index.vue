@@ -23,7 +23,7 @@ const {
   isDuplicationWanted,
   isOrderGettingFetch,
   orders,
-  searchDates,
+  ordersSearchDates,
 } = storeToRefs(ordersStore)
 
 const orderToDelete = ref<IOrder | null>(null)
@@ -38,7 +38,7 @@ const handleDeleteOrderClick = async () => {
   await withNotify(
     async () => {
       await deleteOrder(orderId)
-      await setOrders(searchDates.value)
+      await setOrders(ordersSearchDates.value)
     },
     {
       successContent: t('order.api.delete.success-message'),
@@ -85,10 +85,10 @@ const handleRowClick = (row: IOrder) => {
 }
 
 const handleSearchClick = () => {
-  loadOrders(searchDates.value)
+  loadOrders(ordersSearchDates.value)
 }
 
-onMounted(() => loadOrders(searchDates.value))
+onMounted(() => loadOrders(ordersSearchDates.value))
 </script>
 
 <template>
@@ -104,7 +104,7 @@ onMounted(() => loadOrders(searchDates.value))
 
     <div class="flex gap-4 items-end">
       <DatePicker
-        v-model="searchDates"
+        v-model="ordersSearchDates"
         :label="t('common.dates', 2)"
         range
         theme="light"
