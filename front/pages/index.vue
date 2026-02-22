@@ -1,12 +1,21 @@
 <script setup lang='ts'>
 const { t } = useI18n()
 
-const synthesisSearchDates = ref()
+const {
+  loadOrders,
+} = useOrders()
+
+const ordersStore = useOrdersStore()
+
+const { 
+  ordersSearchDates,
+} = storeToRefs(ordersStore)
 
 const handleSearchClick = () => {
-  console.log('search')
-  // loadOrders(ordersSearchDates.value)
+  loadOrders(ordersSearchDates.value)
 }
+
+onMounted(() => loadOrders(ordersSearchDates.value))
 </script>
 
 <template>
@@ -15,7 +24,7 @@ const handleSearchClick = () => {
 
     <div class="flex gap-4 items-end">
       <DatePicker
-        v-model="synthesisSearchDates"
+        v-model="ordersSearchDates"
         :label="t('common.dates', 2)"
         range
         theme="light"
