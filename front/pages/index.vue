@@ -9,7 +9,30 @@ const ordersStore = useOrdersStore()
 
 const { 
   ordersSearchDates,
+  orders,
 } = storeToRefs(ordersStore)
+
+const productsSummary = computed(() => {
+  const map = new Map()
+
+  orders.value
+    .flatMap(order => order.items)
+    .forEach(item => {
+      const product = item.product
+
+      if (!map.has(product.id)) {
+        map.set(product.id, {
+          id: product.id,
+          name: product.name,
+          quantity: 0
+        })
+      }
+
+      map.get(product.id).quantity += item.quantity
+    })
+
+  return Array.from(map.values())
+})
 
 const handleSearchClick = () => {
   loadOrders(ordersSearchDates.value)
@@ -37,7 +60,7 @@ onMounted(() => loadOrders(ordersSearchDates.value))
 
     <SynthesisCards /> 
 
-    <SynthesisProductsTable />
+    <SynthesisProductsTable :products="productsSummary" />
 
   </div>
 </template>

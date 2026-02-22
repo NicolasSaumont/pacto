@@ -36,8 +36,8 @@ watch(orders, () => {
 
 <template>
   <div class="flex gap-10">
-    <SynthesisCardsCard :count="animatedOrdersCount" :description="t('common.orders', 2)" />
     <SynthesisCardsCard :count="animatedCustomersCount" :description="t('common.customers', 2)" />
+    <SynthesisCardsCard :count="animatedOrdersCount" :description="t('common.orders', 2)" />
     <SynthesisCardsCard :count="animatedProductsCount" :description="t('common.products', 2)" />
   </div>
 </template>
