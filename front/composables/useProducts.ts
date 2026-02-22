@@ -47,7 +47,14 @@ export function useProducts() {
   }
 
   const loadProduct = async () => {
-    isProductGettingFetch.value = true
+    let showLoader = true
+
+    const loaderTimeout = setTimeout(() => {
+      if (showLoader) {
+        isProductGettingFetch.value = true
+      }
+    }, LOADER_TIMEOUT_DURATION)
+
     try {
       const productId = getRouteParam(route.params.id)
       if (!productId) {
@@ -65,12 +72,20 @@ export function useProducts() {
     } catch {
       await navigateTo(PRODUCTS_URL)
     } finally {
+      showLoader = false
+      clearTimeout(loaderTimeout)
       isProductGettingFetch.value = false
     }
   }
 
   const loadProducts = async () => {
-    isProductGettingFetch.value = true
+    let showLoader = true
+
+    const loaderTimeout = setTimeout(() => {
+      if (showLoader) {
+        isProductGettingFetch.value = true
+      }
+    }, LOADER_TIMEOUT_DURATION)
 
     await withNotify(
       async () => {
@@ -80,6 +95,8 @@ export function useProducts() {
         errorContent: t('products.api.get.error-message'),
       }
     )
+    showLoader = false
+    clearTimeout(loaderTimeout)
 
     isProductGettingFetch.value = false
   }

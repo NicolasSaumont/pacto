@@ -30,7 +30,13 @@ const handleResetClick = () => {
 }
 
 const handleSubmitClick = async () => {
-  isProductSaving.value = true
+  let showLoader = true
+
+  const loaderTimeout = setTimeout(() => {
+    if (showLoader) {
+      isProductSaving.value = true
+    }
+  }, LOADER_TIMEOUT_DURATION)
   try {
     if (props.mode === ModeEnum.CREATION) await sendProductToCreate(product.value)
     else if (props.mode === ModeEnum.EDITION) await sendProductToEdit(product.value)
@@ -41,6 +47,8 @@ const handleSubmitClick = async () => {
     // la notif est déjà affichée dans withNotify
     return
   } finally {
+    showLoader = false
+    clearTimeout(loaderTimeout)
     isProductSaving.value = false
   }
 }
