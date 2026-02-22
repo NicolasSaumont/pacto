@@ -14,7 +14,7 @@ export const useOrdersStore = defineStore('orders', () => {
   const order = ref<IOrder>(structuredClone(DEFAULT_ORDER))
   const orders = ref<IOrder[]>([])
   const originalOrder = ref<IOrder>(structuredClone(DEFAULT_ORDER))
-  const searchDates = ref<IRangeDates>({
+  const ordersSearchDates = ref<IRangeDates>({
     start: dayjs(DEFAULT_SEARCH_DATES.start),
     end: dayjs(DEFAULT_SEARCH_DATES.end),
   })
@@ -181,8 +181,8 @@ export const useOrdersStore = defineStore('orders', () => {
     isHydratingOrder.value = false
   }
 
-  const setOrders = async (searchDates: IRangeDates) => {
-    orders.value = await orderRepository.getOrders(searchDates) 
+  const setOrders = async (ordersSearchDates: IRangeDates) => {
+    orders.value = await orderRepository.getOrders(ordersSearchDates) 
   }
 
   // Aligne les lignes de commande avec les produits sélectionnés par l’utilisateur
@@ -236,7 +236,7 @@ export const useOrdersStore = defineStore('orders', () => {
     orders,
     originalOrder,
     postNewOrder,
-    searchDates,
+    ordersSearchDates,
     selectedCustomerId,
     selectedProducts,
     setOrder,

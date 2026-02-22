@@ -115,12 +115,12 @@ export function useOrders() {
     }
   }
 
-  const loadOrders = async (searchDates: IRangeDates) => {
+  const loadOrders = async (ordersSearchDates: IRangeDates) => {
     isOrderGettingFetch.value = true
 
     await withNotify(
       async () => {
-        await setOrders(searchDates)
+        await setOrders(ordersSearchDates)
       },
       {
         errorContent: t('orders.api.get.error-message'),
