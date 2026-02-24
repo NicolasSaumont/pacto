@@ -21,11 +21,11 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   ssr: false,
 
-  runtimeConfig: {
-    public: {
-      apiBase: process.env.NUXT_PUBLIC_API_BASE,
-    },
-  },
+  // runtimeConfig: {
+  //   public: {
+  //     apiBase: process.env.NUXT_PUBLIC_API_BASE,
+  //   },
+  // },
 
   modules: [
     '@formkit/auto-animate/nuxt',
@@ -53,6 +53,20 @@ export default defineNuxtConfig({
   i18n: {
     bundle: {
       optimizeTranslationDirective: false,
+    },
+  },
+
+  nitro: {
+    devProxy: {
+      '/api': {
+        target: 'http://back:3001',
+        changeOrigin: true,
+      },
+    },
+    routeRules: {
+      '/api/**': {
+        proxy: 'http://back:3001/**',
+      },
     },
   },
 })

@@ -45,7 +45,7 @@ app.use('/orders', ordersRouter)
 
 // Définition du port sur lequel le serveur écoute
 // On peut le configurer via .env, sinon il prend 3001 par défaut
-const PORT = process.env.PORT || 3001
+const PORT = process.env.BACK_PORT || 3001
 
 // --- Fonction principale pour démarrer le serveur ---
 const startServer = async () => {
@@ -64,7 +64,7 @@ const startServer = async () => {
     console.log(`${colors.green}📦 Modèles synchronisés${colors.reset}`)
 
     // Démarre le serveur Express
-    app.listen(PORT, () => {
+    app.listen(PORT, '0.0.0.0', () => {
       console.log(`${colors.green}🚀 Serveur démarré sur le port ${PORT}${colors.reset}`)
     })
   } catch (err) {
