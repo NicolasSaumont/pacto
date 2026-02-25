@@ -36,3 +36,30 @@ services:
 
 volumes:
   pacto_postgres_data:
+
+# version: "3.9"
+
+# services:
+#   front:
+#     image: node:22
+#     working_dir: /app
+#     volumes:
+#       - ./front:/app
+#     env_file:
+#       - .env
+#     command: npx nuxt dev --host 0.0.0.0 --port $NUXT_PORT
+#     ports:
+#       - "3000:3000"
+#     depends_on:
+#       - back
+
+#   back:
+#     image: node:22
+#     working_dir: /app
+#     volumes:
+#       - ./back:/app
+#     env_file:
+#       - .env
+#     command: npx nodemon src/server.js
+#     ports:
+#       - "3001:3001"

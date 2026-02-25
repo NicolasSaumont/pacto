@@ -1,79 +1,65 @@
-// Charge les variables d'environnement depuis le fichier .env
-require('dotenv').config()
+// /back/src/server.js
+import 'dotenv/config'             // Charge automatiquement les variables d'environnement
+import express from 'express'      // Framework web
+import cors from 'cors'            // Middleware CORS
+import bodyParser from 'body-parser' // Middleware JSON
+import { sequelize, connectDB } from './config/db.js'
 
-// Import des modules nécessaires
-const express = require('express')                        // Framework web pour créer un serveur HTTP
-const cors = require('cors')                              // Middleware pour gérer le CORS (cross-origin requests)
-const bodyParser = require('body-parser')                 // Middleware pour parser le JSON des requêtes
-const { sequelize, connectDB } = require('./config/db')   // Import de Sequelize et fonction connectDB avec retry
+// Routes
+import customersRouter from './routes/customers.js'
+import productsRouter from './routes/products.routes.js'
+import ordersRouter from './routes/orders.js'
 
-// --- Couleurs pour les logs dans la console ---
+// --- Couleurs pour les logs console ---
 const colors = {
-  reset: '\x1b[0m',   // Reset couleur
-  red: '\x1b[31m',    // Rouge pour erreurs
-  green: '\x1b[32m',  // Vert pour succès
-  yellow: '\x1b[33m', // Jaune pour warnings
-  blue: '\x1b[34m',   // Bleu pour infos
+  reset: '\x1b[0m',
+  red: '\x1b[31m',
+  green: '\x1b[32m',
+  yellow: '\x1b[33m',
+  blue: '\x1b[34m',
 }
 
-// Création de l'application Express
+// Création de l'app
 const app = express()
 
 // --- Middleware ---
-// Autorise toutes les requêtes cross-origin
 app.use(cors())
-// Parse le corps JSON des requêtes HTTP
 app.use(bodyParser.json())
 
 // --- Routes ---
-// Route de test pour vérifier que le backend fonctionne
 app.get('/', (req, res) => {
   res.send('Backend opérationnel')
 })
 
-// Route pour les produits
-const productsRouter = require('./routes/products')
-app.use('/products', productsRouter)
-
-// Route pour les clients
-const customersRouter = require('./routes/customers')
 app.use('/customers', customersRouter)
-
-// Route pour les commande
-const ordersRouter = require('./routes/orders')
+app.use('/products', productsRouter)
 app.use('/orders', ordersRouter)
 
-// Définition du port sur lequel le serveur écoute
-// On peut le configurer via .env, sinon il prend 3001 par défaut
+// Port
 const PORT = process.env.BACK_PORT || 3001
 
-// --- Fonction principale pour démarrer le serveur ---
+// --- Démarrage serveur ---
 const startServer = async () => {
   try {
     console.log(`${colors.blue}⏳ Tentative de connexion à PostgreSQL...${colors.reset}`)
 
-    // Se connecte à la DB avec retries (voir db.js)
-    // Si Postgres n’est pas prêt, connectDB va attendre et réessayer
+    // Connexion à PostgreSQL avec retries
     await connectDB({ retries: 10, delay: 2000, verbose: true })
-
     console.log(`${colors.green}✅ PostgreSQL prêt !${colors.reset}`)
 
-    // Synchronise tous les modèles Sequelize avec la DB
-    // { force: false } = ne supprime pas les tables existantes
-    await sequelize.sync({ force: false })
+    // Synchronisation Sequelize
+    await sequelize.sync({ force: true })
     console.log(`${colors.green}📦 Modèles synchronisés${colors.reset}`)
 
-    // Démarre le serveur Express
+    // Lancement serveur
     app.listen(PORT, '0.0.0.0', () => {
       console.log(`${colors.green}🚀 Serveur démarré sur le port ${PORT}${colors.reset}`)
     })
   } catch (err) {
-    // Si une erreur survient (ex: DB indisponible après tous les retries)
-    // on logue en rouge et on quitte le process
     console.error(`${colors.red}❌ Erreur au démarrage du serveur :${colors.reset}`, err.message)
     process.exit(1)
   }
 }
 
-// Appel de la fonction pour lancer le serveur
+// Lancement
 startServer()
