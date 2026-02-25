@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import customersRouter from './customers.routes.js'
 import productsRouter from './products.routes.js'
-import ordersRouter from './orders.js'
+import ordersRouter from './orders.routes.js'
 
 const router = Router()
 
