@@ -1,14 +1,11 @@
-// /back/src/server.js
 import 'dotenv/config'             // Charge automatiquement les variables d'environnement
 import express from 'express'      // Framework web
 import cors from 'cors'            // Middleware CORS
 import bodyParser from 'body-parser' // Middleware JSON
 import { sequelize, connectDB } from './config/db.js'
 
-// Routes
-import customersRouter from './routes/customers.js'
-import productsRouter from './routes/products.routes.js'
-import ordersRouter from './routes/orders.js'
+// Routes centralisées
+import routes from './routes/index.js'
 
 // --- Couleurs pour les logs console ---
 const colors = {
@@ -31,9 +28,8 @@ app.get('/', (req, res) => {
   res.send('Backend opérationnel')
 })
 
-app.use('/customers', customersRouter)
-app.use('/products', productsRouter)
-app.use('/orders', ordersRouter)
+app.use('/', routes)
+
 
 // Port
 const PORT = process.env.BACK_PORT || 3001

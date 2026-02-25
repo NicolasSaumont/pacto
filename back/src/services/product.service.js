@@ -1,7 +1,5 @@
-import { PrismaClient } from '../generated/prisma/index.js'
+import prisma from '../../prisma/client.js'
 import { normalizeName } from '../utils/normalize.js'
-
-const prisma = new PrismaClient()
 
 export const createProduct = async ({ name }) => {
   return prisma.product.create({
