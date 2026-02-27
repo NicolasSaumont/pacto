@@ -40,7 +40,10 @@ onMounted(async () => {
 
   fillSelects()
 
-  if (isDuplicationWanted.value) order.value.orderDate = undefined
+  if (isDuplicationWanted.value) {
+    order.value.deliveryDate = undefined
+    order.value.orderDate = undefined
+  }
 
   // Reset de la duplication
   isDuplicationWanted.value = false
@@ -74,6 +77,7 @@ onUnmounted(() => {
     />
     <DatePicker 
       v-model="order.deliveryDate"
+      :disabled="!order.orderDate"
       :label="t('order.delivery-date')"
       :loading="isOrderGettingFetch"
       :min="order.orderDate"
