@@ -1,10 +1,23 @@
 {
-  "name": "heros-refrain-monorepo",
+  "name": "pacto-monorepo",
+  "type": "module",
   "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "main": "electron/main.js",
   "scripts": {
-    "dev": "concurrently \"npm run dev --prefix back\" \"npm run dev --prefix front\""
+    "build:front": "cd front && npm run build",
+    "dev": "concurrently \"npm run dev --prefix back\" \"npm run dev --prefix front\"",
+    "electron": "npm run build:front && electron .",
+    "electron:dev": "npm run build:front && cross-env NODE_ENV=development electron ."
+  },
+  "dependencies": {
+    "cross-env": "^10.1.0",
+    "electron": "^40.6.1",
+    "serve-handler": "^6.1.6",
+    "wait-on": "^9.0.4"
   },
   "devDependencies": {
-    "concurrently": "^8.0.0"
+    "concurrently": "^8.2.2"
   }
 }

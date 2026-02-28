@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize')
 const { sequelize } = require('../config/db')
-const { normalizeName } = require('../utils/normalize')
+import { normalizeName } from '../utils/normalize.js'
 
 const Customer = sequelize.define('Customer', {
   // --- Clé primaire auto-incrémentée ---
