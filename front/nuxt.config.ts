@@ -21,6 +21,12 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   ssr: false,
 
+  runtimeConfig: {
+    public: {
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || 'http://localhost:3001'
+    }
+  },
+
   modules: [
     '@formkit/auto-animate/nuxt',
     '@nuxtjs/i18n',
@@ -56,6 +62,7 @@ export default defineNuxtConfig({
         target: 'http://back:3001',
         changeOrigin: true,
       },
+    preset: 'static'
     },
     routeRules: {
       '/api/**': {
